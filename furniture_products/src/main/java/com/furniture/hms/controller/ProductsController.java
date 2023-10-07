@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,13 +21,51 @@ public class ProductsController {
 
     @GetMapping
     public ResponseEntity<List<ProductResponse.ProductList>> getAllProduct() {
-        List<ProductResponse.ProductList> res = productService.getAllProduct();
-        if(res != null){
-            return new ResponseEntity<>(productService.getAllProduct(), HttpStatus.OK);
+        List<ProductResponse.ProductList> response = productService.getAllProduct();
+        if(response != null){
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }else {
-            return new ResponseEntity<>(null,HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
         }
     }
 
+    @GetMapping("/category/{id}")
+    public ResponseEntity<List<ProductResponse.ProductList>> getProductByCategory(@PathVariable("id") Integer id){
+        List<ProductResponse.ProductList> response = productService.getProductByCategory(id);
+        if(response != null){
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+    }
 
+    @GetMapping("/room/{id}")
+    public ResponseEntity<List<ProductResponse.ProductList>> getProductByRoom(@PathVariable("id") Integer id){
+        List<ProductResponse.ProductList> response = productService.getProductByRoom(id);
+        if(response != null){
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<ProductResponse.ProductList> getDetailByIdProduct(@PathVariable("id") Integer id){
+        ProductResponse.ProductList response = productService.getDetailByIdProduct(id);
+        if(response != null) {
+            return new ResponseEntity<>(response,HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/search/{productName}")
+    public ResponseEntity<List<ProductResponse.ProductList>> search(@PathVariable("productName") String productName){
+        List<ProductResponse.ProductList> response = productService.search(productName);
+        if(response != null){
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+    }
 }

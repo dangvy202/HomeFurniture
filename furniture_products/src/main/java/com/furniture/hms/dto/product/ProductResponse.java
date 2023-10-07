@@ -47,10 +47,25 @@ public class ProductResponse {
         private Date createDate;
         private String updateBy;
         private Date updateDate;
-        private String categoryName;
+        private Category category;
         private Inventory inventory;
-
         private Picture picture;
+        private Room room;
+
+        @Data
+        @FieldDefaults(level = AccessLevel.PRIVATE)
+        public static class Room {
+            private Integer id;
+            private String roomName;
+        }
+
+        @Data
+        @FieldDefaults(level = AccessLevel.PRIVATE)
+        public static class Category {
+            private Integer id;
+
+            private String categoryName;
+        }
 
         @Data
         @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -67,11 +82,24 @@ public class ProductResponse {
         @Data
         @FieldDefaults(level = AccessLevel.PRIVATE)
         public static class Inventory {
+
+            private Message message;
+
             private Integer id;
 
             private Integer inventoryQuantity;
 
             private Integer inventoryStatus;
+
+            @Data
+            @FieldDefaults(level = AccessLevel.PRIVATE)
+            public static class Message {
+                private Boolean status;
+
+                private String error;
+
+                private String message;
+            }
         }
     }
 }

@@ -46,8 +46,9 @@ public class Product {
     @JoinColumn(name = "id_category", referencedColumnName = "id_category")
     private Category category;
 
-    @Column(name = "id_room")
-    private Integer idRoom;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_room", referencedColumnName = "id_room")
+    private Room room;
 
     @Column(name = "id_comment")
     private Integer idComment;

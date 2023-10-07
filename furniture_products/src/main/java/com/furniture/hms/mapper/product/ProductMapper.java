@@ -23,13 +23,16 @@ public interface ProductMapper {
     @Mapping(target = "createDate" , source = "product.createDate")
     @Mapping(target = "updateBy" , source = "product.updateBy")
     @Mapping(target = "updateDate" , source = "product.updateDate")
-    @Mapping(target = "categoryName" , source = "product.category.categoryName")
     ProductResponse.ProductList toProductRes(Product product);
 
+//    @Mapping(target = "status" , source = "status")
+//    @Mapping(target = "error" , source = "error")
+//    @Mapping(target = "message" , source = "message")
     @Mapping(target = "id" , source = "inventory.id")
     @Mapping(target = "inventoryQuantity" , source = "inventory.inventoryQuantity")
     @Mapping(target = "inventoryStatus" , source = "inventory.inventoryStatus")
     ProductResponse.ProductList.Inventory toInventoryRes(InventoryResponse inventory);
 
+    ProductResponse.ProductList.Inventory.Message toMessageRes(Boolean status , String error, String message);
 
 }

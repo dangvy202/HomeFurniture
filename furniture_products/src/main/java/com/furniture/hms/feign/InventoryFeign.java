@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(
         name = "furnitureInventories",
+//        configuration = ConfigFeignClient.class,
         fallbackFactory = InventoryFeign.InventoryFeignFallBack.class)
 public interface InventoryFeign {
 
