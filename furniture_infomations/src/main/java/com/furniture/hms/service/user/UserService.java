@@ -94,17 +94,41 @@ public class UserService {
     }
 
     public AuthenticationResponse login(AuthenticationRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
         var userEntity = userRepository.findUserByEmail(request.getEmail());
-        UserDetail userDetail = new UserDetail(userEntity);
-        var jwtToken = jwtService.generateToken(userDetail);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+        if(userEntity == null){
+            return AuthenticationResponse.builder()
+                    .status(false)
+                    .error("403")
+                    .expired(null)
+                    .message(UserMessage.FAIL)
+                    .token(null)
+                    .build();
+        }
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+            UserDetail userDetail = new UserDetail(userEntity);
+            var jwtToken = jwtService.generateToken(userDetail);
+            return AuthenticationResponse.builder()
+                    .status(true)
+                    .error(null)
+                    .expired("asd")
+                    .message(UserMessage.SUCCESS)
+                    .token(jwtToken)
+                    .build();
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            return AuthenticationResponse.builder()
+                    .status(false)
+                    .error("403")
+                    .expired(null)
+                    .message(UserMessage.BAD_CREDENTIALES)
+                    .token(null)
+                    .build();
+        }
     }
 }

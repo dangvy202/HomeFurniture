@@ -9,5 +9,9 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class AuthenticationResponse {
+    private boolean status;
+    private String error;
+    private String message;
     private String token;
+    private String expired;
 }

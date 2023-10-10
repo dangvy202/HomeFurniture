@@ -1,5 +1,6 @@
 package com.furniture.hms.controller;
 
+import com.furniture.hms.constant.UserMessage;
 import com.furniture.hms.dto.auth.AuthenticationRequest;
 import com.furniture.hms.dto.auth.AuthenticationResponse;
 import com.furniture.hms.dto.user.UserRequest;
@@ -38,6 +39,12 @@ public class UsersController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request){
-        return new ResponseEntity<>(userService.login(request),HttpStatus.OK);
+        var response = userService.login(request);
+        if(response.getMessage() == UserMessage.FAIL){
+            return new ResponseEntity<>(response,HttpStatus.FORBIDDEN);
+        }else if(response.getMessage() == UserMessage.BAD_CREDENTIALES) {
+            return new ResponseEntity<>(response,HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(userService.login(request),HttpStatus.ACCEPTED);
     }
 }
