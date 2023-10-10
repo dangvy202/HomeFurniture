@@ -1,13 +1,19 @@
 package com.furniture.hms.service.user;
 
 import com.furniture.hms.constant.UserMessage;
+import com.furniture.hms.dto.auth.AuthenticationRequest;
+import com.furniture.hms.dto.auth.AuthenticationResponse;
 import com.furniture.hms.dto.user.UserRequest;
 import com.furniture.hms.dto.user.UserResponse;
 import com.furniture.hms.entity.User;
 import com.furniture.hms.mapper.user.UserMapper;
 import com.furniture.hms.repository.user.UserRepository;
+import com.furniture.hms.security.UserDetail;
+import com.furniture.hms.service.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +30,10 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    private final AuthenticationManager authenticationManager;
+
+    private final JwtService jwtService;
 
     @Transactional
     public UserResponse registerAccount(UserRequest userRequest){
@@ -81,5 +91,20 @@ public class UserService {
             userResponse.setMessage(UserMessage.NOT_FOUND);
             return userResponse;
         }
+    }
+
+    public AuthenticationResponse login(AuthenticationRequest request) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()
+                )
+        );
+        var userEntity = userRepository.findUserByEmail(request.getEmail());
+        UserDetail userDetail = new UserDetail(userEntity);
+        var jwtToken = jwtService.generateToken(userDetail);
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .build();
     }
 }

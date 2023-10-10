@@ -1,4 +1,4 @@
-package com.furniture.hms.configuation;
+package com.furniture.hms.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

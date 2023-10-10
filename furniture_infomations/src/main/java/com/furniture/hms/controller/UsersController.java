@@ -1,5 +1,7 @@
 package com.furniture.hms.controller;
 
+import com.furniture.hms.dto.auth.AuthenticationRequest;
+import com.furniture.hms.dto.auth.AuthenticationResponse;
 import com.furniture.hms.dto.user.UserRequest;
 import com.furniture.hms.dto.user.UserResponse;
 import com.furniture.hms.service.user.UserService;
@@ -32,5 +34,10 @@ public class UsersController {
             return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request){
+        return new ResponseEntity<>(userService.login(request),HttpStatus.OK);
     }
 }
