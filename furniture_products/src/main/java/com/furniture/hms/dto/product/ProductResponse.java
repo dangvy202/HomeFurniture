@@ -1,12 +1,7 @@
 package com.furniture.hms.dto.product;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.furniture.hms.entity.Product;
-import com.furniture.hms.feign.response.InventoryResponse.InventoryResponse;
-import jakarta.persistence.Column;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -31,18 +26,6 @@ public class ProductResponse {
         private String productColor;
         private String productProperty;
         private Integer productStatus;
-
-//        @Column(name = "id_category")
-//        private Integer idCategory;
-//
-//        @Column(name = "id_room")
-//        private Integer idRoom;
-
-//
-//        @Column(name = "id_rating")
-//        private Integer idRating;
-
-
         private String createBy;
         private Date createDate;
         private String updateBy;

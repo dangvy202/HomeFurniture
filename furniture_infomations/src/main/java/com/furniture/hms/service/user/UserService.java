@@ -12,6 +12,8 @@ import com.furniture.hms.security.UserDetail;
 import com.furniture.hms.service.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.TimeoutUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,11 +23,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class UserService {
+
+    private static final String KEY = "ACCOUNT";
 
     private final UserRepository userRepository;
 
@@ -34,6 +39,8 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
 
     private final JwtService jwtService;
+
+    private final RedisTemplate redisTemplate;
 
     @Transactional
     public UserResponse registerAccount(UserRequest userRequest){
@@ -77,6 +84,7 @@ public class UserService {
     }
 
     public UserResponse getInfomation(String request){
+        redisTemplate.opsForValue().get(KEY);
         UserResponse userResponse = new UserResponse();
         User userCheck = userRepository.findUserByEmail(request);
         if(userCheck != null){
@@ -104,7 +112,7 @@ public class UserService {
                     .token(null)
                     .build();
         }
-        try {
+//        try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             request.getEmail(),
@@ -113,6 +121,9 @@ public class UserService {
             );
             UserDetail userDetail = new UserDetail(userEntity);
             var jwtToken = jwtService.generateToken(userDetail);
+            System.out.println(jwtToken.length());
+            redisTemplate.opsForValue().set(KEY,jwtToken.toString(),System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+
             return AuthenticationResponse.builder()
                     .status(true)
                     .error(null)
@@ -120,15 +131,15 @@ public class UserService {
                     .message(UserMessage.SUCCESS)
                     .token(jwtToken)
                     .build();
-        } catch (Exception ex) {
-            log.error(ex.getMessage());
-            return AuthenticationResponse.builder()
-                    .status(false)
-                    .error("403")
-                    .expired(null)
-                    .message(UserMessage.BAD_CREDENTIALES)
-                    .token(null)
-                    .build();
-        }
+//        } catch (Exception ex) {
+//            log.error(ex.getMessage());
+//            return AuthenticationResponse.builder()
+//                    .status(false)
+//                    .error("403")
+//                    .expired(null)
+//                    .message(UserMessage.BAD_CREDENTIALES)
+//                    .token(null)
+//                    .build();
+//        }
     }
 }
