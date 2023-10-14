@@ -26,7 +26,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final UserDetailsService userDetailsService;
 
-    private final RedisTemplate redisTemplate;
 
     @Override
     protected void doFilterInternal(

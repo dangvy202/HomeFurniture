@@ -31,9 +31,6 @@ public class OrderService {
 
     private final ProductFeign productFeign;
 
-    public OrderResponse getOrderByUserDetail() {
-        return null;
-    }
 
     @Transactional
     public String addOrder(List<OrderRequest> requests) {
@@ -63,6 +60,43 @@ public class OrderService {
             return OrderMessage.ORDER_SUCCESS;
         }else {
             return OrderMessage.ORDER_FAIL;
+        }
+    }
+
+    public OrderResponse getOrderDetailByUser(String email) {
+        List<OrderResponse.OrderDetail> listOrderDetail = new ArrayList<>();
+        User user = userRepository.findUserByEmail(email);
+        OrderResponse orderResponse = new OrderResponse();
+        if(user != null) {
+            List<Order> listOrder = orderRepository.findOrderByUser(user);
+            if(listOrder.size() != 0) {
+                orderResponse           = OrderMapper.INSTANCE.toOrderRes(true,null,OrderMessage.ORDER_SUCCESS);
+                for (Order order : listOrder){
+                    //create variable instant
+                    OrderResponse.OrderDetail orderDetailResponse = new OrderResponse.OrderDetail();
+                    OrderResponse.OrderDetail.Product orderProductResponse = new OrderResponse.OrderDetail.Product();
+                    OrderResponse.OrderDetail.Product.Picture orderPictureResponse = new OrderResponse.OrderDetail.Product.Picture();
+                    //get feign
+                    ProductResponse product = productFeign.getDetailByIdProduct(order.getIdProduct());
+                    //set mapping element
+                    orderDetailResponse     = OrderMapper.INSTANCE.toOrderDetailRes(order);
+                    orderProductResponse    = OrderMapper.INSTANCE.toOrderProductRes(product.getProductName(),product.getProductPrice(),product.getProductSaleoff());
+                    orderPictureResponse    = OrderMapper.INSTANCE.toOrderPictureRes(product.getPicture().getPictureFirst());
+                    //set one by one element
+                    orderProductResponse.setPicture(orderPictureResponse);
+                    orderDetailResponse.setProduct(orderProductResponse);
+                    //Add Array
+                    listOrderDetail.add(orderDetailResponse);
+                }
+                orderResponse.setOrderDetails(listOrderDetail);
+                return orderResponse;
+            }else {
+                orderResponse = OrderMapper.INSTANCE.toOrderRes(true,null,OrderMessage.ORDER_EXIST);
+                return orderResponse;
+            }
+        } else {
+            orderResponse = OrderMapper.INSTANCE.toOrderRes(false,OrderMessage.ORDER_FAIL,OrderMessage.ORDER_FAIL);
+            return orderResponse;
         }
     }
 }

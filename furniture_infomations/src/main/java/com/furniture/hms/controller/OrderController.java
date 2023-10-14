@@ -18,10 +18,21 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @GetMapping("/{}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<List<OrderResponse>> getOrderByUser() {
-        orderService.getOrderByUserDetail();
         return null;
+    }
+
+    @GetMapping("/detail")
+    public ResponseEntity<OrderResponse> getOrderDetailByUser(@RequestHeader("email") String email) {
+        OrderResponse orderResponse = orderService.getOrderDetailByUser(email);
+        if(orderResponse.getStatus() == true && orderResponse.getMessage() == OrderMessage.ORDER_SUCCESS )  {
+            return new ResponseEntity<>(orderResponse , HttpStatus.OK);
+        }else if (orderResponse.getStatus() == true && orderResponse.getMessage() == OrderMessage.ORDER_EXIST){
+            return new ResponseEntity<>(orderResponse , HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(orderResponse , HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/add")
