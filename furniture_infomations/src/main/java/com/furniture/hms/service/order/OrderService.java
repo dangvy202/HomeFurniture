@@ -99,4 +99,45 @@ public class OrderService {
             return orderResponse;
         }
     }
+
+    public String updateOrder(String idOrder, OrderRequest request) {
+        Order order = orderRepository.findOrderByOrderId(idOrder);
+        Instant createDate = Instant.now();
+        Instant updateDate = Instant.now();
+        int id = order.getId();
+        if( order != null ) {
+            order = OrderMapper.INSTANCE.toOrder(
+                    order.getOrderId(),
+                    request.getOrderQuantity(),
+                    order.getUser(),
+                    request.getIdProduct(),
+                    createDate,
+                    updateDate);
+            order.setId(id);
+            try {
+                orderRepository.save(order);
+                return OrderMessage.ORDER_SUCCESS;
+            } catch (Exception ex) {
+                log.error(ex.getMessage());
+                return OrderMessage.ORDER_FAIL;
+            }
+        } else {
+            return OrderMessage.ORDER_FAIL;
+        }
+    }
+
+    public String deleteOrder(String idOrder) {
+        Order order = orderRepository.findOrderByOrderId(idOrder);
+        if(order != null){
+            try {
+                orderRepository.deleteOrderByOrderId(order.getOrderId());
+                return OrderMessage.ORDER_SUCCESS;
+            } catch (Exception ex) {
+                log.error(ex.getMessage());
+                return OrderMessage.ORDER_FAIL;
+            }
+        }else {
+            return OrderMessage.ORDER_FAIL;
+        }
+    }
 }

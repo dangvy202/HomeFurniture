@@ -4,6 +4,7 @@ import com.furniture.hms.constant.OrderMessage;
 import com.furniture.hms.dto.order.OrderRequest;
 import com.furniture.hms.dto.order.OrderResponse;
 import com.furniture.hms.service.order.OrderService;
+import jakarta.ws.rs.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +19,23 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<List<OrderResponse>> getOrderByUser() {
-        return null;
+    @DeleteMapping("/delete/{idOrder}")
+    public ResponseEntity<String> getOrderByUser(@PathVariable("idOrder") String idOrder ) {
+        String response = orderService.deleteOrder(idOrder);
+        if(response == OrderMessage.ORDER_FAIL) {
+            return new ResponseEntity<>(response , HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            return new ResponseEntity<>(response , HttpStatus.OK);
+        }
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<String> updateOrderByOrderId (@PathVariable("id") String idOrder , @RequestBody OrderRequest request) {
+        String response = orderService.updateOrder(idOrder,request);
+        if(response == OrderMessage.ORDER_FAIL) {
+            return new ResponseEntity<>(OrderMessage.ORDER_FAIL,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(OrderMessage.ORDER_SUCCESS,HttpStatus.OK);
     }
 
     @GetMapping("/detail")

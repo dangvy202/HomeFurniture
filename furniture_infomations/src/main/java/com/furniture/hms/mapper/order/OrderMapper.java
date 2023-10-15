@@ -22,7 +22,7 @@ public interface OrderMapper {
     @Mapping(target = "idProduct" , source = "idProduct")
     @Mapping(target = "createBy" , source = "user.lastName")
     @Mapping(target = "createDate" , source = "createDate")
-    @Mapping(target = "updateBy" , constant = "user.lastName")
+    @Mapping(target = "updateBy" , source = "user.lastName")
     @Mapping(target = "updateDate" , source = "updateDate")
     Order toOrder(String orderId, int quantity, User user, int idProduct, Instant createDate,Instant updateDate);
 
