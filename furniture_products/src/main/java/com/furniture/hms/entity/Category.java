@@ -22,6 +22,9 @@ public class Category {
     @Column(name = "category_name")
     private String categoryName;
 
+    @Column(name = "category_picture")
+    private String categoryPicture;
+
     @Column(name = "create_by")
     private String createBy;
 
