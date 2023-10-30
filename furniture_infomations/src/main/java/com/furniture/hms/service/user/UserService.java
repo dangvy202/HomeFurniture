@@ -113,12 +113,15 @@ public class UserService {
                             request.getPassword()
                     )
             );
+            long secondExpired = (System.currentTimeMillis() + 1000 * 60 * 24);
+            long dateExpired = new Date(secondExpired).getTime();
+//            String formatExpiredToString = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS").format(dateExpired);
             UserDetail userDetail = new UserDetail(userEntity);
             var jwtToken = jwtService.generateToken(userDetail);
             return AuthenticationResponse.builder()
                     .status(true)
                     .error(null)
-                    .expired(new Date(System.currentTimeMillis() + 1000 * 60 * 24).toString())
+                    .expired(String.valueOf(dateExpired))
                     .message(UserMessage.SUCCESS)
                     .token(jwtToken)
                     .build();

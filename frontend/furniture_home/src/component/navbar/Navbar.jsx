@@ -111,7 +111,7 @@ const Navbar = () => {
             <div className="menu navbar collapse navbar-collapse">
               <ul className="menu-top navbar-nav">
                 <li className="nav-link">
-                  <a href="#" className="parent">
+                  <a href="/" className="parent">
                     Home
                   </a>
                 </li>
@@ -286,7 +286,7 @@ const Navbar = () => {
                   <div>
                     <a
                       className="login"
-                      href="user-login.html"
+                      href="/login"
                       rel="nofollow"
                       title="Log in to your customer account"
                     >

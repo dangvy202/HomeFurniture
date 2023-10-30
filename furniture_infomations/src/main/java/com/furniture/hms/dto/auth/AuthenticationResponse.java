@@ -2,6 +2,8 @@ package com.furniture.hms.dto.auth;
 
 import lombok.*;
 
+import java.util.Date;
+
 @Data
 @Getter
 @Setter

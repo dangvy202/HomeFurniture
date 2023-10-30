@@ -6,6 +6,9 @@ class ProductService {
     getProduct(){
         return axios.get(PRODUCT_API_BASE_URL);
     }
+    getProductByCategory(id){
+        return axios.get(PRODUCT_API_BASE_URL + `/category/${id}`);
+    }
 }
 
-export default new ProductService()
+export default new ProductService();

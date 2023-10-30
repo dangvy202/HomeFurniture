@@ -1,6 +1,20 @@
 import React, { Component } from "react";
+import CategoryService from "../../service/CategoryService";
 
 class Filter extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      category: [],
+    };
+  }
+
+  componentDidMount() {
+    CategoryService.getCategory().then((res) => {
+      this.setState({ category: res.data });
+    });
+  }
+
   render() {
     return (
       <div className="title-tab-content d-flex">
@@ -9,26 +23,18 @@ class Filter extends Component {
           Select Category
         </div>
         <ul className="nav nav-tabs wibkit row">
-          <li className="col-xs-6">
+          <li className="col-xs-6 all">
             <a href="#all" data-toggle="tab" className="active">
               ALL PRODUCTS
             </a>
           </li>
-          <li className="col-xs-6">
-            <a href="#table" data-toggle="tab">
-              SIDE TABLE
-            </a>
-          </li>
-          <li className="col-xs-6">
-            <a href="#armchair" data-toggle="tab">
-              ARMCHAIR
-            </a>
-          </li>
-          <li className="col-xs-6">
-            <a href="#cushion" data-toggle="tab">
-              CUSHION
-            </a>
-          </li>
+          {this.state.category.map((item) => (
+            <li className="col-xs-6" key={item.id}>
+              <a href={"#" + item.categoryName} data-toggle="tab">
+                {item.categoryName}
+              </a>
+            </li>
+          ))}
         </ul>
 
         {/* <!-- Sort by --> */}
