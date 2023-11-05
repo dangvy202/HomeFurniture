@@ -36,7 +36,7 @@ public class UserResponse {
         @JsonProperty("email")
         private String email;
 
-        @JsonProperty("password ")
+        @JsonProperty("password")
         private String password;
 
         @JsonProperty("address")

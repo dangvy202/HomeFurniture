@@ -9,7 +9,7 @@ class Login extends Component {
     this.state = {
       email: "",
       password: "",
-      isLogin: sessionStorage.getItem("token") != null,
+      isLogin: "",
     };
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
@@ -20,7 +20,8 @@ class Login extends Component {
       sessionStorage.getItem("status") != null ||
       sessionStorage.getItem("message") != null ||
       sessionStorage.getItem("token") != null ||
-      sessionStorage.getItem("expired") != null
+      sessionStorage.getItem("expired") != null ||
+      sessionStorage.getItem("email") != null
     ) {
       window.location.href = "/infomation";
     }
@@ -36,15 +37,17 @@ class Login extends Component {
     e.preventDefault();
     LoginService.login(this.state.email, this.state.password)
       .then((res) => {
+        this.setState({ isLogin: "false" });
         sessionStorage.setItem("status", res.data.status);
         sessionStorage.setItem("message", "SUCCESS");
         sessionStorage.setItem("token", res.data.token);
         sessionStorage.setItem("expired", res.data.expired);
+        sessionStorage.setItem("email", this.state.email);
         window.location.href = "/";
         return false;
       })
       .catch((error) => {
-        alert(error);
+        this.setState({ isLogin: "false" });
       });
   }
 
@@ -78,6 +81,7 @@ class Login extends Component {
               <div id="main">
                 <div className="container">
                   <h1 className="text-center title-page">Log In</h1>
+
                   <div className="login-form">
                     <form onSubmit={(e) => this.loginAccount(e)}>
                       <div>

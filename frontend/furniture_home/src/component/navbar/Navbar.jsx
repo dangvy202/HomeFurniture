@@ -267,7 +267,27 @@ const Navbar = () => {
             <div id="block_myaccount_infos">
               <div className="myaccount-title hidden-sm-down dropdown d-flex align-items-center justify-content-center">
                 <a href="#acount" data-toggle="collapse" className="acount">
-                  <i className="fa fa-user" aria-hidden="true"></i>
+                  <i
+                    className="fa fa-user"
+                    style={{ marginTop: "0px auto" }}
+                    aria-hidden="true"
+                  ></i>
+                  <span style={{ marginLeft: "10px", marginTop: "10px" }}>
+                    {sessionStorage.getItem("email")}
+                  </span>
+
+                  {/* {(() => {
+                    if (sessionStorage.getItem("token")) {
+                      return (
+                        <>
+                          <span style={{ marginTop: "-20px" }}>
+                            {sessionStorage.getItem("email")}
+                          </span>
+                          <i class="fa fa-angle-down" aria-hidden="true"></i>
+                        </>
+                      );
+                    }
+                  })()} */}
                 </a>
               </div>
               <div id="acount" className="collapse">
@@ -275,7 +295,7 @@ const Navbar = () => {
                   <div>
                     <a
                       className="login"
-                      href="user-acount.html"
+                      href="/infomation"
                       rel="nofollow"
                       title="Log in to your customer account"
                     >
@@ -283,28 +303,53 @@ const Navbar = () => {
                       <span>My Account</span>
                     </a>
                   </div>
-                  <div>
-                    <a
-                      className="login"
-                      href="/login"
-                      rel="nofollow"
-                      title="Log in to your customer account"
-                    >
-                      <i className="fa fa-sign-in"></i>
-                      <span>Sign in</span>
-                    </a>
-                  </div>
-                  <div>
-                    <a
-                      className="register"
-                      href="user-register.html"
-                      rel="nofollow"
-                      title="Register Account"
-                    >
-                      <i className="fa fa-user"></i>
-                      <span>Register Account</span>
-                    </a>
-                  </div>
+
+                  {(() => {
+                    if (sessionStorage.getItem("token") == null) {
+                      return (
+                        <>
+                          <div>
+                            <a
+                              className="login"
+                              href="/login"
+                              rel="nofollow"
+                              title="Log in to your customer account"
+                            >
+                              <i className="fa fa-sign-in"></i>
+                              <span>Sign in</span>
+                            </a>
+                          </div>
+                          <div>
+                            <a
+                              className="register"
+                              href="/register"
+                              rel="nofollow"
+                              title="Register Account"
+                            >
+                              <i className="fa fa-user"></i>
+                              <span>Register Account</span>
+                            </a>
+                          </div>
+                        </>
+                      );
+                    } else {
+                      return (
+                        <>
+                          <div>
+                            <a
+                              className="login"
+                              href="/logout"
+                              rel="nofollow"
+                              title="Log in to your customer account"
+                            >
+                              <i className="fa fa-sign-in"></i>
+                              <span>Sign out</span>
+                            </a>
+                          </div>
+                        </>
+                      );
+                    }
+                  })()}
                   <div>
                     <a
                       className="check-out"
@@ -320,78 +365,6 @@ const Navbar = () => {
                     <a href="user-wishlist.html" title="My Wishlists">
                       <i className="fa fa-heart"></i>My Wishlists
                     </a>
-                  </div>
-                  <div
-                    id="desktop_currency_selector"
-                    className="currency-selector groups-selector hidden-sm-down"
-                  >
-                    <ul className="list-inline">
-                      <li>
-                        <a title="Euro" rel="nofollow" href="#">
-                          EUR
-                        </a>
-                      </li>
-                      <li className="current list-inline-item">
-                        <a
-                          title="British Pound Sterling"
-                          rel="nofollow"
-                          href="#"
-                        >
-                          GBP
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div
-                    id="desktop_language_selector"
-                    className="language-selector groups-selector hidden-sm-down"
-                  >
-                    <ul className="list-inline">
-                      <li className="list-inline-item current">
-                        <a href="#">
-                          <img
-                            className="img-fluid"
-                            src="img/home/home1-flas.jpg"
-                            alt="English"
-                            width="16"
-                            height="11"
-                          />
-                        </a>
-                      </li>
-                      <li className="list-inline-item">
-                        <a href="#">
-                          <img
-                            className="img-fluid"
-                            src="img/home/home1-flas2.jpg"
-                            alt="Italiano"
-                            width="16"
-                            height="11"
-                          />
-                        </a>
-                      </li>
-                      <li className="list-inline-item">
-                        <a href="#">
-                          <img
-                            className="img-fluid"
-                            src="img/home/home1-flas3.jpg"
-                            alt="Français"
-                            width="16"
-                            height="11"
-                          />
-                        </a>
-                      </li>
-                      <li className="list-inline-item">
-                        <a href="#">
-                          <img
-                            className="img-fluid"
-                            src="img/home/home1-flas4.jpg"
-                            alt="Español"
-                            width="16"
-                            height="11"
-                          />
-                        </a>
-                      </li>
-                    </ul>
                   </div>
                 </div>
               </div>

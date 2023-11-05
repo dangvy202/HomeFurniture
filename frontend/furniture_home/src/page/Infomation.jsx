@@ -1,6 +1,40 @@
 import React, { Component } from "react";
+import InfomationService from "../service/InfomationService";
 
 class Infomation extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      fullName: "",
+      email: "",
+      address: "",
+      birthday: "",
+      nation: "",
+      phone: "",
+      picture: "",
+    };
+  }
+
+  componentDidMount() {
+    if (sessionStorage.getItem("email") != null) {
+      // ProductService.getProduct().then((res) => {
+      //   this.setState({ product: res.data });
+      // });
+      InfomationService.infomation(sessionStorage.getItem("email")).then(
+        (res) => {
+          this.setState({ fullName: res.data.user.username });
+          this.setState({ email: res.data.user.email });
+          this.setState({ address: res.data.user.address });
+          this.setState({ birthday: res.data.user.birthday });
+          this.setState({ nation: res.data.user.nation });
+          this.setState({ phone: res.data.user.phone });
+          this.setState({ picture: res.data.user.picture });
+        }
+      );
+    } else {
+      window.location.href = "/login";
+    }
+  }
   render() {
     return (
       <body className="user-acount">
@@ -33,31 +67,23 @@ class Infomation extends Component {
                       <tbody>
                         <tr>
                           <th className="first_item">My Name :</th>
-                          <td>David James</td>
-                        </tr>
-                        <tr>
-                          <th className="first_item">Company :</th>
-                          <td>TivaTheme</td>
+                          <td>{this.state.fullName}</td>
                         </tr>
                         <tr>
                           <th className="first_item">Address :</th>
-                          <td>123 canberra Street, New York, USA</td>
+                          <td>{this.state.address}</td>
                         </tr>
                         <tr>
-                          <th className="first_item">City :</th>
-                          <td>New York</td>
-                        </tr>
-                        <tr>
-                          <th className="first_item">Postal/Zip Code :</th>
-                          <td>10001</td>
+                          <th className="first_item">Nation :</th>
+                          <td>{this.state.nation}</td>
                         </tr>
                         <tr>
                           <th className="first_item">Phone :</th>
-                          <td>0123456789</td>
+                          <td>0{this.state.address}</td>
                         </tr>
                         <tr>
-                          <th className="first_item">Country:</th>
-                          <td>USA</td>
+                          <th className="first_item">Birthday:</th>
+                          <td>{this.state.birthday}</td>
                         </tr>
                       </tbody>
                     </table>

@@ -29,8 +29,8 @@ public class UsersController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @GetMapping("/infomation")
-    public ResponseEntity<UserResponse> infomationAccount(@RequestHeader("email") String email) {
+    @GetMapping("/infomation/{email}")
+    public ResponseEntity<UserResponse> infomationAccount(@PathVariable("email") String email) {
         UserResponse response = userService.getInfomation(email);
         if(response == null){
             return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);

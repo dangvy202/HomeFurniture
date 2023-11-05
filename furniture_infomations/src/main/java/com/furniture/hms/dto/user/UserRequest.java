@@ -1,16 +1,9 @@
 package com.furniture.hms.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.validation.annotation.Validated;
-
-import java.math.BigInteger;
-import java.util.Date;
 
 @Data
 @Setter
@@ -23,7 +16,7 @@ public class UserRequest {
     @JsonProperty("last_name")
     private String lastName;
 
-    @JsonProperty("username")
+    @JsonProperty("user_name")
     private String userName;
 
     @JsonProperty("email")
