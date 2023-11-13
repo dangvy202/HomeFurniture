@@ -13,8 +13,23 @@ class InfomationService {
           },
         }) 
   }
-  register() {
-    axios.post(INFOMATION_API_BASE_URL + 'register');
+   register(firstName, lastName, userName, email, password, address, birthday, nation, phone, picture) {
+    var formData = new FormData();
+    formData.append("firstName", firstName);
+    formData.append("lastName", lastName);
+    formData.append("userName", userName);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("address", address);
+    formData.append("birthday", birthday);
+    formData.append("nation", nation);
+    formData.append("phone", phone);
+    return axios.post(INFOMATION_API_BASE_URL + '/register', formData, {
+      headers:{
+                Accept: 'application/json',
+                  'Content-Type': 'application/json',
+          }
+    });
   }
 }
 export default new InfomationService();

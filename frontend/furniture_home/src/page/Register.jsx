@@ -1,6 +1,91 @@
 import React, { Component } from "react";
+import InfomationService from "../service/InfomationService";
 
 class Register extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      first_name: "",
+      last_name: "",
+      user_name: "",
+      email: "",
+      password: "",
+      address: "",
+      birthday: "",
+      nation: "",
+      phone: "",
+      picture: "",
+    };
+    this.onChageFirstName = this.onChageFirstName.bind(this);
+    this.onChangeLastName = this.onChangeLastName.bind(this);
+    this.onChangeUserName = this.onChangeUserName.bind(this);
+    this.onChangeEmail = this.onChangeEmail.bind(this);
+    this.onChangePassword = this.onChangePassword.bind(this);
+    this.onChangeAddress = this.onChangeAddress.bind(this);
+    this.onChangeBirthday = this.onChangeBirthday.bind(this);
+    this.onChangeNation = this.onChangeNation.bind(this);
+    this.onChangePhone = this.onChangePhone.bind(this);
+    this.onChangePicture = this.onChangePicture.bind(this);
+    this.regiterAccount = this.regiterAccount.bind(this);
+  }
+
+  onChageFirstName(e) {
+    this.setState({ first_name: e.target.value });
+  }
+
+  onChangeLastName(e) {
+    this.setState({ last_name: e.target.value });
+  }
+
+  onChangeUserName(e) {
+    this.setState({ user_name: e.target.value });
+  }
+
+  onChangeEmail(e) {
+    this.setState({ email: e.target.value });
+  }
+
+  onChangePassword(e) {
+    this.setState({ password: e.target.value });
+  }
+
+  onChangeAddress(e) {
+    this.setState({ address: e.target.value });
+  }
+
+  onChangeBirthday(e) {
+    this.setState({ birthday: e.target.value });
+  }
+
+  onChangeNation(e) {
+    this.setState({ nation: e.target.value });
+  }
+
+  onChangePhone(e) {
+    this.setState({ phone: e.target.value });
+  }
+
+  onChangePicture(e) {
+    this.setState({ picture: e.target.value });
+  }
+
+  async regiterAccount(e) {
+    e.preventDefault();
+    InfomationService.register(
+      this.state.first_name,
+      this.state.last_name,
+      this.state.user_name,
+      this.state.email,
+      this.state.password,
+      this.state.address,
+      this.state.birthday,
+      this.state.nation,
+      this.state.phone,
+      this.state.picture
+    ).then((res) => {
+      console.log(res + "asdad");
+    });
+  }
   render() {
     return (
       <div className="user-register blog">
@@ -41,19 +126,19 @@ class Register extends Component {
                           Create Account
                         </h1>
                         <form
-                          action="#"
                           id="customer-form"
                           className="js-customer-form"
-                          method="post"
+                          onSubmit={(e) => this.regiterAccount(e)}
                         >
                           <div>
                             <div className="form-group">
                               <div>
                                 <input
                                   className="form-control"
-                                  name="firstname"
+                                  name="first_name"
                                   type="text"
                                   placeholder="First name"
+                                  onChange={this.onChageFirstName}
                                 />
                               </div>
                             </div>
@@ -61,9 +146,10 @@ class Register extends Component {
                               <div>
                                 <input
                                   className="form-control"
-                                  name="lastname"
+                                  name="last_name"
                                   type="text"
                                   placeholder="Last name"
+                                  onChange={this.onChangeLastName}
                                 />
                               </div>
                             </div>
@@ -74,6 +160,7 @@ class Register extends Component {
                                   name="user_name"
                                   type="text"
                                   placeholder="Full name"
+                                  onChange={this.onChangeUserName}
                                 />
                               </div>
                             </div>
@@ -84,6 +171,7 @@ class Register extends Component {
                                   name="email"
                                   type="email"
                                   placeholder="Email"
+                                  onChange={this.onChangeEmail}
                                 />
                               </div>
                             </div>
@@ -95,6 +183,7 @@ class Register extends Component {
                                     name="password"
                                     type="password"
                                     placeholder="Password"
+                                    onChange={this.onChangePassword}
                                   />
                                 </div>
                               </div>
@@ -107,6 +196,7 @@ class Register extends Component {
                                     name="address"
                                     type="text"
                                     placeholder="Address"
+                                    onChange={this.onChangeAddress}
                                   />
                                 </div>
                               </div>
@@ -119,6 +209,7 @@ class Register extends Component {
                                     name="birthday"
                                     type="date"
                                     placeholder="Birthday"
+                                    onChange={this.onChangeBirthday}
                                   />
                                 </div>
                               </div>
@@ -131,6 +222,7 @@ class Register extends Component {
                                     name="nation"
                                     type="text"
                                     placeholder="Nation"
+                                    onChange={this.onChangeNation}
                                   />
                                 </div>
                               </div>
@@ -143,20 +235,8 @@ class Register extends Component {
                                     name="phone"
                                     type="number"
                                     min={5}
-                                    max={13}
                                     placeholder="Phone"
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                            <div className="form-group">
-                              <div>
-                                <div className="input-group js-parent-focus">
-                                  <input
-                                    className="form-control js-child-focus js-visible-password"
-                                    name="picture"
-                                    type="file"
-                                    placeholder="Picture"
+                                    onChange={this.onChangePhone}
                                   />
                                 </div>
                               </div>
@@ -164,11 +244,7 @@ class Register extends Component {
                           </div>
                           <div className="clearfix">
                             <div>
-                              <button
-                                className="btn btn-primary"
-                                data-link-action="sign-in"
-                                type="submit"
-                              >
+                              <button className="btn btn-primary" type="submit">
                                 Create Account
                               </button>
                             </div>

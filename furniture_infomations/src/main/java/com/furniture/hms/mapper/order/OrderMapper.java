@@ -3,7 +3,6 @@ package com.furniture.hms.mapper.order;
 import com.furniture.hms.dto.order.OrderResponse;
 import com.furniture.hms.entity.Order;
 import com.furniture.hms.entity.User;
-import com.furniture.hms.feign.response.ProductResponse.ProductResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

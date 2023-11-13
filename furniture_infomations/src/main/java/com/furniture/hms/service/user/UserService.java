@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
@@ -53,7 +54,10 @@ public class UserService {
                 Instant updateDate = Instant.now();
                 Date dateFormat = new SimpleDateFormat("yyyy-MM-dd").parse(userRequest.getBirthday());
                 String password = bCryptPasswordEncoder.encode(userRequest.getPassword());
-                User user = userRepository.save(UserMapper.INSTANCE.toUserEntity(userRequest,createDate,updateDate,dateFormat,password));
+                BigDecimal phone = BigDecimal.valueOf(Long.parseLong(userRequest.getPhone()));
+                User user = userRepository.save(
+                        UserMapper.INSTANCE.toUserEntity
+                                (phone,userRequest.getNation(),userRequest.getAddress(),userRequest.getFirstName(),userRequest.getLastName(),userRequest.getUserName(),userRequest.getEmail(),createDate,updateDate,dateFormat,password));
                 User userDetail = userRepository.findById(user.getId()).orElse(null);
                 if(userDetail != null){
                     UserResponse.DataUser userData = UserMapper.INSTANCE.toUserRes(userDetail);

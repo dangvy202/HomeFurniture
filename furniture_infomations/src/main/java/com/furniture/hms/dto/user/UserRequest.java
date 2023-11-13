@@ -4,19 +4,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Setter
 @Getter
 public class UserRequest {
 
-    @JsonProperty("first_name")
+    @JsonProperty("firstName")
     private String firstName;
 
-    @JsonProperty("last_name")
+    @JsonProperty("lastName")
     private String lastName;
 
-    @JsonProperty("user_name")
+    @JsonProperty("userName")
     private String userName;
 
     @JsonProperty("email")
@@ -37,6 +38,4 @@ public class UserRequest {
     @JsonProperty("phone")
     private String phone;
 
-    @JsonProperty("picture")
-    private String picture;
 }

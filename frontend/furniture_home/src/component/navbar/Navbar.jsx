@@ -269,25 +269,23 @@ const Navbar = () => {
                 <a href="#acount" data-toggle="collapse" className="acount">
                   <i
                     className="fa fa-user"
-                    style={{ marginTop: "0px auto" }}
+                    style={{ marginTop: "0px" }}
                     aria-hidden="true"
                   ></i>
-                  <span style={{ marginLeft: "10px", marginTop: "10px" }}>
-                    {sessionStorage.getItem("email")}
-                  </span>
-
-                  {/* {(() => {
+                  {(() => {
                     if (sessionStorage.getItem("token")) {
                       return (
                         <>
-                          <span style={{ marginTop: "-20px" }}>
+                          <span
+                            style={{ marginLeft: "10px", marginTop: "10px" }}
+                          >
                             {sessionStorage.getItem("email")}
                           </span>
                           <i class="fa fa-angle-down" aria-hidden="true"></i>
                         </>
                       );
                     }
-                  })()} */}
+                  })()}
                 </a>
               </div>
               <div id="acount" className="collapse">
