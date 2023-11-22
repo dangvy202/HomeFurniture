@@ -60,7 +60,6 @@ class ProductByCategory extends Component {
                 ) {
                   return (
                     <div className="col-md-3 col-xs-12" key={item.id}>
-                      coi cai nay{item.id}
                       <div className="product-miniature js-product-miniature item-one first-item">
                         <div className="thumbnail-container">
                           <a href="product-detail.html">

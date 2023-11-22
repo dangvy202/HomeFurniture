@@ -15,6 +15,9 @@ class Register extends Component {
       nation: "",
       phone: "",
       picture: "",
+      status: false,
+      error: "",
+      message: "PROCESS",
     };
     this.onChageFirstName = this.onChageFirstName.bind(this);
     this.onChangeLastName = this.onChangeLastName.bind(this);
@@ -27,6 +30,7 @@ class Register extends Component {
     this.onChangePhone = this.onChangePhone.bind(this);
     this.onChangePicture = this.onChangePicture.bind(this);
     this.regiterAccount = this.regiterAccount.bind(this);
+    this.openPopup = this.openPopup.bind(this);
   }
 
   onChageFirstName(e) {
@@ -69,8 +73,9 @@ class Register extends Component {
     this.setState({ picture: e.target.value });
   }
 
-  async regiterAccount(e) {
+  regiterAccount(e) {
     e.preventDefault();
+    // popup.hidden();
     InfomationService.register(
       this.state.first_name,
       this.state.last_name,
@@ -82,14 +87,98 @@ class Register extends Component {
       this.state.nation,
       this.state.phone,
       this.state.picture
-    ).then((res) => {
-      console.log(res + "asdad");
-    });
+    )
+      .then((res) => {
+        this.setState({ status: res.data.status });
+        this.setState({ error: res.data.error });
+        this.setState({ message: res.data.message });
+      })
+      .catch((error) => {
+        this.setState({ status: false });
+        this.setState({ error: "FAIL" });
+        this.setState({ message: "REJECT" });
+      });
   }
+  async openPopup() {}
   render() {
     return (
       <div className="user-register blog">
         {/* <!-- main content --> */}
+
+        {/* {(() => {
+          console.log("show = " + this.state.message);
+          if (this.state.message === "EMAIL EXIST") {
+            return (
+              <> */}
+        <div
+          className="modal fade"
+          id="exampleModal"
+          tabIndex="-1"
+          role="dialog"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="exampleModalLabel">
+                  {this.state.message === "SUCCESS" ? "Message" : "Error!"}
+                </h5>
+                <button
+                  type="button"
+                  className="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                {/* {this.state.message === "SUCCESS" ? "Register Success" :} */}
+                {(() => {
+                  if (
+                    this.state.message === "ACCOUNT NOT EXIST" &&
+                    this.state.error === "ACCOUNT NOT EXIST" &&
+                    this.state.status === true
+                  ) {
+                    return <>CAN'T REGISTER ACCOUNT</>;
+                  } else if (
+                    this.state.message === "SUCCESS" &&
+                    this.state.error === null &&
+                    this.state.status === true
+                  ) {
+                    return <>REGISTER SUCCESS</>;
+                  } else if (
+                    this.state.message === "EMAIL EXIST" &&
+                    this.state.error === "FAIL" &&
+                    this.state.status === false
+                  ) {
+                    return <>ACCOUNT EXITS</>;
+                  } else {
+                    return <>REGISTER FAIL</>;
+                  }
+                })()}
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Close
+                </button>
+                <a href="/" className="btn btn-primary">
+                  Back Home
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* </>
+            );
+          }
+        })()} */}
+
         <div className="main-content">
           <div className="wrap-banner">
             {/* <!-- breadcrumb --> */}
@@ -244,7 +333,13 @@ class Register extends Component {
                           </div>
                           <div className="clearfix">
                             <div>
-                              <button className="btn btn-primary" type="submit">
+                              {/* <!-- Button trigger modal --> */}
+                              <button
+                                className="btn btn-primary"
+                                type="submit"
+                                data-toggle="modal"
+                                data-target="#exampleModal"
+                              >
                                 Create Account
                               </button>
                             </div>
