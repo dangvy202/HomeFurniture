@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Banner from "../component/banner/Banner";
-import Category from "../component/categories/Category";
 import Product from "../component/product/Product";
 
 class Home extends Component {
@@ -8,7 +7,6 @@ class Home extends Component {
     return (
       // <body id="home2">
       <div className="main-content">
-        <Category />
         {/* <!-- main --> */}
         <div id="wrapper-site">
           <div id="content-wrapper" className="full-width">

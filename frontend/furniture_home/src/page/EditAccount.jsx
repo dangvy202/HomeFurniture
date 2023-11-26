@@ -1,19 +1,18 @@
 import React, { Component } from "react";
 import InfomationService from "../service/InfomationService";
 
-class Register extends Component {
+class editAccount extends Component {
   constructor(props) {
     super(props);
     this.state = {
       first_name: "",
       last_name: "",
       user_name: "",
-      email: "",
-      password: "",
       address: "",
       birthday: "",
       nation: "",
       phone: "",
+      picture: "",
       status: false,
       error: "",
       message: "PROCESS",
@@ -21,14 +20,12 @@ class Register extends Component {
     this.onChageFirstName = this.onChageFirstName.bind(this);
     this.onChangeLastName = this.onChangeLastName.bind(this);
     this.onChangeUserName = this.onChangeUserName.bind(this);
-    this.onChangeEmail = this.onChangeEmail.bind(this);
-    this.onChangePassword = this.onChangePassword.bind(this);
     this.onChangeAddress = this.onChangeAddress.bind(this);
     this.onChangeBirthday = this.onChangeBirthday.bind(this);
     this.onChangeNation = this.onChangeNation.bind(this);
     this.onChangePhone = this.onChangePhone.bind(this);
-    this.regiterAccount = this.regiterAccount.bind(this);
-    this.openPopup = this.openPopup.bind(this);
+    this.onChangePicture = this.onChangePicture.bind(this);
+    this.editAccount = this.editAccount.bind(this);
   }
 
   onChageFirstName(e) {
@@ -41,14 +38,6 @@ class Register extends Component {
 
   onChangeUserName(e) {
     this.setState({ user_name: e.target.value });
-  }
-
-  onChangeEmail(e) {
-    this.setState({ email: e.target.value });
-  }
-
-  onChangePassword(e) {
-    this.setState({ password: e.target.value });
   }
 
   onChangeAddress(e) {
@@ -67,19 +56,41 @@ class Register extends Component {
     this.setState({ phone: e.target.value });
   }
 
-  regiterAccount(e) {
+  onChangePicture(e) {
+    this.setState({ picture: e.target.value });
+  }
+  componentDidMount() {
+    if (sessionStorage.getItem("email") != null) {
+      InfomationService.infomation(sessionStorage.getItem("email")).then(
+        (res) => {
+          this.setState({ first_name: res.data.user.first_name });
+          this.setState({ last_name: res.data.user.last_name });
+          this.setState({ fullName: res.data.user.username });
+          this.setState({ email: res.data.user.email });
+          this.setState({ address: res.data.user.address });
+          this.setState({ birthday: res.data.user.birthday });
+          this.setState({ nation: res.data.user.nation });
+          this.setState({ phone: res.data.user.phone });
+          this.setState({ picture: res.data.user.picture });
+        }
+      );
+    } else {
+      window.location.href = "/login";
+    }
+  }
+
+  editAccount(e) {
     e.preventDefault();
     // popup.hidden();
-    InfomationService.register(
+    InfomationService.editAccount(
       this.state.first_name,
       this.state.last_name,
       this.state.user_name,
-      this.state.email,
-      this.state.password,
       this.state.address,
       this.state.birthday,
       this.state.nation,
-      this.state.phone
+      this.state.phone,
+      this.state.picture
     )
       .then((res) => {
         this.setState({ status: res.data.status });
@@ -92,7 +103,7 @@ class Register extends Component {
         this.setState({ message: "REJECT" });
       });
   }
-  async openPopup() {}
+
   render() {
     return (
       <div className="user-register blog">
@@ -121,7 +132,7 @@ class Register extends Component {
                 </button>
               </div>
               <div className="modal-body">
-                {(() => {
+                {/* {(() => {
                   if (
                     this.state.message === "ACCOUNT NOT EXIST" &&
                     this.state.error === "ACCOUNT NOT EXIST" &&
@@ -143,7 +154,7 @@ class Register extends Component {
                   } else {
                     return <>REGISTER FAIL</>;
                   }
-                })()}
+                })()} */}
               </div>
               <div className="modal-footer">
                 <button
@@ -174,7 +185,7 @@ class Register extends Component {
                       </a>
                     </li>
                     <li>
-                      <span>Register</span>
+                      <span>Edit</span>
                     </li>
                   </ol>
                 </div>
@@ -193,121 +204,123 @@ class Register extends Component {
                   <div id="main">
                     <div id="content" className="page-content">
                       <div className="register-form text-center">
-                        <h1 className="text-center title-page">
-                          Create Account
-                        </h1>
+                        <h1 className="text-center title-page">Edit Account</h1>
                         <form
                           id="customer-form"
                           className="js-customer-form"
-                          onSubmit={(e) => this.regiterAccount(e)}
+                          onSubmit={(e) => this.editAccount(e)}
                         >
                           <div>
                             <div className="form-group">
                               <div>
+                                <p>First Name</p>
                                 <input
                                   className="form-control"
                                   name="first_name"
                                   type="text"
                                   placeholder="First name"
                                   onChange={this.onChageFirstName}
+                                  value={this.state.first_name}
                                 />
                               </div>
                             </div>
                             <div className="form-group">
                               <div>
+                                <p>Last Name</p>
                                 <input
                                   className="form-control"
                                   name="last_name"
                                   type="text"
                                   placeholder="Last name"
                                   onChange={this.onChangeLastName}
+                                  value={this.state.last_name}
                                 />
                               </div>
                             </div>
                             <div className="form-group">
                               <div>
+                                <p>Full Name</p>
                                 <input
                                   className="form-control"
                                   name="user_name"
                                   type="text"
                                   placeholder="Full name"
                                   onChange={this.onChangeUserName}
+                                  value={this.state.fullName}
                                 />
                               </div>
                             </div>
                             <div className="form-group">
                               <div>
-                                <input
-                                  className="form-control"
-                                  name="email"
-                                  type="email"
-                                  placeholder="Email"
-                                  onChange={this.onChangeEmail}
-                                />
-                              </div>
-                            </div>
-                            <div className="form-group">
-                              <div>
-                                <div className="input-group js-parent-focus">
+                                <div>
+                                  <p>Address</p>
                                   <input
-                                    className="form-control js-child-focus js-visible-password"
-                                    name="password"
-                                    type="password"
-                                    placeholder="Password"
-                                    onChange={this.onChangePassword}
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                            <div className="form-group">
-                              <div>
-                                <div className="input-group js-parent-focus">
-                                  <input
-                                    className="form-control js-child-focus js-visible-password"
+                                    className="form-control"
                                     name="address"
                                     type="text"
                                     placeholder="Address"
                                     onChange={this.onChangeAddress}
+                                    value={this.state.address}
                                   />
                                 </div>
                               </div>
                             </div>
                             <div className="form-group">
                               <div>
-                                <div className="input-group js-parent-focus">
+                                <div>
+                                  <p>Birthday</p>
                                   <input
-                                    className="form-control js-child-focus js-visible-password"
+                                    className="form-control"
                                     name="birthday"
                                     type="date"
                                     placeholder="Birthday"
                                     onChange={this.onChangeBirthday}
+                                    value={this.state.birthday}
                                   />
                                 </div>
                               </div>
                             </div>
                             <div className="form-group">
                               <div>
-                                <div className="input-group js-parent-focus">
+                                <div>
+                                  <p>Nation</p>
                                   <input
-                                    className="form-control js-child-focus js-visible-password"
+                                    className="form-control"
                                     name="nation"
                                     type="text"
                                     placeholder="Nation"
                                     onChange={this.onChangeNation}
+                                    value={this.state.nation}
                                   />
                                 </div>
                               </div>
                             </div>
                             <div className="form-group">
                               <div>
-                                <div className="input-group js-parent-focus">
+                                <div>
+                                  <p>Phone Number</p>
                                   <input
-                                    className="form-control js-child-focus js-visible-password"
+                                    className="form-control"
                                     name="phone"
                                     type="number"
                                     min={5}
                                     placeholder="Phone"
                                     onChange={this.onChangePhone}
+                                    value={"0" + this.state.phone}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                            <div className="form-group">
+                              <div>
+                                <div>
+                                  <p>Picture</p>
+                                  <input
+                                    className="form-control"
+                                    name="picture"
+                                    type="file"
+                                    placeholder="Picture"
+                                    onChange={this.onChangePicture}
                                   />
                                 </div>
                               </div>
@@ -322,7 +335,7 @@ class Register extends Component {
                                 data-toggle="modal"
                                 data-target="#exampleModal"
                               >
-                                Create Account
+                                Save Edit
                               </button>
                             </div>
                           </div>
@@ -340,4 +353,4 @@ class Register extends Component {
   }
 }
 
-export default Register;
+export default editAccount;

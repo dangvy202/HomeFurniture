@@ -17,9 +17,6 @@ class Infomation extends Component {
 
   componentDidMount() {
     if (sessionStorage.getItem("email") != null) {
-      // ProductService.getProduct().then((res) => {
-      //   this.setState({ product: res.data });
-      // });
       InfomationService.infomation(sessionStorage.getItem("email")).then(
         (res) => {
           this.setState({ fullName: res.data.user.username });
@@ -66,6 +63,17 @@ class Infomation extends Component {
                     <table className="std table">
                       <tbody>
                         <tr>
+                          <th className="first_item">Picture :</th>
+                          <td>
+                            <img
+                              src={require("../component/asset/infomation/noimage.jpg")}
+                              alt="img"
+                              width={"100px"}
+                              height={"100px"}
+                            />
+                          </td>
+                        </tr>
+                        <tr>
                           <th className="first_item">My Name :</th>
                           <td>{this.state.fullName}</td>
                         </tr>
@@ -88,13 +96,9 @@ class Infomation extends Component {
                       </tbody>
                     </table>
                   </div>
-                  <button
-                    className="btn btn-primary"
-                    data-link-action="sign-in"
-                    type="submit"
-                  >
-                    view Address
-                  </button>
+                  <a href="/editAccount" className="btn btn-primary">
+                    CHANGE INFOMATION
+                  </a>
                   <div className="order">
                     <h4>
                       Order
