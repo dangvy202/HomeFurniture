@@ -9,7 +9,7 @@ class Login extends Component {
     this.state = {
       email: "",
       password: "",
-      isLogin: "",
+      isLogin: true,
     };
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
@@ -43,11 +43,9 @@ class Login extends Component {
         sessionStorage.setItem("token", res.data.token);
         sessionStorage.setItem("expired", res.data.expired);
         sessionStorage.setItem("email", this.state.email);
-        window.location.href = "/";
-        return false;
       })
       .catch((error) => {
-        this.setState({ isLogin: "false" });
+        this.setState({ isLogin: false });
       });
   }
 
@@ -55,6 +53,63 @@ class Login extends Component {
     return (
       <body className="user-login blog">
         <div className="main-content">
+          <div
+            className="modal fade"
+            id="exampleModal"
+            tabIndex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div className="modal-dialog" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title" id="exampleModalLabel">
+                    {this.state.isLogin === false ? "Error!" : "Message!"}
+                  </h5>
+                  <button
+                    type="button"
+                    className="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div className="modal-body">
+                  {(() => {
+                    if (this.state.isLogin === false) {
+                      return <>LOGIN FAIL</>;
+                    } else {
+                      return <>LOGIN SUCCESS</>;
+                    }
+                  })()}
+                </div>
+                <div className="modal-footer">
+                  {(() => {
+                    if (this.state.isLogin === false) {
+                      return (
+                        <>
+                          <button
+                            type="button"
+                            className="btn btn-secondary"
+                            data-dismiss="modal"
+                          >
+                            Close
+                          </button>
+                        </>
+                      );
+                    }
+                  })()}
+
+                  <a href="/" className="btn btn-primary">
+                    Back Home
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="wrap-banner">
             {/* <!-- breadcrumb --> */}
             <nav className="breadcrumb-bg">
@@ -129,7 +184,8 @@ class Login extends Component {
                           <input type="hidden" name="submitLogin" value="1" />
                           <button
                             className="btn btn-primary"
-                            // data-link-action="sign-in"
+                            data-toggle="modal"
+                            data-target="#exampleModal"
                             type="submit"
                           >
                             Sign in

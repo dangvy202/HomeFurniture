@@ -28,7 +28,6 @@ public class Blog {
 
     @Column(name = "content")
     private String content;
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_category", referencedColumnName = "id_category")
     private CategoryBlog categoryBlog;

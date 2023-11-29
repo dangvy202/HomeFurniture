@@ -1,10 +1,14 @@
 import Footer from './component/footer/Footer';
 import Navbar from './component/navbar/Navbar';
+import Category from './component/categories/Category';
 import Home from './page/Home';
 import Login from './page/Login';
 import Infomation from './page/Infomation';
 import { BrowserRouter,Routes,Route  } from 'react-router-dom';
 import Register from './page/Register';
+import Blog from './page/Blog';
+import EditAccount from './page/EditAccount';
+
 
 function App() {
   var dateNow = new Date().getTime();
@@ -20,11 +24,14 @@ function App() {
     <div>
       <BrowserRouter>
         <Navbar />
+        <Category />
           <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path='/infomation' element={<Infomation />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />}></Route>
+            <Route path="/" element={<Home />} />
+            <Route path='/infomation' element={<Infomation />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/editAccount" element={<EditAccount />} />
           </Routes>
         <Footer />
       </BrowserRouter>
