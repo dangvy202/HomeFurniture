@@ -41,7 +41,7 @@ public class UsersController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<UserResponse> saveInfomation(@RequestBody UserRequest request){
+    public ResponseEntity<UserResponse> saveInfomation(@ModelAttribute  UserRequest request){
         UserResponse response = userService.saveEditAccount(request);
         if(response == null) {
             return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);

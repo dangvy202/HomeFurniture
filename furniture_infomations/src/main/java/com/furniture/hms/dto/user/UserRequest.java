@@ -1,6 +1,7 @@
 package com.furniture.hms.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.servlet.annotation.MultipartConfig;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,5 +38,8 @@ public class UserRequest {
 
     @JsonProperty("phone")
     private String phone;
+
+    @JsonProperty("picture")
+    private MultipartFile picture;
 
 }
