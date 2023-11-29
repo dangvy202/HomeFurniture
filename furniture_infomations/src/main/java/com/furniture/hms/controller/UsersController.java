@@ -11,6 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.*;
 
 @RestController
 @RequestMapping("/user")
@@ -19,6 +22,33 @@ import org.springframework.web.bind.annotation.*;
 public class UsersController {
 
     private final UserService userService;
+
+//    @PostMapping("/check")
+//    public ResponseEntity<UserResponse> saveInfomatioasdadn(@RequestParam(UserRequest) String request){
+////        UserResponse response = userService.saveEditAccount(request);
+////        if(response == null) {
+////            return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+////        } else {
+////            return new ResponseEntity<>(response,HttpStatus.CREATED);
+////        }
+//        return null;
+//    }
+
+    @PostMapping("/img/save")
+    public ResponseEntity<String> saveImageInfomation(@RequestBody MultipartFile picture) throws Exception {
+        String response = userService.saveImageInfomation(picture);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    @PostMapping("/save")
+    public ResponseEntity<UserResponse> saveInfomation(@RequestBody UserRequest request){
+        UserResponse response = userService.saveEditAccount(request);
+        if(response == null) {
+            return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            return new ResponseEntity<>(response,HttpStatus.CREATED);
+        }
+    }
 
     @PostMapping("/register")
     public ResponseEntity<UserResponse> registerAccount(@Validated @RequestBody UserRequest userRequest) {

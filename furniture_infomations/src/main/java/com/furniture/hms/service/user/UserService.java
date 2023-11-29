@@ -6,6 +6,7 @@ import com.furniture.hms.dto.auth.AuthenticationResponse;
 import com.furniture.hms.dto.user.UserRequest;
 import com.furniture.hms.dto.user.UserResponse;
 import com.furniture.hms.entity.User;
+import com.furniture.hms.enums.ImageEnum;
 import com.furniture.hms.mapper.user.UserMapper;
 import com.furniture.hms.repository.user.UserRepository;
 import com.furniture.hms.security.UserDetail;
@@ -17,7 +18,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -28,8 +33,6 @@ import java.util.Date;
 @Slf4j
 public class UserService {
 
-    private static final String KEY = "ACCOUNT";
-
     private final UserRepository userRepository;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -37,6 +40,75 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
 
     private final JwtService jwtService;
+
+    private static final String PATH = "D:\\HomeFurniture\\frontend\\furniture_home\\src\\component\\asset\\infomation";
+
+    public String saveImageInfomation(MultipartFile picture) throws Exception {
+        //check picture(save img and png)
+
+        if(picture.getOriginalFilename() != null || !picture.isEmpty()) {
+            if(picture.getContentType().equals("image/jpeg") || picture.getContentType().equals("image/png")) {
+
+                BufferedOutputStream outputStream = new BufferedOutputStream(
+                        new FileOutputStream(
+                                new File(PATH,picture.getOriginalFilename())
+                        )
+                );
+                outputStream.write(picture.getBytes());
+                outputStream.flush();
+                outputStream.close();
+                return ImageEnum.SUCCESS.getValue();
+            }else {
+                return ImageEnum.FAIL_EXTENSION.getValue();
+            }
+        }else {
+            return ImageEnum.NULL.getValue();
+        }
+    }
+    public UserResponse saveEditAccount(UserRequest request) {
+        UserResponse response = new UserResponse();
+
+        User userDetail = userRepository.findUserByEmail(request.getEmail());
+
+        if(userDetail != null) {
+            try{
+//                BufferedOutputStream outputStream = new BufferedOutputStream(
+//                        new FileOutputStream(
+//                                new File(PATH,picture.getOriginalFilename())
+//                        )
+//                );
+//                outputStream.write(picture.getBytes());
+//                outputStream.flush();
+//                outputStream.close();
+                //set response
+                Date dateFormat = new SimpleDateFormat("yyyy-MM-dd").parse(request.getBirthday());
+                BigDecimal phone = BigDecimal.valueOf(Long.parseLong(request.getPhone()));
+
+                userDetail.setFirstName(request.getFirstName());
+                userDetail.setLastName(request.getLastName());
+                userDetail.setUserName(request.getUserName());
+                userDetail.setAddress(request.getAddress());
+                userDetail.setBirthday(dateFormat);
+                userDetail.setNation(request.getNation());
+                userDetail.setPhone(phone.toBigInteger());
+//                userDetail.setPicture(picture.getOriginalFilename());
+                userRepository.save(userDetail);
+
+
+                UserResponse.DataUser userData = UserMapper.INSTANCE.toUserRes(userDetail);
+                response.setStatus(true);
+                response.setError(null);
+                response.setMessage(UserMessage.SUCCESS);
+                response.setUser(userData);
+                return response;
+            } catch (Exception ex){
+                ex.printStackTrace();
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
 
     @Transactional
     public UserResponse registerAccount(UserRequest userRequest){

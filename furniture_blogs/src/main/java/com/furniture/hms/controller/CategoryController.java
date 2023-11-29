@@ -1,7 +1,7 @@
 package com.furniture.hms.controller;
 
-import com.furniture.hms.dto.blog.BlogResponse;
-import com.furniture.hms.service.blog.BlogService;
+import com.furniture.hms.dto.category.CategoryBlogResponse;
+import com.furniture.hms.service.category.CategoryBlogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,16 +10,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/blog")
+@RequestMapping("/categoryBlog")
 @RequiredArgsConstructor
 @CrossOrigin("http://localhost:3000")
-public class BlogController {
+public class CategoryController {
 
-    private final BlogService blogService;
+    private final CategoryBlogService categoryBlogService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<List<BlogResponse>> getBlogById(@PathVariable("id") int id){
-        List<BlogResponse> response = blogService.getBlogById(id);
+    @GetMapping
+    public ResponseEntity<List<CategoryBlogResponse>> getAllCategories() {
+        List<CategoryBlogResponse> response = categoryBlogService.getAllCategoriesBlog();
         if(response != null){
             return new ResponseEntity<>(response, HttpStatus.OK);
         }else {

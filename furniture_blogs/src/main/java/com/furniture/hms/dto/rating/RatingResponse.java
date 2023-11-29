@@ -1,2 +1,4 @@
-package com.furniture.hms.dto.rating;public class RatingResponse {
+package com.furniture.hms.dto.rating;
+
+public class RatingResponse {
 }
