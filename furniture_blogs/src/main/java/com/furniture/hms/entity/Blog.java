@@ -1,10 +1,21 @@
 package com.furniture.hms.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-
-import java.awt.*;
 import java.util.Date;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Data
 @Getter
@@ -26,8 +37,12 @@ public class Blog {
     @Column(name = "status")
     private Integer status;
 
+    @Column(name = "short_content")
+    private String shortContent;
+
     @Column(name = "content")
     private String content;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_category", referencedColumnName = "id_category")
     private CategoryBlog categoryBlog;

@@ -23,7 +23,7 @@ class CategoryBlog extends Component {
         <div class="block-content">
           {this.state.categoryBlog.map((item) => (
             <div class="cateTitle hasSubCategory open level1">
-              <a class="cateItem" href="#">
+              <a class="cateItem" href={() => this.changeTab(item.id)}>
                 {item.categoryName}
               </a>
             </div>

@@ -1,8 +1,22 @@
 import React, { Component } from "react";
 import logo from "../asset/home/logo.png";
 import logomobie from "../asset/home/logo-mobie.png";
+import CategoryBlogService from "../../service/CategoryBlogService";
 
 class Navbar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      categoryBlog: []
+    }
+  }
+
+  componentDidMount() {
+    CategoryBlogService.getCategory().then((res) => {
+      this.setState({categoryBlog: res.data});
+    });
+  }
+
   render() {
     return (
       <header>
@@ -12,7 +26,7 @@ class Navbar extends Component {
             <div id="mobile_mainmenu" className="item-mobile-top">
               <i className="fa fa-bars" aria-hidden="true"></i>
             </div>
-
+  
             {/* <!-- logo --> */}
             <div className="mobile-logo">
               <a href="home2.html">
@@ -23,13 +37,13 @@ class Navbar extends Component {
                 />
               </a>
             </div>
-
+  
             {/* <!-- menu right --> */}
             <div className="mobile-menutop" data-target="#mobile-pagemenu">
               <i className="zmdi zmdi-more"></i>
             </div>
           </div>
-
+  
           {/* <!-- search --> */}
           <div id="mobile_search" className="d-flex">
             <div id="mobile_search_content">
@@ -68,10 +82,7 @@ class Navbar extends Component {
                           </td>
                           <td className="action">
                             <a className="remove" href="#">
-                              <i
-                                className="fa fa-trash-o"
-                                aria-hidden="true"
-                              ></i>
+                              <i className="fa fa-trash-o" aria-hidden="true"></i>
                             </a>
                           </td>
                         </tr>
@@ -79,7 +90,7 @@ class Navbar extends Component {
                           <td colSpan="2">Total:</td>
                           <td>£92.96</td>
                         </tr>
-
+  
                         <tr>
                           <td
                             colSpan="3"
@@ -103,7 +114,7 @@ class Navbar extends Component {
             </div>
           </div>
         </div>
-
+  
         {/* <!-- header desktop --> */}
         <div className="header-top d-xs-none">
           <div className="row margin-0">
@@ -120,9 +131,24 @@ class Navbar extends Component {
                     </a>
                   </li>
                   <li>
-                    <a href="/blog" className="parent">
-                      Blog
+                    <a href="#" className="parent">
+                      Blog 
                     </a>
+                    <div className="dropdown-menu">
+                      <ul>
+                        {this.state.categoryBlog.map((item) => (
+                          <li className="item">
+                            <a
+                              href="blog-list-sidebar-left.html"
+                              title="Blog List (Sidebar Left)"
+                            >
+                              
+                                {item.categoryName}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </li>
                   <li>
                     <a href="#" className="parent">
@@ -134,9 +160,7 @@ class Navbar extends Component {
                           <div className="dropdown-menu dropdown-tab">
                             <ul>
                               <li className="item col-md-4 float-left">
-                                <span className="menu-title">
-                                  Category Style
-                                </span>
+                                <span className="menu-title">Category Style</span>
                                 <div className="menu-content">
                                   <ul className="col">
                                     <li>
@@ -203,7 +227,7 @@ class Navbar extends Component {
                 </ul>
               </div>
             </div>
-
+  
             {/* <!-- logo --> */}
             <div className="flex-2 d-flex align-items-center justify-content-center">
               <div id="logo">
@@ -212,7 +236,7 @@ class Navbar extends Component {
                 </a>
               </div>
             </div>
-
+  
             {/* <!-- search and acount --> */}
             <div
               id="search_widget"
@@ -258,7 +282,7 @@ class Navbar extends Component {
                         <span>My Account</span>
                       </a>
                     </div>
-
+  
                     {(() => {
                       if (sessionStorage.getItem("token") == null) {
                         return (
@@ -363,7 +387,7 @@ class Navbar extends Component {
                             <td colSpan="2">Total:</td>
                             <td>£92.96</td>
                           </tr>
-
+  
                           <tr>
                             <td
                               colSpan="3"
@@ -373,10 +397,7 @@ class Navbar extends Component {
                                 <a href="product-cart.html" title="View Cart">
                                   View Cart
                                 </a>
-                                <a
-                                  href="product-checkout.html"
-                                  title="Checkout"
-                                >
+                                <a href="product-checkout.html" title="Checkout">
                                   Checkout
                                 </a>
                               </div>
@@ -394,6 +415,6 @@ class Navbar extends Component {
       </header>
     );
   }
-}
+};
 
 export default Navbar;

@@ -21,6 +21,7 @@ public class BlogResponse {
     private String blogTitle;
     private Integer status;
     private String content;
+    private String shortContent;
     private String createBy;
     private Date createDate;
     private String updateBy;
