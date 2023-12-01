@@ -72,41 +72,65 @@ public class UserService {
 
         if(userDetail != null) {
             try{
-//                BufferedOutputStream outputStream = new BufferedOutputStream(
-//                        new FileOutputStream(
-//                                new File(PATH,picture.getOriginalFilename())
-//                        )
-//                );
-//                outputStream.write(picture.getBytes());
-//                outputStream.flush();
-//                outputStream.close();
-                //set response
-                Date dateFormat = new SimpleDateFormat("yyyy-MM-dd").parse(request.getBirthday());
-                BigDecimal phone = BigDecimal.valueOf(Long.parseLong(request.getPhone()));
 
-                userDetail.setFirstName(request.getFirstName());
-                userDetail.setLastName(request.getLastName());
-                userDetail.setUserName(request.getUserName());
-                userDetail.setAddress(request.getAddress());
-                userDetail.setBirthday(dateFormat);
-                userDetail.setNation(request.getNation());
-                userDetail.setPhone(phone.toBigInteger());
-//                userDetail.setPicture(picture.getOriginalFilename());
-                userRepository.save(userDetail);
+                if(request.getPicture().getOriginalFilename() != null ||
+                        !request.getPicture().isEmpty() ||
+                        request.getPicture().getContentType().equals("image/jpeg") ||
+                        request.getPicture().getContentType().equals("image/png")
+                ) {
 
+                    //set response
+                    Date dateFormat = new SimpleDateFormat("yyyy-MM-dd").parse(request.getBirthday());
+                    BigDecimal phone = BigDecimal.valueOf(Long.parseLong(request.getPhone()));
 
-                UserResponse.DataUser userData = UserMapper.INSTANCE.toUserRes(userDetail);
-                response.setStatus(true);
-                response.setError(null);
-                response.setMessage(UserMessage.SUCCESS);
-                response.setUser(userData);
-                return response;
+                    userDetail.setFirstName(request.getFirstName());
+                    userDetail.setLastName(request.getLastName());
+                    userDetail.setUserName(request.getUserName());
+                    userDetail.setAddress(request.getAddress());
+                    userDetail.setBirthday(dateFormat);
+                    userDetail.setNation(request.getNation());
+                    userDetail.setPhone(phone.toBigInteger());
+                    userDetail.setPicture(request.getPicture().getOriginalFilename());
+
+                    userRepository.save(userDetail);
+
+                    //save image into folder
+                    BufferedOutputStream outputStream = new BufferedOutputStream(
+                            new FileOutputStream(
+                                    new File(PATH,request.getPicture().getOriginalFilename())
+                            )
+                    );
+                    outputStream.write(request.getPicture().getBytes());
+                    outputStream.flush();
+                    outputStream.close();
+                    //end save image into folder
+
+                    //set response
+                    UserResponse.DataUser userData = UserMapper.INSTANCE.toUserRes(userDetail);
+                    response.setStatus(true);
+                    response.setError(null);
+                    response.setMessage(UserMessage.SUCCESS);
+                    response.setUser(userData);
+                    return response;
+                }else {
+                    response.setStatus(false);
+                    response.setError(UserMessage.FAIL);
+                    response.setMessage(UserMessage.FAIL);
+                    return response;
+                }
+
             } catch (Exception ex){
                 ex.printStackTrace();
-                return null;
+                response.setStatus(false);
+                response.setError(UserMessage.FAIL);
+                response.setMessage(UserMessage.FAIL);
+                return response;
             }
         } else {
-            return null;
+            response.setStatus(false);
+            response.setError(UserMessage.FAIL);
+            response.setMessage(UserMessage.FAIL);
+            return response;
         }
     }
 
@@ -129,7 +153,7 @@ public class UserService {
                 BigDecimal phone = BigDecimal.valueOf(Long.parseLong(userRequest.getPhone()));
                 User user = userRepository.save(
                         UserMapper.INSTANCE.toUserEntity
-                                (phone,userRequest.getNation(),userRequest.getAddress(),userRequest.getFirstName(),userRequest.getLastName(),userRequest.getUserName(),userRequest.getEmail(),createDate,updateDate,dateFormat,password));
+                                ("noImg.jpg",phone,userRequest.getNation(),userRequest.getAddress(),userRequest.getFirstName(),userRequest.getLastName(),userRequest.getUserName(),userRequest.getEmail(),createDate,updateDate,dateFormat,password));
                 User userDetail = userRepository.findById(user.getId()).orElse(null);
                 if(userDetail != null){
                     UserResponse.DataUser userData = UserMapper.INSTANCE.toUserRes(userDetail);
