@@ -1,7 +1,21 @@
 import React, { Component } from "react";
 import CategoryBlog from "../component/sidebar/CategoryBlog";
+import BlogService from "../service/BlogService";
 
 class Blog extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      blog: []
+    }
+  }
+
+  componentDidMount() {
+    BlogService.getBlogByIdCategory().then((res) => {
+      this.setState({ blog: res.data });
+    });
+  }
+
   render() {
     return (
       <div id="blog-list-sidebar-left" className="blog">
@@ -159,180 +173,33 @@ class Blog extends Component {
                         </div>
                         <div className="col-sm-8 col-lg-9 col-md-9 flex-xs-first main-blogs">
                           <h2>Recent Posts</h2>
-                          <div className="list-content row">
-                            <div className="hover-after col-md-5 col-xs-12">
-                              <a href="blog-detail.html">
-                                <img src="img/blog/4.jpg" alt="img" />
-                              </a>
-                            </div>
-                            <div className="late-item col-md-7 col-xs-12">
-                              <p className="content-title">
+                          {this.state.blog.map((item) => (
+                            <div className="list-content row">
+                              <div className="hover-after col-md-5 col-xs-12">
                                 <a href="blog-detail.html">
-                                  Lorem ipsum dolor sit amet
+                                  <img src="img/blog/4.jpg" alt="img" />
                                 </a>
-                              </p>
-                              <p className="post-info">
-                                <span>3 minitunes ago</span>
-                                <span>113 Comments</span>
-                                <span>TIVATHEME</span>
-                              </p>
-                              <p className="description">
-                                Proin gravida nibh vel velit auctor aliquet.
-                                Aenean sollicudin, lorem quis bibendum auctor,
-                                nisi elit consequat ipsum, elit. Duis sed odio
-                                sit amet nibh vultate cursus a sit amet mauris.
-                                Proin gravida...
-                              </p>
-                              <span className="view-more">
-                                <a href="blog-detail.html">view more</a>
-                              </span>
+                              </div>
+                              <div className="late-item col-md-7 col-xs-12">
+                                <p className="content-title">
+                                  <a href="blog-detail.html">
+                                    {item.blogTitle}
+                                  </a>
+                                </p>
+                                <p className="post-info">
+                                  <span>{item.updateDate}</span>
+                                  <span>113 Comments</span>
+                                  {/* <span>TIVATHEME</span> */}
+                                </p>
+                                <p className="description">
+                                  {item.shortContent}...
+                                </p>
+                                <span className="view-more">
+                                  <a href="blog-detail.html">view more</a>
+                                </span>
+                              </div>
                             </div>
-                          </div>
-                          <div className="list-content row">
-                            <div className="hover-after col-md-5 col-xs-12">
-                              <a href="blog-detail.html">
-                                <img src="img/blog/5.jpg" alt="img" />
-                              </a>
-                            </div>
-                            <div className="late-item col-md-7 col-xs-12">
-                              <p className="content-title">
-                                <a href="blog-detail.html">
-                                  Lorem ipsum dolor sit amet
-                                </a>
-                              </p>
-                              <p className="post-info">
-                                <span>3 minitunes ago</span>
-                                <span>113 Comments</span>
-                                <span>TIVATHEME</span>
-                              </p>
-                              <p className="description">
-                                Proin gravida nibh vel velit auctor aliquet.
-                                Aenean sollicudin, lorem quis bibendum auctor,
-                                nisi elit consequat ipsum, elit. Duis sed odio
-                                sit amet nibh vultate cursus a sit amet mauris.
-                                Proin gravida...
-                              </p>
-                              <span className="view-more">
-                                <a href="blog-detail.html">view more</a>
-                              </span>
-                            </div>
-                          </div>
-                          <div className="list-content row">
-                            <div className="hover-after col-md-5 col-xs-12">
-                              <a href="blog-detail.html">
-                                <img src="img/blog/6.jpg" alt="img" />
-                              </a>
-                            </div>
-                            <div className="late-item  col-md-7 col-xs-12">
-                              <p className="content-title">
-                                <a href="blog-detail.html">
-                                  Lorem ipsum dolor sit amet
-                                </a>
-                              </p>
-                              <p className="post-info">
-                                <span>3 minitunes ago</span>
-                                <span>113 Comments</span>
-                                <span>TIVATHEME</span>
-                              </p>
-                              <p className="description">
-                                Proin gravida nibh vel velit auctor aliquet.
-                                Aenean sollicudin, lorem quis bibendum auctor,
-                                nisi elit consequat ipsum, elit. Duis sed odio
-                                sit amet nibh vultate cursus a sit amet mauris.
-                                Proin gravida...
-                              </p>
-                              <span className="view-more">
-                                <a href="blog-detail.html">view more</a>
-                              </span>
-                            </div>
-                          </div>
-                          <div className="list-content row">
-                            <div className="hover-after col-md-5 col-xs-12">
-                              <a href="blog-detail.html">
-                                <img src="img/blog/7.jpg" alt="img" />
-                              </a>
-                            </div>
-                            <div className="late-item col-md-7 col-xs-12">
-                              <p className="content-title">
-                                <a href="blog-detail.html">
-                                  Lorem ipsum dolor sit amet
-                                </a>
-                              </p>
-                              <p className="post-info">
-                                <span>3 minitunes ago</span>
-                                <span>113 Comments</span>
-                                <span>TIVATHEME</span>
-                              </p>
-                              <p className="description">
-                                Proin gravida nibh vel velit auctor aliquet.
-                                Aenean sollicudin, lorem quis bibendum auctor,
-                                nisi elit consequat ipsum, elit. Duis sed odio
-                                sit amet nibh vultate cursus a sit amet mauris.
-                                Proin gravida...
-                              </p>
-                              <span className="view-more">
-                                <a href="blog-detail.html">view more</a>
-                              </span>
-                            </div>
-                          </div>
-                          <div className="list-content row">
-                            <div className="hover-after col-md-5 col-xs-12">
-                              <a href="blog-detail.html">
-                                <img src="img/blog/8.jpg" alt="img" />
-                              </a>
-                            </div>
-                            <div className="late-item col-md-7 col-xs-12">
-                              <p className="content-title">
-                                <a href="blog-detail.html">
-                                  Lorem ipsum dolor sit amet
-                                </a>
-                              </p>
-                              <p className="post-info">
-                                <span>3 minitunes ago</span>
-                                <span>113 Comments</span>
-                                <span>TIVATHEME</span>
-                              </p>
-                              <p className="description">
-                                Proin gravida nibh vel velit auctor aliquet.
-                                Aenean sollicudin, lorem quis bibendum auctor,
-                                nisi elit consequat ipsum, elit. Duis sed odio
-                                sit amet nibh vultate cursus a sit amet mauris.
-                                Proin gravida...
-                              </p>
-                              <span className="view-more">
-                                <a href="blog-detail.html">view more</a>
-                              </span>
-                            </div>
-                          </div>
-                          <div className="list-content row">
-                            <div className="hover-after col-md-5 col-xs-12">
-                              <a href="blog-detail.html">
-                                <img src="img/blog/9.jpg" alt="img" />
-                              </a>
-                            </div>
-                            <div className="late-item  col-md-7 col-xs-12">
-                              <p className="content-title">
-                                <a href="blog-detail.html">
-                                  Lorem ipsum dolor sit amet
-                                </a>
-                              </p>
-                              <p className="post-info">
-                                <span>3 minitunes ago</span>
-                                <span>113 Comments</span>
-                                <span>TIVATHEME</span>
-                              </p>
-                              <p className="description">
-                                Proin gravida nibh vel velit auctor aliquet.
-                                Aenean sollicudin, lorem quis bibendum auctor,
-                                nisi elit consequat ipsum, elit. Duis sed odio
-                                sit amet nibh vultate cursus a sit amet mauris.
-                                Proin gravida...
-                              </p>
-                              <span className="view-more">
-                                <a href="blog-detail.html">view more</a>
-                              </span>
-                            </div>
-                          </div>
+                          ))}
                           <div className="page-list col">
                             <ul className="justify-content-center d-flex">
                               <li>

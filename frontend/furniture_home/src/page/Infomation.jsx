@@ -66,7 +66,7 @@ class Infomation extends Component {
                           <th className="first_item">Picture :</th>
                           <td>
                             <img
-                              src={require("../component/asset/infomation/noimage.jpg")}
+                              src={require("../component/asset/infomation/noImg.jpg")}
                               alt="img"
                               width={"100px"}
                               height={"100px"}
