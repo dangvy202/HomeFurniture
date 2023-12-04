@@ -187,7 +187,8 @@ class Blog extends Component {
                                   </a>
                                 </p>
                                 <p className="post-info">
-                                  <span>{item.updateDate}</span>
+                                  <span>{item.updateDate.split("T")[0]}
+                                  </span>
                                   <span>113 Comments</span>
                                   {/* <span>TIVATHEME</span> */}
                                 </p>

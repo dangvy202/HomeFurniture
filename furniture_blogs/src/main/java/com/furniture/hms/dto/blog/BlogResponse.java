@@ -3,6 +3,7 @@ package com.furniture.hms.dto.blog;
 import java.util.Date;
 
 import com.furniture.hms.dto.category.CategoryBlogResponse;
+import com.furniture.hms.dto.comment.CommentResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,4 +28,5 @@ public class BlogResponse {
     private String updateBy;
     private Date updateDate;
     private CategoryBlogResponse categoryBlog;
+    private CommentResponse commentBlog;
 }

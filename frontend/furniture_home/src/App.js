@@ -13,12 +13,11 @@ import EditAccount from './page/EditAccount';
 function App() {
   var dateNow = new Date().getTime();
   if (sessionStorage.getItem("expired") < dateNow) {
-      console.log("het time");
       sessionStorage.removeItem("status");
       sessionStorage.removeItem("message");
       sessionStorage.removeItem("token");
-    sessionStorage.removeItem("expired");
-    sessionStorage.removeItem("email");
+      sessionStorage.removeItem("expired");
+      sessionStorage.removeItem("email");
   }
   return (
     <div>
@@ -30,7 +29,7 @@ function App() {
             <Route path='/infomation' element={<Infomation />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/3" element={<Blog />} />
             <Route path="/editAccount" element={<EditAccount />} />
           </Routes>
         <Footer />
