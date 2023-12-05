@@ -37,7 +37,9 @@ public class CommentService {
 	    response.setComment(commentDetail);
 	    return response;
 	} else {
-	    return null;
+	    response.setTotal(count);
+	    response.setComment(commentDetail);
+	    return response;
 	}
     }
 }

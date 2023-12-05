@@ -40,12 +40,13 @@ public class BlogService {
     public List<BlogResponse> getBlogByCategoryBlogId(int id) {
 	List<Blog> arrBlog = blogRepository.findBlogByIdCategoryBlog(id);
 	List<BlogResponse> responses = new ArrayList<>();
-	commentService.getCommentByIdBlog(1);
 
 	if (!arrBlog.isEmpty()) {
 	    for (Blog blog : arrBlog) {
 		if (blog.getStatus() != 0) {
-		    responses.add(BlogMapper.INSTANCE.toBlogResponse(blog));
+		    BlogResponse blogRes = BlogMapper.INSTANCE.toBlogResponse(blog);
+		    blogRes.setCommentBlog(commentService.getCommentByIdBlog(blog.getId()));
+		    responses.add(blogRes);
 		}
 	    }
 	    return responses;

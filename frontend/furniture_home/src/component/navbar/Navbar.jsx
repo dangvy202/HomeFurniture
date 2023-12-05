@@ -17,6 +17,10 @@ class Navbar extends Component {
     });
   }
 
+  changeBlog(id) {
+    window.location.href = "/blog/"+id;
+  }
+
   render() {
     return (
       <header>
@@ -139,10 +143,9 @@ class Navbar extends Component {
                         {this.state.categoryBlog.map((item) => (
                           <li className="item">
                             <a
-                              href="blog-list-sidebar-left.html"
-                              title="Blog List (Sidebar Left)"
+                              href="#"
+                              onClick={() => this.changeBlog(item.id)}
                             >
-                              
                                 {item.categoryName}
                             </a>
                           </li>

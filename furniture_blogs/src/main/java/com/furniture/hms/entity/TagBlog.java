@@ -21,7 +21,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "tag_blog")
-public class BlogTag {
+public class TagBlog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_tag")

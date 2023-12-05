@@ -29,7 +29,7 @@ function App() {
             <Route path='/infomation' element={<Infomation />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/blog/3" element={<Blog />} />
+            <Route path="/blog/:idCategory" element={<Blog />} />
             <Route path="/editAccount" element={<EditAccount />} />
           </Routes>
         <Footer />
