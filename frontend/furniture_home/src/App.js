@@ -30,6 +30,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/blog/:idCategory" element={<Blog />} />
+            <Route path="/blog-tag/:idTag" element={<Blog />} />
             <Route path="/editAccount" element={<EditAccount />} />
           </Routes>
         <Footer />

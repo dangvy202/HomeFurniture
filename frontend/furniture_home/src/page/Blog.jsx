@@ -2,24 +2,32 @@ import React, { Component } from "react";
 import CategoryBlog from "../component/sidebar/CategoryBlog";
 import TagBlog from "../component/tagblog/TagBlog";
 import BlogService from "../service/BlogService";
+import CooperateBlogTagService from "../service/CooperateBlogTagService";
 
 class Blog extends Component {
   constructor(props) {
     super(props);
-    
     const pathName = window.location.pathname;
     var arrPath = pathName.split("/");
     var id = arrPath[arrPath.length - 1];
+    var domain = arrPath[1];
     this.state = {
       id: id,
+      domail: domain,
       blog: []
     }
   }
 
   componentDidMount() {
-    BlogService.getBlogByIdCategory(this.state.id).then((res) => {
-      this.setState({ blog: res.data });
-    });
+    if(this.state.domail === "blog-tag"){
+      CooperateBlogTagService.getCooperateBlogTagId(this.state.id).then((res) => {
+        this.setState({ blog: res.data.blog.blogResponse });
+      });
+    }else{
+      BlogService.getBlogByIdCategory(this.state.id).then((res) => {
+        this.setState({ blog: res.data });
+      });
+    }
   }
 
   render() {

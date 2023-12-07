@@ -17,6 +17,10 @@ class TagBlog extends Component {
         });
     }
 
+    changeCooperate(id) {
+        window.location.href = "/blog-tag/"+id;
+    }
+
     render() {
         return (
             <div className="sidebar-block product-tags">
@@ -29,6 +33,7 @@ class TagBlog extends Component {
                             <a
                                 href="#"
                                 title="Show products matching tag Hot Trend"
+                                onClick={() => this.changeCooperate(item.id)}
                             >
                                 {item.tagName}
                             </a>
