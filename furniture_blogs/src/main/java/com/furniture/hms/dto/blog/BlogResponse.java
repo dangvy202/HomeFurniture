@@ -23,6 +23,7 @@ public class BlogResponse {
     private Integer status;
     private String content;
     private String shortContent;
+    private String blogAvatar;
     private String createBy;
     private Date createDate;
     private String updateBy;

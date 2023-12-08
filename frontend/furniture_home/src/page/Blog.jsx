@@ -3,6 +3,7 @@ import CategoryBlog from "../component/sidebar/CategoryBlog";
 import TagBlog from "../component/tagblog/TagBlog";
 import BlogService from "../service/BlogService";
 import CooperateBlogTagService from "../service/CooperateBlogTagService";
+import Pagination from "../service/Pagination"
 
 class Blog extends Component {
   constructor(props) {
@@ -14,9 +15,21 @@ class Blog extends Component {
     this.state = {
       id: id,
       domail: domain,
-      blog: []
+      blog: [],
+      currentPage: null,
+      totalPages: null
     }
   }
+
+  onPageChanged = data => {
+    const { blog } = this.state;
+    const { currentPage, totalPages, pageLimit } = data;
+
+    const offset = (currentPage - 1) * pageLimit;
+    const currentCountries = blog.slice(offset, offset + pageLimit);
+
+    this.setState({ currentPage, currentCountries, totalPages });
+  };
 
   componentDidMount() {
     if(this.state.domail === "blog-tag"){
@@ -31,6 +44,8 @@ class Blog extends Component {
   }
 
   render() {
+    
+
     return (
       <div id="blog-list-sidebar-left" className="blog">
         <div className="main-content">
@@ -73,7 +88,7 @@ class Blog extends Component {
                               <a href="#">
                                 <img
                                   className="img-fluid"
-                                  src="img/blog/advertising.jpg"
+                                  src={require("../component/asset/blog/advertising.jpg")}
                                   alt="banner-2"
                                   title="banner-2"
                                 />
@@ -87,7 +102,7 @@ class Blog extends Component {
                             <div className="list-content row">
                               <div className="hover-after col-md-5 col-xs-12">
                                 <a href="blog-detail.html">
-                                  <img src="img/blog/4.jpg" alt="img" />
+                                  <img src={require("../component/asset/blog/"+item.blogAvatar)}  alt="img" />
                                 </a>
                               </div>
                               <div className="late-item col-md-7 col-xs-12">
@@ -110,6 +125,13 @@ class Blog extends Component {
                               </div>
                             </div>
                           ))}
+
+<Pagination
+                totalRecords={totalCountries}
+                pageLimit={18}
+                pageNeighbours={1}
+                onPageChanged={this.onPageChanged}
+              />
                           <div className="page-list col">
                             <ul className="justify-content-center d-flex">
                               <li>
