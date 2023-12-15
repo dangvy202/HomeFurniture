@@ -3,7 +3,7 @@ import CategoryBlog from "../component/sidebar/CategoryBlog";
 import TagBlog from "../component/tagblog/TagBlog";
 import BlogService from "../service/BlogService";
 import CooperateBlogTagService from "../service/CooperateBlogTagService";
-import Pagination from "../service/Pagination"
+import Pagination from "../service/Pagination";
 
 class Blog extends Component {
   constructor(props) {
@@ -16,27 +16,17 @@ class Blog extends Component {
       id: id,
       domail: domain,
       blog: [],
-      currentPage: null,
-      totalPages: null
+      currentPage: 1,
+      postsPerPage: 5
     }
   }
 
-  onPageChanged = data => {
-    const { blog } = this.state;
-    const { currentPage, totalPages, pageLimit } = data;
-
-    const offset = (currentPage - 1) * pageLimit;
-    const currentCountries = blog.slice(offset, offset + pageLimit);
-
-    this.setState({ currentPage, currentCountries, totalPages });
-  };
-
   componentDidMount() {
-    if(this.state.domail === "blog-tag"){
+    if (this.state.domail === "blog-tag") {
       CooperateBlogTagService.getCooperateBlogTagId(this.state.id).then((res) => {
         this.setState({ blog: res.data.blog.blogResponse });
       });
-    }else{
+    } else {
       BlogService.getBlogByIdCategory(this.state.id).then((res) => {
         this.setState({ blog: res.data });
       });
@@ -44,7 +34,23 @@ class Blog extends Component {
   }
 
   render() {
-    
+    const indexOfLastPost = this.state.currentPage * this.state.postsPerPage;
+
+    const indexOfFirstPost = indexOfLastPost - this.state.postsPerPage;
+
+    const currentPosts = this.state.blog.slice(indexOfFirstPost, indexOfLastPost);
+
+    const pageNumbers = []
+
+    for (let i = 1; i <= Math.ceil(this.state.blog.length / this.state.postsPerPage); i++) {
+      pageNumbers.push(i);
+    }
+
+    //Set current page
+    const setPage = (pageNum) => {
+      this.setState({ currentPage: pageNum })
+    }
+
 
     return (
       <div id="blog-list-sidebar-left" className="blog">
@@ -98,11 +104,11 @@ class Blog extends Component {
                         </div>
                         <div className="col-sm-8 col-lg-9 col-md-9 flex-xs-first main-blogs">
                           <h2>Recent Posts</h2>
-                          {this.state.blog.map((item) => (
+                          {currentPosts.map((item) => (
                             <div className="list-content row">
                               <div className="hover-after col-md-5 col-xs-12">
                                 <a href="blog-detail.html">
-                                  <img src={require("../component/asset/blog/"+item.blogAvatar)}  alt="img" />
+                                  <img src={require("../component/asset/blog/" + item.blogAvatar)} alt="img" />
                                 </a>
                               </div>
                               <div className="late-item col-md-7 col-xs-12">
@@ -126,52 +132,51 @@ class Blog extends Component {
                             </div>
                           ))}
 
-<Pagination
-                totalRecords={totalCountries}
-                pageLimit={18}
-                pageNeighbours={1}
-                onPageChanged={this.onPageChanged}
-              />
-                          <div className="page-list col">
-                            <ul className="justify-content-center d-flex">
-                              <li>
-                                <a
-                                  rel="prev"
-                                  href="#"
-                                  className="previous disabled js-search-link"
-                                >
-                                  Previous
-                                </a>
-                              </li>
-                              <li className="current active">
-                                <a
-                                  rel="nofollow"
-                                  href="#"
-                                  className="disabled js-search-link"
-                                >
-                                  1
-                                </a>
-                              </li>
-                              <li>
-                                <a
-                                  rel="nofollow"
-                                  href="#"
-                                  className="disabled js-search-link"
-                                >
-                                  2
-                                </a>
-                              </li>
-                              <li>
-                                <a
-                                  rel="next"
-                                  href="#"
-                                  className="next disabled js-search-link"
-                                >
-                                  Next
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
+                          {(() => {
+                            if (this.state.blog.length > 5) {
+                              return (
+                                <>
+                                  <div className="page-list col">
+                                    <ul className="justify-content-center d-flex">
+                                      <li>
+                                        <a
+                                          rel="prev"
+                                          href="#"
+                                          className="previous disabled js-search-link" onClick={() => { setPage(this.state.currentPage == 1 ? 1 : this.state.currentPage - 1) }}
+                                        >
+                                          Previous
+                                        </a>
+                                      </li>
+                                      {pageNumbers.map((pageNum, index) => (
+                                        <li className={pageNum === this.state.currentPage ? "current active" : ""} onClick={() => { setPage(pageNum) }}>
+                                          <a
+                                            rel="nofollow"
+                                            href="#"
+                                            className="disabled js-search-link"
+                                          >
+                                            {pageNum}
+                                          </a>
+                                        </li>
+                                      ))
+                                      }
+
+
+                                      <li>
+                                        <a
+                                          rel="next"
+                                          href="#"
+                                          className="next disabled js-search-link"
+                                          onClick={() => { setPage(this.state.currentPage == pageNumbers.length ? pageNumbers.length : this.state.currentPage + 1) }}
+                                        >
+                                          Next
+                                        </a>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </>
+                              );
+                            }
+                          })()}
                         </div>
                       </div>
                     </div>
