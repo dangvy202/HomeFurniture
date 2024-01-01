@@ -29,7 +29,11 @@ class Category extends Component {
 
                   {this.state.category.map((item) => (
                     <li className="item parent" key={item.id}>
-                      <a href="#" className="hasicon" title={item.categoryName}>
+                      <a
+                        href={"/product/category?=" + item.categoryRedirect}
+                        className="hasicon"
+                        title={item.categoryName}
+                      >
                         <img
                           src={require("../asset/home/" + item.categoryPicture)}
                           alt="img"

@@ -87,132 +87,252 @@ class Product extends Component {
                   item.inventory.message.status == true &&
                   item.inventory.message.error == null
                 ) {
-                  return (
-                    <div className="col-md-3 col-xs-12" key={item.id}>
-                      <div className="product-miniature js-product-miniature item-one first-item">
-                        <div className="thumbnail-container">
-                          <a href="product-detail.html">
-                            <img
-                              className="img-fluid"
-                              src={require("../asset/product/" +
-                                item.picture.pictureFirst)}
-                              alt="img"
-                            />
-                          </a>
-                          {(() => {
-                            if (item.productSaleoff != 0) {
-                              return (
-                                <>
+                  if (item.inventory.message.message === "AVAILABLE") {
+                    return (
+                      <div className="col-md-3 col-xs-12" key={item.id}>
+                        <div className="product-miniature js-product-miniature item-one first-item">
+                          <div className="thumbnail-container">
+                            <a href="product-detail.html">
+                              <img
+                                className="img-fluid"
+                                src={require("../asset/product/" +
+                                  item.picture.pictureFirst)}
+                                alt="img"
+                              />
+                            </a>
+                            {(() => {
+                              if (item.productSaleoff != 0) {
+                                return (
+                                  <>
+                                    <div className="product-flags discount">
+                                      {(item.productSaleoff /
+                                        item.productPrice) *
+                                        100}
+                                      %
+                                    </div>
+                                  </>
+                                );
+                              } else {
+                                return (
+                                  <>
+                                    <div
+                                      className="product-flags discount"
+                                      style={{ background: "#362d5900" }}
+                                    ></div>
+                                  </>
+                                );
+                              }
+                            })()}
+                          </div>
+                          <div className="product-description">
+                            <div className="product-groups">
+                              <div className="product-title">
+                                <a href="product-detail.html">
+                                  {item.productName}
+                                </a>
+                              </div>
+                              <div className="rating">
+                                <div className="star-content">
+                                  <div className="star"></div>
+                                  <div className="star"></div>
+                                  <div className="star"></div>
+                                  <div className="star"></div>
+                                  <div className="star"></div>
+                                </div>
+                              </div>
+                              <div className="product-group-price">
+                                <div className="product-price-and-shipping">
+                                  {(() => {
+                                    if (item.productSaleoff != 0) {
+                                      return (
+                                        <>
+                                          <span className="price">
+                                            {Intl.NumberFormat("vi-VN", {
+                                              style: "currency",
+                                              currency: "VND",
+                                            }).format(
+                                              item.productPrice -
+                                                item.productSaleoff
+                                            )}
+                                          </span>
+                                          <del className="regular-price">
+                                            {Intl.NumberFormat("vi-VN", {
+                                              style: "currency",
+                                              currency: "VND",
+                                            }).format(item.productPrice)}
+                                          </del>
+                                        </>
+                                      );
+                                    } else {
+                                      return (
+                                        <span className="price">
+                                          {Intl.NumberFormat("vi-VN", {
+                                            style: "currency",
+                                            currency: "VND",
+                                          }).format(item.productPrice)}
+                                        </span>
+                                      );
+                                    }
+                                  })()}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="product-buttons d-flex justify-content-center">
+                              <form
+                                action="#"
+                                method="post"
+                                className="formAddToCart"
+                              >
+                                <input type="hidden" name="token" />
+                                <a
+                                  className="add-to-cart"
+                                  href="#"
+                                  data-button-action="add-to-cart"
+                                >
+                                  <i
+                                    className="fa fa-shopping-cart"
+                                    aria-hidden="true"
+                                  ></i>
+                                </a>
+                              </form>
+                              <a
+                                className="addToWishlist wishlistProd_1"
+                                href="#"
+                                data-rel="1"
+                                // onclick=""
+                              >
+                                <i
+                                  className="fa fa-heart"
+                                  aria-hidden="true"
+                                ></i>
+                              </a>
+                              <a
+                                href="#"
+                                className="quick-view hidden-sm-down"
+                                data-link-action="quickview"
+                              >
+                                <i className="fa fa-eye" aria-hidden="true"></i>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  } else {
+                    return (
+                      <div className="col-md-3 col-xs-12" key={item.id}>
+                        <div className="product-miniature js-product-miniature item-one first-item">
+                          <div
+                            style={{ height: "100%" }}
+                            className="thumbnail-container"
+                          >
+                            <a
+                              href="product-detail.html"
+                              style={{
+                                backgroundColor: "gray",
+                              }}
+                            >
+                              <h3
+                                style={{
+                                  color: "white",
+                                  backgroundColor: "red",
+                                  zIndex: 1000,
+                                  textAlign: "center",
+                                  width: "100%",
+                                  marginTop: "100px",
+                                  position: "absolute",
+                                }}
+                              >
+                                SOLD OUT
+                              </h3>
+                              <img
+                                style={{
+                                  filter:
+                                    "opacity(0.5) drop-shadow(0 0 0 gray)",
+                                }}
+                                className="img-fluid"
+                                src={require("../asset/product/" +
+                                  item.picture.pictureFirst)}
+                                alt="img"
+                              />
+                            </a>
+                            {(() => {
+                              if (item.productSaleoff != 0) {
+                                return (
                                   <div className="product-flags discount">
                                     {(item.productSaleoff / item.productPrice) *
                                       100}
                                     %
                                   </div>
-                                </>
-                              );
-                            } else {
-                              return (
-                                <>
+                                );
+                              } else {
+                                return (
                                   <div
                                     className="product-flags discount"
                                     style={{ background: "#362d5900" }}
                                   ></div>
-                                </>
-                              );
-                            }
-                          })()}
-                        </div>
-                        <div className="product-description">
-                          <div className="product-groups">
-                            <div className="product-title">
-                              <a href="product-detail.html">
-                                {item.productName}
-                              </a>
-                            </div>
-                            <div className="rating">
-                              <div className="star-content">
-                                <div className="star"></div>
-                                <div className="star"></div>
-                                <div className="star"></div>
-                                <div className="star"></div>
-                                <div className="star"></div>
+                                );
+                              }
+                            })()}
+                          </div>
+                          <div className="product-description">
+                            <div className="product-groups">
+                              <div className="product-title">
+                                <a href="product-detail.html">
+                                  {item.productName}
+                                </a>
                               </div>
-                            </div>
-                            <div className="product-group-price">
-                              <div className="product-price-and-shipping">
-                                {(() => {
-                                  if (item.productSaleoff != 0) {
-                                    return (
-                                      <>
+                              <div className="rating">
+                                <div className="star-content">
+                                  <div className="star"></div>
+                                  <div className="star"></div>
+                                  <div className="star"></div>
+                                  <div className="star"></div>
+                                  <div className="star"></div>
+                                </div>
+                              </div>
+                              <div className="product-group-price">
+                                <div className="product-price-and-shipping">
+                                  {(() => {
+                                    if (item.productSaleoff != 0) {
+                                      return (
+                                        <>
+                                          <span className="price">
+                                            {Intl.NumberFormat("vi-VN", {
+                                              style: "currency",
+                                              currency: "VND",
+                                            }).format(
+                                              item.productPrice -
+                                                item.productSaleoff
+                                            )}
+                                          </span>
+                                          <del className="regular-price">
+                                            {Intl.NumberFormat("vi-VN", {
+                                              style: "currency",
+                                              currency: "VND",
+                                            }).format(item.productPrice)}
+                                          </del>
+                                        </>
+                                      );
+                                    } else {
+                                      return (
                                         <span className="price">
                                           {Intl.NumberFormat("vi-VN", {
                                             style: "currency",
                                             currency: "VND",
-                                          }).format(
-                                            item.productPrice -
-                                              item.productSaleoff
-                                          )}
-                                        </span>
-                                        <del className="regular-price">
-                                          {Intl.NumberFormat("vi-VN", {
-                                            style: "currency",
-                                            currency: "VND",
                                           }).format(item.productPrice)}
-                                        </del>
-                                      </>
-                                    );
-                                  } else {
-                                    return (
-                                      <span className="price">
-                                        {Intl.NumberFormat("vi-VN", {
-                                          style: "currency",
-                                          currency: "VND",
-                                        }).format(item.productPrice)}
-                                      </span>
-                                    );
-                                  }
-                                })()}
+                                        </span>
+                                      );
+                                    }
+                                  })()}
+                                </div>
                               </div>
                             </div>
                           </div>
-                          <div className="product-buttons d-flex justify-content-center">
-                            <form
-                              action="#"
-                              method="post"
-                              className="formAddToCart"
-                            >
-                              <input type="hidden" name="token" />
-                              <a
-                                className="add-to-cart"
-                                href="#"
-                                data-button-action="add-to-cart"
-                              >
-                                <i
-                                  className="fa fa-shopping-cart"
-                                  aria-hidden="true"
-                                ></i>
-                              </a>
-                            </form>
-                            <a
-                              className="addToWishlist wishlistProd_1"
-                              href="#"
-                              data-rel="1"
-                              // onclick=""
-                            >
-                              <i className="fa fa-heart" aria-hidden="true"></i>
-                            </a>
-                            <a
-                              href="#"
-                              className="quick-view hidden-sm-down"
-                              data-link-action="quickview"
-                            >
-                              <i className="fa fa-eye" aria-hidden="true"></i>
-                            </a>
-                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
+                    );
+                  }
                 }
               })}
             </div>
