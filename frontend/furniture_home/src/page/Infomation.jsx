@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import InfomationService from "../service/InfomationService";
+import moment from "moment";
 
 class Infomation extends Component {
   constructor(props) {
@@ -19,13 +20,19 @@ class Infomation extends Component {
     if (sessionStorage.getItem("email") != null) {
       InfomationService.infomation(sessionStorage.getItem("email")).then(
         (res) => {
+          let birthdayConvert = moment
+            .utc(res.data.user.birthday)
+            .format("DD/MM/YYYY");
           this.setState({ fullName: res.data.user.username });
           this.setState({ email: res.data.user.email });
           this.setState({ address: res.data.user.address });
-          this.setState({ birthday: res.data.user.birthday });
+          this.setState({ birthday: birthdayConvert });
           this.setState({ nation: res.data.user.nation });
           this.setState({ phone: res.data.user.phone });
-          this.setState({ picture: res.data.user.picture });
+          this.setState({
+            picture: require("../component/asset/infomation/" +
+              res.data.user.picture),
+          });
         }
       );
     } else {
@@ -66,7 +73,7 @@ class Infomation extends Component {
                           <th className="first_item">Picture :</th>
                           <td>
                             <img
-                              src={require("../component/asset/infomation/noImg.jpg")}
+                              src={this.state.picture}
                               alt="img"
                               width={"100px"}
                               height={"100px"}

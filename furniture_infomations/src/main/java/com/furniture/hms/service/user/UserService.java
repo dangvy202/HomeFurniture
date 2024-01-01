@@ -13,11 +13,13 @@ import com.furniture.hms.security.UserDetail;
 import com.furniture.hms.service.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedOutputStream;
@@ -26,7 +28,9 @@ import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.Date;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -41,30 +45,10 @@ public class UserService {
 
     private final JwtService jwtService;
 
+    private final UserPictureService userPictureService;
+
     private static final String PATH = "D:\\HomeFurniture\\frontend\\furniture_home\\src\\component\\asset\\infomation";
 
-    public String saveImageInfomation(MultipartFile picture) throws Exception {
-        //check picture(save img and png)
-
-        if(picture.getOriginalFilename() != null || !picture.isEmpty()) {
-            if(picture.getContentType().equals("image/jpeg") || picture.getContentType().equals("image/png")) {
-
-                BufferedOutputStream outputStream = new BufferedOutputStream(
-                        new FileOutputStream(
-                                new File(PATH,picture.getOriginalFilename())
-                        )
-                );
-                outputStream.write(picture.getBytes());
-                outputStream.flush();
-                outputStream.close();
-                return ImageEnum.SUCCESS.getValue();
-            }else {
-                return ImageEnum.FAIL_EXTENSION.getValue();
-            }
-        }else {
-            return ImageEnum.NULL.getValue();
-        }
-    }
     public UserResponse saveEditAccount(UserRequest request) {
         UserResponse response = new UserResponse();
 
@@ -78,6 +62,15 @@ public class UserService {
                         request.getPicture().getContentType().equals("image/jpeg") ||
                         request.getPicture().getContentType().equals("image/png")
                 ) {
+                    //declare file
+                    String oldFileName = userDetail.getPicture();
+                    String renameFile = request.getPicture().getOriginalFilename();
+                    //rename to push
+                    if(request.getPicture().getContentType().equals("image/jpeg")){
+                        renameFile = UUID.randomUUID().toString() + ".jpg";
+                    }else {
+                        renameFile = UUID.randomUUID().toString() + ".png";
+                    }
 
                     //set response
                     Date dateFormat = new SimpleDateFormat("yyyy-MM-dd").parse(request.getBirthday());
@@ -90,23 +83,33 @@ public class UserService {
                     userDetail.setBirthday(dateFormat);
                     userDetail.setNation(request.getNation());
                     userDetail.setPhone(phone.toBigInteger());
-                    userDetail.setPicture(request.getPicture().getOriginalFilename());
+                    userDetail.setPicture(renameFile);
 
                     userRepository.save(userDetail);
 
-                    //save image into folder
-                    BufferedOutputStream outputStream = new BufferedOutputStream(
-                            new FileOutputStream(
-                                    new File(PATH,request.getPicture().getOriginalFilename())
-                            )
-                    );
-                    outputStream.write(request.getPicture().getBytes());
-                    outputStream.flush();
-                    outputStream.close();
-                    //end save image into folder
+                    //delete old image
+                    UserResponse.DataUser userData = UserMapper.INSTANCE.toUserRes(userDetail);
+                    UserResponse.DataUser.Orther orther = new UserResponse.DataUser.Orther();
+                    if(oldFileName.equals("noImg.jpg")){
+                        //save picture
+                        String noticeSavePicture = userPictureService.savePicture(PATH,renameFile,request.getPicture().getBytes());
+                        Map<String, Object> setOrther = new HashMap<>();
+                        setOrther.put("savePicture",noticeSavePicture);
+                        orther.setVariable(setOrther);
+                        userData.setOrther(orther);
+                    } else {
+                        File tempFile = new File(PATH+"\\"+oldFileName);
+                        Boolean deleteCheck = tempFile.delete();
+                        String noticeSavePicture = userPictureService.savePicture(PATH,renameFile,request.getPicture().getBytes());
+                        Map<String, Object> setOrther = new HashMap<>();
+                        setOrther.put("savePicture",noticeSavePicture);
+                        setOrther.put("deletePicture",deleteCheck == true ? "SUCCESS" : "FAIL");
+                        orther.setVariable(setOrther);
+                        userData.setOrther(orther);
+                    }
+
 
                     //set response
-                    UserResponse.DataUser userData = UserMapper.INSTANCE.toUserRes(userDetail);
                     response.setStatus(true);
                     response.setError(null);
                     response.setMessage(UserMessage.SUCCESS);

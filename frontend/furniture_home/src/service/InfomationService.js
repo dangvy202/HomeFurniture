@@ -32,21 +32,28 @@ class InfomationService {
       });
   }
 
-  editAccount(firstName, lastName, userName, address, birthday, nation, phone, picture) {
+  editAccount(email,firstName, lastName, userName, address, birthday, nation, phone,picture) {
       var formData = new FormData();
+      formData.append("email", email);
       formData.append("firstName", firstName);
       formData.append("lastName", lastName);
       formData.append("userName", userName);
       formData.append("address", address);
       formData.append("birthday", birthday);
       formData.append("nation", nation);
-      formData.append("phone", phone);
-      return axios.post(INFOMATION_API_BASE_URL + '/save', formData, {
+    formData.append("phone", phone);
+    formData.append("picture", picture);
+    return axios.post(INFOMATION_API_BASE_URL + '/save', formData
+      , {
         headers:{
-                  Accept: 'application/json',
-                    'Content-Type': 'application/json',
-            }
-      });
+          Accept:
+            'application/json',
+                    
+                    // "Content-Type": "multipart/form-data",
+                    'Authorization': "Bearer " + sessionStorage.getItem("token"),
+            },
+      }
+      );
   }
 }
 export default new InfomationService();

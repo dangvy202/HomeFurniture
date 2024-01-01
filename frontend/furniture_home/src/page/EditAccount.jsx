@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import InfomationService from "../service/InfomationService";
 
-class editAccount extends Component {
+class EditAccount extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      email: "",
       first_name: "",
       last_name: "",
       user_name: "",
@@ -57,15 +58,19 @@ class editAccount extends Component {
   }
 
   onChangePicture(e) {
-    this.setState({ picture: e.target.value });
+    debugger;
+    this.setState({
+      picture: e.target.files[0],
+    });
   }
   componentDidMount() {
     if (sessionStorage.getItem("email") != null) {
       InfomationService.infomation(sessionStorage.getItem("email")).then(
         (res) => {
+          this.setState({ email: sessionStorage.getItem("email") });
           this.setState({ first_name: res.data.user.first_name });
           this.setState({ last_name: res.data.user.last_name });
-          this.setState({ fullName: res.data.user.username });
+          this.setState({ user_name: res.data.user.username });
           this.setState({ email: res.data.user.email });
           this.setState({ address: res.data.user.address });
           this.setState({ birthday: res.data.user.birthday });
@@ -83,6 +88,7 @@ class editAccount extends Component {
     e.preventDefault();
     // popup.hidden();
     InfomationService.editAccount(
+      this.state.email,
       this.state.first_name,
       this.state.last_name,
       this.state.user_name,
@@ -132,29 +138,13 @@ class editAccount extends Component {
                 </button>
               </div>
               <div className="modal-body">
-                {/* {(() => {
-                  if (
-                    this.state.message === "ACCOUNT NOT EXIST" &&
-                    this.state.error === "ACCOUNT NOT EXIST" &&
-                    this.state.status === true
-                  ) {
-                    return <>CAN'T REGISTER ACCOUNT</>;
-                  } else if (
-                    this.state.message === "SUCCESS" &&
-                    this.state.error === null &&
-                    this.state.status === true
-                  ) {
-                    return <>REGISTER SUCCESS</>;
-                  } else if (
-                    this.state.message === "EMAIL EXIST" &&
-                    this.state.error === "FAIL" &&
-                    this.state.status === false
-                  ) {
-                    return <>ACCOUNT EXITS</>;
+                {(() => {
+                  if (this.state.message === "SUCCESS") {
+                    return <>EDIT INFOMATION SUCCESS</>;
                   } else {
-                    return <>REGISTER FAIL</>;
+                    return <>CAN'T EDIT INFOMATION</>;
                   }
-                })()} */}
+                })()}
               </div>
               <div className="modal-footer">
                 <button
@@ -246,7 +236,7 @@ class editAccount extends Component {
                                   type="text"
                                   placeholder="Full name"
                                   onChange={this.onChangeUserName}
-                                  value={this.state.fullName}
+                                  value={this.state.user_name}
                                 />
                               </div>
                             </div>
@@ -353,4 +343,4 @@ class editAccount extends Component {
   }
 }
 
-export default editAccount;
+export default EditAccount;

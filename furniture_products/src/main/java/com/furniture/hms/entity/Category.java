@@ -25,6 +25,12 @@ public class Category {
     @Column(name = "category_picture")
     private String categoryPicture;
 
+    @Column(name = "category_redirect")
+    private String categoryRedirect;
+
+    @Column(name = "status")
+    private int status;
+
     @Column(name = "create_by")
     private String createBy;
 

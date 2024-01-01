@@ -17,15 +17,17 @@ class Blog extends Component {
       domail: domain,
       blog: [],
       currentPage: 1,
-      postsPerPage: 5
-    }
+      postsPerPage: 5,
+    };
   }
 
   componentDidMount() {
     if (this.state.domail === "blog-tag") {
-      CooperateBlogTagService.getCooperateBlogTagId(this.state.id).then((res) => {
-        this.setState({ blog: res.data.blog.blogResponse });
-      });
+      CooperateBlogTagService.getCooperateBlogTagId(this.state.id).then(
+        (res) => {
+          this.setState({ blog: res.data.blog.blogResponse });
+        }
+      );
     } else {
       BlogService.getBlogByIdCategory(this.state.id).then((res) => {
         this.setState({ blog: res.data });
@@ -38,19 +40,25 @@ class Blog extends Component {
 
     const indexOfFirstPost = indexOfLastPost - this.state.postsPerPage;
 
-    const currentPosts = this.state.blog.slice(indexOfFirstPost, indexOfLastPost);
+    const currentPosts = this.state.blog.slice(
+      indexOfFirstPost,
+      indexOfLastPost
+    );
 
-    const pageNumbers = []
+    const pageNumbers = [];
 
-    for (let i = 1; i <= Math.ceil(this.state.blog.length / this.state.postsPerPage); i++) {
+    for (
+      let i = 1;
+      i <= Math.ceil(this.state.blog.length / this.state.postsPerPage);
+      i++
+    ) {
       pageNumbers.push(i);
     }
 
     //Set current page
     const setPage = (pageNum) => {
-      this.setState({ currentPage: pageNum })
-    }
-
+      this.setState({ currentPage: pageNum });
+    };
 
     return (
       <div id="blog-list-sidebar-left" className="blog">
@@ -108,7 +116,11 @@ class Blog extends Component {
                             <div className="list-content row">
                               <div className="hover-after col-md-5 col-xs-12">
                                 <a href="blog-detail.html">
-                                  <img src={require("../component/asset/blog/" + item.blogAvatar)} alt="img" />
+                                  <img
+                                    // src={require("../component/asset/blog/" +
+                                    //   item.blogAvatar)}
+                                    alt="img"
+                                  />
                                 </a>
                               </div>
                               <div className="late-item col-md-7 col-xs-12">
@@ -142,13 +154,29 @@ class Blog extends Component {
                                         <a
                                           rel="prev"
                                           href="#"
-                                          className="previous disabled js-search-link" onClick={() => { setPage(this.state.currentPage == 1 ? 1 : this.state.currentPage - 1) }}
+                                          className="previous disabled js-search-link"
+                                          onClick={() => {
+                                            setPage(
+                                              this.state.currentPage == 1
+                                                ? 1
+                                                : this.state.currentPage - 1
+                                            );
+                                          }}
                                         >
                                           Previous
                                         </a>
                                       </li>
                                       {pageNumbers.map((pageNum, index) => (
-                                        <li className={pageNum === this.state.currentPage ? "current active" : ""} onClick={() => { setPage(pageNum) }}>
+                                        <li
+                                          className={
+                                            pageNum === this.state.currentPage
+                                              ? "current active"
+                                              : ""
+                                          }
+                                          onClick={() => {
+                                            setPage(pageNum);
+                                          }}
+                                        >
                                           <a
                                             rel="nofollow"
                                             href="#"
@@ -157,16 +185,21 @@ class Blog extends Component {
                                             {pageNum}
                                           </a>
                                         </li>
-                                      ))
-                                      }
-
+                                      ))}
 
                                       <li>
                                         <a
                                           rel="next"
                                           href="#"
                                           className="next disabled js-search-link"
-                                          onClick={() => { setPage(this.state.currentPage == pageNumbers.length ? pageNumbers.length : this.state.currentPage + 1) }}
+                                          onClick={() => {
+                                            setPage(
+                                              this.state.currentPage ==
+                                                pageNumbers.length
+                                                ? pageNumbers.length
+                                                : this.state.currentPage + 1
+                                            );
+                                          }}
                                         >
                                           Next
                                         </a>

@@ -42,7 +42,7 @@ public class Product {
     @Column(name = "product_status")
     private Integer productStatus;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_category", referencedColumnName = "id_category")
     private Category category;
 
