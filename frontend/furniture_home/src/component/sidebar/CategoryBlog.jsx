@@ -16,14 +16,18 @@ class CategoryBlog extends Component {
     });
   }
 
+  changeBlog(id) {
+    window.location.href = "/blog/"+id;
+  }
+
   render() {
     return (
-      <div class="sidebar-block">
-        <div class="title-block">Categories</div>
-        <div class="block-content">
+      <div className="sidebar-block">
+        <div className="title-block">Categories</div>
+        <div className="block-content">
           {this.state.categoryBlog.map((item) => (
-            <div class="cateTitle hasSubCategory open level1">
-              <a class="cateItem" href={() => this.changeTab(item.id)}>
+            <div className="cateTitle hasSubCategory open level1">
+              <a href="#" className="cateItem" onClick={() => this.changeBlog(item.id)}>
                 {item.categoryName}
               </a>
             </div>

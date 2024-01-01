@@ -23,32 +23,21 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "blogs")
-public class Blog {
+@Table(name = "cooperate_blog_tag")
+public class CooperateBlogTag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_blog")
+    @Column(name = "id_cooperate")
     private Integer id;
 
-    @Column(name = "blog_title")
-    private String blogTitle;
-
-    @Column(name = "status")
-    private Integer status;
-
-    @Column(name = "short_content")
-    private String shortContent;
-
-    @Column(name = "content")
-    private String content;
-
-    @Column(name = "blog_avatar")
-    private String blogAvatar;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_blog", referencedColumnName = "id_blog")
+    private Blog blog;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_category", referencedColumnName = "id_category")
-    private CategoryBlog categoryBlog;
+    @JoinColumn(name = "id_tag", referencedColumnName = "id_tag")
+    private TagBlog tagBlog;
 
     @Column(name = "create_by")
     private String createBy;

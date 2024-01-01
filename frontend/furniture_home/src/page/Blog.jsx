@@ -1,22 +1,57 @@
 import React, { Component } from "react";
 import CategoryBlog from "../component/sidebar/CategoryBlog";
+import TagBlog from "../component/tagblog/TagBlog";
 import BlogService from "../service/BlogService";
+import CooperateBlogTagService from "../service/CooperateBlogTagService";
+import Pagination from "../service/Pagination";
 
 class Blog extends Component {
   constructor(props) {
     super(props);
+    const pathName = window.location.pathname;
+    var arrPath = pathName.split("/");
+    var id = arrPath[arrPath.length - 1];
+    var domain = arrPath[1];
     this.state = {
-      blog: []
+      id: id,
+      domail: domain,
+      blog: [],
+      currentPage: 1,
+      postsPerPage: 5
     }
   }
 
   componentDidMount() {
-    BlogService.getBlogByIdCategory().then((res) => {
-      this.setState({ blog: res.data });
-    });
+    if (this.state.domail === "blog-tag") {
+      CooperateBlogTagService.getCooperateBlogTagId(this.state.id).then((res) => {
+        this.setState({ blog: res.data.blog.blogResponse });
+      });
+    } else {
+      BlogService.getBlogByIdCategory(this.state.id).then((res) => {
+        this.setState({ blog: res.data });
+      });
+    }
   }
 
   render() {
+    const indexOfLastPost = this.state.currentPage * this.state.postsPerPage;
+
+    const indexOfFirstPost = indexOfLastPost - this.state.postsPerPage;
+
+    const currentPosts = this.state.blog.slice(indexOfFirstPost, indexOfLastPost);
+
+    const pageNumbers = []
+
+    for (let i = 1; i <= Math.ceil(this.state.blog.length / this.state.postsPerPage); i++) {
+      pageNumbers.push(i);
+    }
+
+    //Set current page
+    const setPage = (pageNum) => {
+      this.setState({ currentPage: pageNum })
+    }
+
+
     return (
       <div id="blog-list-sidebar-left" className="blog">
         <div className="main-content">
@@ -50,112 +85,8 @@ class Blog extends Component {
 
                           {/* <!-- recent posts --> */}
 
-                          {/* <!-- product tag --> */}
-                          <div className="sidebar-block product-tags">
-                            <div className="title-block">Blog Tags</div>
-                            <div className="block-content">
-                              <ul className="listSidebarBlog list-unstyled">
-                                <li>
-                                  <a
-                                    href="#"
-                                    title="Show products matching tag Hot Trend"
-                                  >
-                                    Hot Trend
-                                  </a>
-                                </li>
-
-                                <li>
-                                  <a
-                                    href="#"
-                                    title="Show products matching tag Jewelry"
-                                  >
-                                    Jewelry
-                                  </a>
-                                </li>
-
-                                <li>
-                                  <a
-                                    href="man.html"
-                                    title="Show products matching tag Man"
-                                  >
-                                    Man
-                                  </a>
-                                </li>
-
-                                <li>
-                                  <a
-                                    href="#"
-                                    title="Show products matching tag Party"
-                                  >
-                                    Party
-                                  </a>
-                                </li>
-
-                                <li>
-                                  <a
-                                    href="#"
-                                    title="Show products matching tag SamSung"
-                                  >
-                                    SamSung
-                                  </a>
-                                </li>
-
-                                <li>
-                                  <a
-                                    href="#"
-                                    title="Show products matching tag Shirt Dresses"
-                                  >
-                                    Shirt Dresses
-                                  </a>
-                                </li>
-
-                                <li>
-                                  <a
-                                    href="#"
-                                    title="Show products matching tag Shoes"
-                                  >
-                                    Shoes
-                                  </a>
-                                </li>
-
-                                <li>
-                                  <a
-                                    href="#"
-                                    title="Show products matching tag Summer"
-                                  >
-                                    Summer
-                                  </a>
-                                </li>
-
-                                <li>
-                                  <a
-                                    href="#"
-                                    title="Show products matching tag Sweaters"
-                                  >
-                                    Sweaters
-                                  </a>
-                                </li>
-
-                                <li>
-                                  <a
-                                    href="#"
-                                    title="Show products matching tag Winter"
-                                  >
-                                    Winter
-                                  </a>
-                                </li>
-
-                                <li>
-                                  <a
-                                    href="#"
-                                    title="Show products matching tag Woman"
-                                  >
-                                    Woman
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
+                          {/* <!-- tag blog --> */}
+                          <TagBlog />
 
                           {/* <!-- advertising --> */}
                           <div className="sidebar-block group-image-special">
@@ -163,7 +94,7 @@ class Blog extends Component {
                               <a href="#">
                                 <img
                                   className="img-fluid"
-                                  src="img/blog/advertising.jpg"
+                                  src={require("../component/asset/blog/advertising.jpg")}
                                   alt="banner-2"
                                   title="banner-2"
                                 />
@@ -173,11 +104,11 @@ class Blog extends Component {
                         </div>
                         <div className="col-sm-8 col-lg-9 col-md-9 flex-xs-first main-blogs">
                           <h2>Recent Posts</h2>
-                          {this.state.blog.map((item) => (
+                          {currentPosts.map((item) => (
                             <div className="list-content row">
                               <div className="hover-after col-md-5 col-xs-12">
                                 <a href="blog-detail.html">
-                                  <img src="img/blog/4.jpg" alt="img" />
+                                  <img src={require("../component/asset/blog/" + item.blogAvatar)} alt="img" />
                                 </a>
                               </div>
                               <div className="late-item col-md-7 col-xs-12">
@@ -187,8 +118,8 @@ class Blog extends Component {
                                   </a>
                                 </p>
                                 <p className="post-info">
-                                  <span>{item.updateDate}</span>
-                                  <span>113 Comments</span>
+                                  <span>{item.updateDate.split("T")[0]}</span>
+                                  <span>{item.commentBlog.total} Comments</span>
                                   {/* <span>TIVATHEME</span> */}
                                 </p>
                                 <p className="description">
@@ -200,46 +131,52 @@ class Blog extends Component {
                               </div>
                             </div>
                           ))}
-                          <div className="page-list col">
-                            <ul className="justify-content-center d-flex">
-                              <li>
-                                <a
-                                  rel="prev"
-                                  href="#"
-                                  className="previous disabled js-search-link"
-                                >
-                                  Previous
-                                </a>
-                              </li>
-                              <li className="current active">
-                                <a
-                                  rel="nofollow"
-                                  href="#"
-                                  className="disabled js-search-link"
-                                >
-                                  1
-                                </a>
-                              </li>
-                              <li>
-                                <a
-                                  rel="nofollow"
-                                  href="#"
-                                  className="disabled js-search-link"
-                                >
-                                  2
-                                </a>
-                              </li>
-                              <li>
-                                <a
-                                  rel="next"
-                                  href="#"
-                                  className="next disabled js-search-link"
-                                >
-                                  Next
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
+
+                          {(() => {
+                            if (this.state.blog.length > 5) {
+                              return (
+                                <>
+                                  <div className="page-list col">
+                                    <ul className="justify-content-center d-flex">
+                                      <li>
+                                        <a
+                                          rel="prev"
+                                          href="#"
+                                          className="previous disabled js-search-link" onClick={() => { setPage(this.state.currentPage == 1 ? 1 : this.state.currentPage - 1) }}
+                                        >
+                                          Previous
+                                        </a>
+                                      </li>
+                                      {pageNumbers.map((pageNum, index) => (
+                                        <li className={pageNum === this.state.currentPage ? "current active" : ""} onClick={() => { setPage(pageNum) }}>
+                                          <a
+                                            rel="nofollow"
+                                            href="#"
+                                            className="disabled js-search-link"
+                                          >
+                                            {pageNum}
+                                          </a>
+                                        </li>
+                                      ))
+                                      }
+
+
+                                      <li>
+                                        <a
+                                          rel="next"
+                                          href="#"
+                                          className="next disabled js-search-link"
+                                          onClick={() => { setPage(this.state.currentPage == pageNumbers.length ? pageNumbers.length : this.state.currentPage + 1) }}
+                                        >
+                                          Next
+                                        </a>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </>
+                              );
+                            }
+                          })()}
                         </div>
                       </div>
                     </div>

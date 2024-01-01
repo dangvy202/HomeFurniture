@@ -2,14 +2,11 @@ package com.furniture.hms.entity;
 
 import java.util.Date;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,32 +20,18 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "blogs")
-public class Blog {
-
+@Table(name = "tag_blog")
+public class TagBlog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_blog")
+    @Column(name = "id_tag")
     private Integer id;
 
-    @Column(name = "blog_title")
-    private String blogTitle;
+    @Column(name = "tag_name")
+    private String tagName;
 
     @Column(name = "status")
     private Integer status;
-
-    @Column(name = "short_content")
-    private String shortContent;
-
-    @Column(name = "content")
-    private String content;
-
-    @Column(name = "blog_avatar")
-    private String blogAvatar;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_category", referencedColumnName = "id_category")
-    private CategoryBlog categoryBlog;
 
     @Column(name = "create_by")
     private String createBy;

@@ -9,6 +9,7 @@ import com.furniture.hms.dto.blog.BlogResponse;
 import com.furniture.hms.entity.Blog;
 import com.furniture.hms.mapper.blog.BlogMapper;
 import com.furniture.hms.repository.blog.BlogRepository;
+import com.furniture.hms.service.comment.CommentService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 public class BlogService {
 
     private final BlogRepository blogRepository;
+    private final CommentService commentService;
 
     public List<BlogResponse> getAllBlog() {
 	List<Blog> arrBlog = blogRepository.findAll();
@@ -38,10 +40,13 @@ public class BlogService {
     public List<BlogResponse> getBlogByCategoryBlogId(int id) {
 	List<Blog> arrBlog = blogRepository.findBlogByIdCategoryBlog(id);
 	List<BlogResponse> responses = new ArrayList<>();
+
 	if (!arrBlog.isEmpty()) {
 	    for (Blog blog : arrBlog) {
 		if (blog.getStatus() != 0) {
-		    responses.add(BlogMapper.INSTANCE.toBlogResponse(blog));
+		    BlogResponse blogRes = BlogMapper.INSTANCE.toBlogResponse(blog);
+		    blogRes.setCommentBlog(commentService.getCommentByIdBlog(blog.getId()));
+		    responses.add(blogRes);
 		}
 	    }
 	    return responses;
