@@ -117,8 +117,8 @@ class Blog extends Component {
                               <div className="hover-after col-md-5 col-xs-12">
                                 <a href="blog-detail.html">
                                   <img
-                                    // src={require("../component/asset/blog/" +
-                                    //   item.blogAvatar)}
+                                    src={require("../component/asset/blog/" +
+                                      item.blogAvatar)}
                                     alt="img"
                                   />
                                 </a>

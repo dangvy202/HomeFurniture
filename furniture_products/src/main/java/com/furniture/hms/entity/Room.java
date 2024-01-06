@@ -28,6 +28,9 @@ public class Room {
     @Column(name = "status")
     private int status;
 
+    @Column(name = "picture")
+    private String picture;
+
     @Column(name = "create_by")
     private String createBy;
 

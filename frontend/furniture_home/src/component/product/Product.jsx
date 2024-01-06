@@ -543,7 +543,7 @@ class Product extends Component {
                                   zIndex: 1000,
                                   textAlign: "center",
                                   width: "100%",
-                                  marginTop: "100px",
+                                  marginTop: "45%",
                                   position: "absolute",
                                 }}
                               >

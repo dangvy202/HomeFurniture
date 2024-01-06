@@ -20,6 +20,7 @@ class ProductsAll extends Component {
       title: extension,
       pathname: extensionCategory,
       navbar: "",
+      quantityProduct: 0,
     };
   }
 
@@ -35,6 +36,13 @@ class ProductsAll extends Component {
         .then((res) => {
           this.setState({ products: res.data });
           this.setState({ navbar: res.data[0].category.categoryName });
+          var count = 0;
+          for (var i = 0; i < res.data.length; i++) {
+            if (res.data[i].inventory.message.message === "AVAILABLE") {
+              count++;
+            }
+          }
+          this.setState({ quantityProduct: count });
         })
         .catch((error) => {
           window.location.href = "/404";
@@ -44,6 +52,13 @@ class ProductsAll extends Component {
         .then((res) => {
           this.setState({ products: res.data });
           this.setState({ navbar: res.data[0].room.roomName });
+          var count = 0;
+          for (var i = 0; i < res.data.length; i++) {
+            if (res.data[i].inventory.message.message === "AVAILABLE") {
+              count++;
+            }
+          }
+          this.setState({ quantityProduct: count });
         })
         .catch((error) => {
           window.location.href = "/404";
@@ -166,7 +181,7 @@ class ProductsAll extends Component {
                                 </ul>
                                 <div class="hidden-sm-down total-products">
                                   <p>
-                                    There are {this.state.products.length}{" "}
+                                    There are {this.state.quantityProduct}{" "}
                                     products.
                                   </p>
                                 </div>
@@ -179,157 +194,14 @@ class ProductsAll extends Component {
                               class="related tab-pane fade in active show"
                             >
                               <div class="row">
-                                {this.state.products.map((item) => (
-                                  <div class="item text-center col-md-4">
-                                    <div class="product-miniature js-product-miniature item-one first-item">
-                                      <div class="thumbnail-container border">
-                                        <a href="product-detail.html">
-                                          <img
-                                            class="img-fluid image-cover"
-                                            src={require("../component/asset/product/" +
-                                              item.picture.pictureFirst)}
-                                            alt="img"
-                                          />
-                                          <img
-                                            class="img-fluid image-secondary"
-                                            src={require("../component/asset/product/" +
-                                              item.picture.pictureSecond)}
-                                            alt="img"
-                                          />
-                                        </a>
-                                      </div>
-                                      <div class="product-description">
-                                        <div class="product-groups">
-                                          <div class="product-title">
-                                            <a href="product-detail.html">
-                                              {item.productName}
-                                            </a>
-                                          </div>
-                                          <div class="rating">
-                                            <div class="star-content">
-                                              <div class="star"></div>
-                                              <div class="star"></div>
-                                              <div class="star"></div>
-                                              <div class="star"></div>
-                                              <div class="star"></div>
-                                            </div>
-                                          </div>
-                                          <div class="product-group-price">
-                                            <div class="product-price-and-shipping">
-                                              {(() => {
-                                                if (item.productSaleoff != 0) {
-                                                  return (
-                                                    <>
-                                                      <ul>
-                                                        <li className="item col-md-6 float-left">
-                                                          <span className="price">
-                                                            {Intl.NumberFormat(
-                                                              "vi-VN",
-                                                              {
-                                                                style:
-                                                                  "currency",
-                                                                currency: "VND",
-                                                              }
-                                                            ).format(
-                                                              item.productPrice -
-                                                                item.productSaleoff
-                                                            )}
-                                                          </span>
-                                                        </li>
-                                                        <li className="item col-md-6 float-left">
-                                                          <del className="regular-price">
-                                                            {Intl.NumberFormat(
-                                                              "vi-VN",
-                                                              {
-                                                                style:
-                                                                  "currency",
-                                                                currency: "VND",
-                                                              }
-                                                            ).format(
-                                                              item.productPrice
-                                                            )}
-                                                          </del>
-                                                        </li>
-                                                      </ul>
-                                                    </>
-                                                  );
-                                                } else {
-                                                  return (
-                                                    <span className="price">
-                                                      {Intl.NumberFormat(
-                                                        "vi-VN",
-                                                        {
-                                                          style: "currency",
-                                                          currency: "VND",
-                                                        }
-                                                      ).format(
-                                                        item.productPrice
-                                                      )}
-                                                    </span>
-                                                  );
-                                                }
-                                              })()}
-                                            </div>
-                                          </div>
-                                        </div>
-                                        <div class="product-buttons d-flex justify-content-center">
-                                          <form
-                                            action="#"
-                                            method="post"
-                                            class="formAddToCart"
-                                          >
-                                            <input
-                                              type="hidden"
-                                              name="id_product"
-                                              value="1"
-                                            />
-                                            <a
-                                              class="add-to-cart"
-                                              href="#"
-                                              data-button-action="add-to-cart"
-                                            >
-                                              <i
-                                                class="fa fa-shopping-cart"
-                                                aria-hidden="true"
-                                              ></i>
-                                            </a>
-                                          </form>
-                                          <a
-                                            class="addToWishlist"
-                                            href="#"
-                                            data-rel="1"
-                                            onclick=""
-                                          >
-                                            <i
-                                              class="fa fa-heart"
-                                              aria-hidden="true"
-                                            ></i>
-                                          </a>
-                                          <a
-                                            href="#"
-                                            class="quick-view hidden-sm-down"
-                                            data-link-action="quickview"
-                                          >
-                                            <i
-                                              class="fa fa-eye"
-                                              aria-hidden="true"
-                                            ></i>
-                                          </a>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-
-                            <div id="list" class="related tab-pane fade">
-                              {this.state.products.map((item) => (
-                                <div class="row">
-                                  <div class="item col-md-12">
-                                    <div class="product-miniature item-one first-item">
-                                      <div class="row">
-                                        <div class="col-md-4">
+                                {this.state.products.map((item) => {
+                                  if (
+                                    item.inventory.message.message ===
+                                    "AVAILABLE"
+                                  ) {
+                                    return (
+                                      <div class="item text-center col-md-4">
+                                        <div class="product-miniature js-product-miniature item-one first-item">
                                           <div class="thumbnail-container border">
                                             <a href="product-detail.html">
                                               <img
@@ -346,8 +218,6 @@ class ProductsAll extends Component {
                                               />
                                             </a>
                                           </div>
-                                        </div>
-                                        <div class="col-md-8">
                                           <div class="product-description">
                                             <div class="product-groups">
                                               <div class="product-title">
@@ -373,7 +243,7 @@ class ProductsAll extends Component {
                                                       return (
                                                         <>
                                                           <ul>
-                                                            <li>
+                                                            <li className="item col-md-6 float-left">
                                                               <span className="price">
                                                                 {Intl.NumberFormat(
                                                                   "vi-VN",
@@ -389,7 +259,7 @@ class ProductsAll extends Component {
                                                                 )}
                                                               </span>
                                                             </li>
-                                                            <li>
+                                                            <li className="item col-md-6 float-left">
                                                               <del className="regular-price">
                                                                 {Intl.NumberFormat(
                                                                   "vi-VN",
@@ -425,16 +295,18 @@ class ProductsAll extends Component {
                                                   })()}
                                                 </div>
                                               </div>
-                                              <div class="discription">
-                                                {item.productDescription}
-                                              </div>
                                             </div>
-                                            <div class="product-buttons d-flex">
+                                            <div class="product-buttons d-flex justify-content-center">
                                               <form
                                                 action="#"
                                                 method="post"
                                                 class="formAddToCart"
                                               >
+                                                <input
+                                                  type="hidden"
+                                                  name="id_product"
+                                                  value="1"
+                                                />
                                                 <a
                                                   class="add-to-cart"
                                                   href="#"
@@ -444,7 +316,6 @@ class ProductsAll extends Component {
                                                     class="fa fa-shopping-cart"
                                                     aria-hidden="true"
                                                   ></i>
-                                                  Add to cart
                                                 </a>
                                               </form>
                                               <a
@@ -472,10 +343,176 @@ class ProductsAll extends Component {
                                           </div>
                                         </div>
                                       </div>
+                                    );
+                                  }
+                                })}
+                              </div>
+                            </div>
+
+                            <div id="list" class="related tab-pane fade">
+                              {this.state.products.map((item) => {
+                                if (
+                                  item.inventory.message.message === "AVAILABLE"
+                                ) {
+                                  return (
+                                    <div class="row">
+                                      <div class="item col-md-12">
+                                        <div class="product-miniature item-one first-item">
+                                          <div class="row">
+                                            <div class="col-md-4">
+                                              <div class="thumbnail-container border">
+                                                <a href="product-detail.html">
+                                                  <img
+                                                    class="img-fluid image-cover"
+                                                    src={require("../component/asset/product/" +
+                                                      item.picture
+                                                        .pictureFirst)}
+                                                    alt="img"
+                                                  />
+                                                  <img
+                                                    class="img-fluid image-secondary"
+                                                    src={require("../component/asset/product/" +
+                                                      item.picture
+                                                        .pictureSecond)}
+                                                    alt="img"
+                                                  />
+                                                </a>
+                                              </div>
+                                            </div>
+                                            <div class="col-md-8">
+                                              <div class="product-description">
+                                                <div class="product-groups">
+                                                  <div class="product-title">
+                                                    <a href="product-detail.html">
+                                                      {item.productName}
+                                                    </a>
+                                                  </div>
+                                                  <div class="rating">
+                                                    <div class="star-content">
+                                                      <div class="star"></div>
+                                                      <div class="star"></div>
+                                                      <div class="star"></div>
+                                                      <div class="star"></div>
+                                                      <div class="star"></div>
+                                                    </div>
+                                                  </div>
+                                                  <div class="product-group-price">
+                                                    <div class="product-price-and-shipping">
+                                                      {(() => {
+                                                        if (
+                                                          item.productSaleoff !=
+                                                          0
+                                                        ) {
+                                                          return (
+                                                            <>
+                                                              <ul>
+                                                                <li>
+                                                                  <span className="price">
+                                                                    {Intl.NumberFormat(
+                                                                      "vi-VN",
+                                                                      {
+                                                                        style:
+                                                                          "currency",
+                                                                        currency:
+                                                                          "VND",
+                                                                      }
+                                                                    ).format(
+                                                                      item.productPrice -
+                                                                        item.productSaleoff
+                                                                    )}
+                                                                  </span>
+                                                                </li>
+                                                                <li>
+                                                                  <del className="regular-price">
+                                                                    {Intl.NumberFormat(
+                                                                      "vi-VN",
+                                                                      {
+                                                                        style:
+                                                                          "currency",
+                                                                        currency:
+                                                                          "VND",
+                                                                      }
+                                                                    ).format(
+                                                                      item.productPrice
+                                                                    )}
+                                                                  </del>
+                                                                </li>
+                                                              </ul>
+                                                            </>
+                                                          );
+                                                        } else {
+                                                          return (
+                                                            <span className="price">
+                                                              {Intl.NumberFormat(
+                                                                "vi-VN",
+                                                                {
+                                                                  style:
+                                                                    "currency",
+                                                                  currency:
+                                                                    "VND",
+                                                                }
+                                                              ).format(
+                                                                item.productPrice
+                                                              )}
+                                                            </span>
+                                                          );
+                                                        }
+                                                      })()}
+                                                    </div>
+                                                  </div>
+                                                  <div class="discription">
+                                                    {item.productDescription}
+                                                  </div>
+                                                </div>
+                                                <div class="product-buttons d-flex">
+                                                  <form
+                                                    action="#"
+                                                    method="post"
+                                                    class="formAddToCart"
+                                                  >
+                                                    <a
+                                                      class="add-to-cart"
+                                                      href="#"
+                                                      data-button-action="add-to-cart"
+                                                    >
+                                                      <i
+                                                        class="fa fa-shopping-cart"
+                                                        aria-hidden="true"
+                                                      ></i>
+                                                      Add to cart
+                                                    </a>
+                                                  </form>
+                                                  <a
+                                                    class="addToWishlist"
+                                                    href="#"
+                                                    data-rel="1"
+                                                    onclick=""
+                                                  >
+                                                    <i
+                                                      class="fa fa-heart"
+                                                      aria-hidden="true"
+                                                    ></i>
+                                                  </a>
+                                                  <a
+                                                    href="#"
+                                                    class="quick-view hidden-sm-down"
+                                                    data-link-action="quickview"
+                                                  >
+                                                    <i
+                                                      class="fa fa-eye"
+                                                      aria-hidden="true"
+                                                    ></i>
+                                                  </a>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
                                     </div>
-                                  </div>
-                                </div>
-                              ))}
+                                  );
+                                }
+                              })}
                             </div>
                           </div>
 
