@@ -34,14 +34,10 @@ public class UsersController {
 //        return null;
 //    }
 
-    @PostMapping("/img/save")
-    public ResponseEntity<String> saveImageInfomation(@RequestBody MultipartFile picture) throws Exception {
-        String response = userService.saveImageInfomation(picture);
-        return new ResponseEntity<>(response,HttpStatus.OK);
-    }
-
     @PostMapping("/save")
-    public ResponseEntity<UserResponse> saveInfomation(@ModelAttribute @Validated UserRequest request){
+    public ResponseEntity<UserResponse> saveInfomation
+//            (@RequestParam("picture") MultipartFile picture){
+        (@ModelAttribute @Validated UserRequest request){
         UserResponse response = userService.saveEditAccount(request);
         if(response == null) {
             return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);

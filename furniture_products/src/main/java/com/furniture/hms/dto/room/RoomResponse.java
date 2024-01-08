@@ -10,4 +10,7 @@ import lombok.*;
 public class RoomResponse {
     private Integer id;
     private String roomName;
+    private String roomRedirect;
+
+    private String picture;
 }

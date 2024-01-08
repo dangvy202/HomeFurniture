@@ -9,6 +9,7 @@ import java.math.BigInteger;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Map;
 
 @Data
 @Getter
@@ -59,5 +60,13 @@ public class UserResponse {
 
         @JsonProperty("picture")
         private String picture;
+
+        private Orther orther;
+
+        @Data
+        @FieldDefaults(level = AccessLevel.PRIVATE)
+        public static class Orther {
+            private Map<String,Object> variable;
+        }
     }
 }

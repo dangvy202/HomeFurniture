@@ -67,14 +67,30 @@ class Login extends Component {
                   <h5 className="modal-title" id="exampleModalLabel">
                     {this.state.isLogin === false ? "Error!" : "Message!"}
                   </h5>
-                  <button
-                    type="button"
-                    className="close"
-                    data-dismiss="modal"
-                    aria-label="Close"
-                  >
-                    <span aria-hidden="true">&times;</span>
-                  </button>
+                  {(() => {
+                    if (this.state.isLogin === false) {
+                      return (
+                        <>
+                          <button
+                            type="button"
+                            className="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </>
+                      );
+                    } else {
+                      return (
+                        <>
+                          <a href="/" className="close">
+                            <span aria-hidden="true">&times;</span>
+                          </a>
+                        </>
+                      );
+                    }
+                  })()}
                 </div>
                 <div className="modal-body">
                   {(() => {

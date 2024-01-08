@@ -71,6 +71,40 @@ public class ProductService {
         }
     }
 
+    public List<ProductResponse.ProductList> getProductByCategoryRedirect(String categoryRedirect) {
+        List<Product> listProduct = productRepository.findProductByCategoryRedirect(categoryRedirect);
+
+        List<ProductResponse.ProductList> listProductResponse = new ArrayList<>();
+
+        if(!listProduct.isEmpty()) {
+            for (Product product : listProduct){
+                ProductResponse.ProductList detailResponse = ProductMapper.INSTANCE.toProductRes(product);
+                detailResponse.setInventory(this.handleInventory(product.getId()));
+                listProductResponse.add(detailResponse);
+            }
+            return listProductResponse;
+        }else {
+            return null;
+        }
+    }
+
+    public List<ProductResponse.ProductList> getProductByRoomRedirect(String roomRedirect) {
+        List<Product> listProduct = productRepository.findProductByRoomRedirect(roomRedirect);
+
+        List<ProductResponse.ProductList> listProductResponse = new ArrayList<>();
+
+        if(!listProduct.isEmpty()) {
+            for (Product product : listProduct){
+                ProductResponse.ProductList detailResponse = ProductMapper.INSTANCE.toProductRes(product);
+                detailResponse.setInventory(this.handleInventory(product.getId()));
+                listProductResponse.add(detailResponse);
+            }
+            return listProductResponse;
+        }else {
+            return null;
+        }
+    }
+
     public List<ProductResponse.ProductList> search(String nameProduct){
         List<Product> listProduct = productRepository.findByProductNameContaining(nameProduct);
 

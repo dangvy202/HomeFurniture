@@ -17,7 +17,7 @@ class CategoryBlog extends Component {
   }
 
   changeBlog(id) {
-    window.location.href = "/blog/"+id;
+    window.location.href = "/blog/" + id;
   }
 
   render() {
@@ -27,7 +27,11 @@ class CategoryBlog extends Component {
         <div className="block-content">
           {this.state.categoryBlog.map((item) => (
             <div className="cateTitle hasSubCategory open level1">
-              <a href="#" className="cateItem" onClick={() => this.changeBlog(item.id)}>
+              <a
+                href="#"
+                className="cateItem"
+                onClick={() => this.changeBlog(item.id)}
+              >
                 {item.categoryName}
               </a>
             </div>

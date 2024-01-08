@@ -37,6 +37,26 @@ public class ProductsController {
         }
     }
 
+    @GetMapping("/category-redirect/{categoryRedirect}")
+    public ResponseEntity<List<ProductResponse.ProductList>> getProductByCategoryRedirect(@PathVariable("categoryRedirect") String categoryRedirect) {
+        List<ProductResponse.ProductList> response = productService.getProductByCategoryRedirect(categoryRedirect);
+        if(response != null){
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/room-redirect/{roomRedirect}")
+    public ResponseEntity<List<ProductResponse.ProductList>> getProductByRoomRedirect(@PathVariable("roomRedirect") String roomRedirect) {
+        List<ProductResponse.ProductList> response = productService.getProductByRoomRedirect(roomRedirect);
+        if(response != null){
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping("/room/{id}")
     public ResponseEntity<List<ProductResponse.ProductList>> getProductByRoom(@PathVariable("id") Integer id){
         List<ProductResponse.ProductList> response = productService.getProductByRoom(id);

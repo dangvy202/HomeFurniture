@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import Banner from "../component/banner/Banner";
 import Product from "../component/product/Product";
+import Introduction from "../component/introduction/Introduction";
+import RoomCategory from "../component/room/RoomCategory";
+import Subscribe from "../component/subscribe/Subscribe";
 
 class Home extends Component {
   render() {
@@ -13,8 +16,13 @@ class Home extends Component {
             <div id="main">
               <section className="page-home">
                 <Banner />
+                <Introduction />
+
                 {/* <!-- product living room --> */}
-                <div className="section living-room background-none">
+                <div
+                  className="section living-room background-none"
+                  style={{ marginTop: "-10%" }}
+                >
                   <div className="container">
                     <div className="tiva-row-wrap row">
                       <div className="col-md-12 col-xs-12 groupcategoriestab-vertical">
@@ -28,6 +36,8 @@ class Home extends Component {
                     </div>
                   </div>
                 </div>
+                <RoomCategory />
+                <Subscribe />
               </section>
             </div>
           </div>

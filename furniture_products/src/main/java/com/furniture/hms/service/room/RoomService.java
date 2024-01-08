@@ -25,8 +25,10 @@ public class RoomService {
 
         if(!listRooms.isEmpty()) {
             for (Room room : listRooms){
-                RoomResponse detailResponse = RoomMapper.INSTANCE.toRoomResponse(room);
-                listRoomsResponse.add(detailResponse);
+                if(room.getStatus() == 1) {
+                    RoomResponse detailResponse = RoomMapper.INSTANCE.toRoomResponse(room);
+                    listRoomsResponse.add(detailResponse);
+                }
             }
             return listRoomsResponse;
         }else {

@@ -22,6 +22,15 @@ public class Room {
     @Column(name = "room_name")
     private String roomName;
 
+    @Column(name = "room_redirect")
+    private String roomRedirect;
+
+    @Column(name = "status")
+    private int status;
+
+    @Column(name = "picture")
+    private String picture;
+
     @Column(name = "create_by")
     private String createBy;
 

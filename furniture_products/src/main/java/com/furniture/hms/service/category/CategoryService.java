@@ -24,8 +24,10 @@ public class CategoryService {
 
         if(!listCategories.isEmpty()) {
             for (Category category : listCategories){
-                CategoryResponse detailResponse = CategoryMapper.INSTANCE.toCategoryResponse(category);
-                listCategoriesResponse.add(detailResponse);
+                if(category.getStatus() == 1) {
+                    CategoryResponse detailResponse = CategoryMapper.INSTANCE.toCategoryResponse(category);
+                    listCategoriesResponse.add(detailResponse);
+                }
             }
             return listCategoriesResponse;
         }else {
