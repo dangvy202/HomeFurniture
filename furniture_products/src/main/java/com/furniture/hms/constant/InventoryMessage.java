@@ -2,7 +2,6 @@ package com.furniture.hms.constant;
 
 import org.springframework.stereotype.Component;
 
-@Component
 public class InventoryMessage {
     public static final String AVAILABLE = "AVAILABLE";
     public static final String INAVAILABLE = "INAVAILABLE";
