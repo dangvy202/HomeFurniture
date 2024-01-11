@@ -234,7 +234,7 @@ class Navbar extends Component {
                     </div>
                   </li>
                   <li>
-                    <a href="contact.html" className="parent">
+                    <a href="/contact" className="parent">
                       Contact US
                     </a>
                   </li>

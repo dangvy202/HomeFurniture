@@ -11,6 +11,7 @@ import EditAccount from './page/EditAccount';
 import ProductAll from './page/ProductAll';
 import NotFound from './page/NotFound';
 import React, { Component } from "react";
+import Contact from './page/Contact';
 
 
 class App extends Component {
@@ -49,6 +50,7 @@ class App extends Component {
             <Route path="/editAccount" element={<EditAccount />} />
             <Route path="/product/:category" element={<ProductAll />} />
             <Route path="/product/:room" element={<ProductAll />} />
+            <Route path="/contact" element={<Contact/>} />
               
   
   

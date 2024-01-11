@@ -1,12 +1,34 @@
 import React, { Component } from "react";
 import "./style.css";
+import SubscribeService from "../../service/SubscribeService";
 
 class Subscribe extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      message: "",
+      email: "",
+    };
+    this.onChangeEmail = this.onChangeEmail.bind(this);
   }
 
   componentDidMount() {}
+
+  async subscribeForm(e) {
+    e.preventDefault();
+    SubscribeService.subscribeEmail(this.state.email)
+      .then((res) => {
+        this.setState({ message: res.data.message });
+      })
+      .catch((error) => {
+        this.setState({ message: error.response.data.message });
+      });
+  }
+
+  onChangeEmail(e) {
+    this.setState({ email: e.target.value });
+  }
 
   render() {
     return (
@@ -17,18 +39,76 @@ class Subscribe extends Component {
               <div className="tiva-modules">
                 <div className="block">
                   <div className="title-block">Newsletter</div>
+
+                  <div
+                    className="modal fade"
+                    id="exampleModal"
+                    tabIndex="-1"
+                    role="dialog"
+                    aria-labelledby="exampleModalLabel"
+                    aria-hidden="true"
+                  >
+                    <div className="modal-dialog" role="document">
+                      <div className="modal-content">
+                        <div className="modal-header">
+                          <h5 className="modal-title" id="exampleModalLabel">
+                            {(() => {
+                              if (this.state.message === "SUCCESS") {
+                                return <>Notification</>;
+                              } else {
+                                return <>Error !</>;
+                              }
+                            })()}
+                          </h5>
+                          <button
+                            type="button"
+                            className="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div className="modal-body">
+                          {(() => {
+                            if (this.state.message === "SUCCESS") {
+                              return (
+                                <>Success, we will send you a discount ticket</>
+                              );
+                            } else {
+                              return <>Fail, please try again !</>;
+                            }
+                          })()}
+                        </div>
+                        <div className="modal-footer">
+                          <button
+                            type="button"
+                            className="btn btn-primary"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            Close
+                          </button>
+                          {/* <a href="/" className="btn btn-primary">
+                            
+                          </a> */}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="sub-title">
                     Sign up to our newsletter to get the latest articles,
                     lookbooks voucher codes direct to your inbox
                   </div>
                   <div className="block-newsletter">
-                    <form action="#" method="post">
+                    <form onSubmit={(e) => this.subscribeForm(e)}>
                       <div className="input-group">
                         <input
                           type="text"
                           className="form-control"
                           name="email"
-                          value=""
+                          onChange={this.onChangeEmail}
                           placeholder="Enter Your Email"
                         />
                         <span className="input-group-btn">
@@ -36,12 +116,13 @@ class Subscribe extends Component {
                             className="effect-btn btn btn-secondary"
                             name="submitNewsletter"
                             type="submit"
+                            data-target="#exampleModal"
+                            data-toggle="modal"
                           >
                             <span>subscribe</span>
                           </button>
                         </span>
                       </div>
-                      <input type="hidden" name="action" value="0" />
                     </form>
                   </div>
                 </div>
