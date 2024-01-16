@@ -10,6 +10,9 @@ import lombok.Setter;
 @Setter
 public class InformationContactClientRequest {
 
+    @JsonProperty("name")
+    private String name;
+
     @JsonProperty("email")
     private String email;
 

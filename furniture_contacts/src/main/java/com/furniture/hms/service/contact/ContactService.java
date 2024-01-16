@@ -48,7 +48,7 @@ public class ContactService {
         ) {
             try{
                 Instant dateNow = Instant.now();
-                InformationContactClient informationContactClientEntity = InformationContactClientMapper.INSTANT.toInformationContactClientEntity(informationContactClientRequest,dateNow,0);
+                InformationContactClient informationContactClientEntity = InformationContactClientMapper.INSTANT.toInformationContactClientEntity(informationContactClientRequest,dateNow,request.getInformationContactClientDetail().getInformationContactClientRequest().getName(),0);
                 ContactDescription contactDescriptionEntity = ContactDescriptionMapper.INSTANCE.toContactDescriptionEntity(contactDescriptionRequest, dateNow);
                 ContactHistory contactHistoryEntity =
                         ContactHistoryMapper.INSTANT.toContactHistoryEntity(

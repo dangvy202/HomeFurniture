@@ -1,7 +1,66 @@
 import React from "react";
 import { Component } from "react";
+import ContactService from "../service/ContactService";
 
 class Contact extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "",
+      email: "",
+      hotline: "",
+      address: "",
+      title: "",
+      description: "",
+      informationContactAdmin: [],
+    };
+    this.onChageName = this.onChageName.bind(this);
+    this.onChageEmail = this.onChageEmail.bind(this);
+    this.onChageHotline = this.onChageHotline.bind(this);
+    this.onChageAddress = this.onChageAddress.bind(this);
+    this.onChageTitle = this.onChageTitle.bind(this);
+    this.onChageDescription = this.onChageDescription.bind(this);
+  }
+
+  onChageName(e) {
+    this.setState({ name: e.target.value });
+  }
+
+  onChageEmail(e) {
+    this.setState({ email: e.target.value });
+  }
+
+  onChageHotline(e) {
+    this.setState({ hotline: e.target.value });
+  }
+
+  onChageAddress(e) {
+    this.setState({ address: e.target.value });
+  }
+
+  onChageTitle(e) {
+    this.setState({ title: e.target.value });
+  }
+
+  onChageDescription(e) {
+    this.setState({ description: e.target.value });
+  }
+
+  componentDidMount() {
+    ContactService.getInformationContactAdmin()
+      .then((res) => {
+        this.setState({
+          informationContactAdmin: res.data.informationContactAdminDetailList,
+        });
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  }
+
+  addContact(e) {
+    e.preventDefault();
+  }
   render() {
     return (
       <div id="contact">
@@ -42,13 +101,16 @@ class Contact extends Component {
                               <div class="item-right d-flex">
                                 <div class="title">Email:</div>
                                 <div class="contact-content">
-                                  <a href="mailto:support@domain.com">
-                                    support@domain.com
-                                  </a>
-                                  <br />
-                                  <a href="mailto:contact@domain.com">
-                                    contact@domain.com
-                                  </a>
+                                  {this.state.informationContactAdmin.map(
+                                    (item) => (
+                                      <>
+                                        <a href={"mailto:" + item.email}>
+                                          {item.email}
+                                        </a>
+                                        <br />
+                                      </>
+                                    )
+                                  )}
                                 </div>
                               </div>
                             </div>
@@ -62,11 +124,16 @@ class Contact extends Component {
                               </div>
                               <div class="item-right d-flex">
                                 <div class="title">Address:</div>
-                                <div class="contact-content">
-                                  23 Suspendis matti, Visaosang Building
-                                  <br />
-                                  District, NY Accums, North American
-                                </div>
+                                {this.state.informationContactAdmin.map(
+                                  (item) => (
+                                    <>
+                                      <div class="contact-content">
+                                        {item.address}
+                                      </div>
+                                      <br />
+                                    </>
+                                  )
+                                )}
                               </div>
                             </div>
                           </div>
@@ -79,11 +146,20 @@ class Contact extends Component {
                               </div>
                               <div class="item-right d-flex">
                                 <div class="title">Hotline:</div>
-                                <div class="contact-content">
-                                  0123-456-78910
-                                  <br />
-                                  0987-654-32100
-                                </div>
+
+                                {this.state.informationContactAdmin.map(
+                                  (item) => (
+                                    <>
+                                      <div class="contact-content">
+                                        <a href={"tel:" + item.hotline}>
+                                          {item.hotline}
+                                        </a>
+                                        <br />
+                                      </div>
+                                      <br />
+                                    </>
+                                  )
+                                )}
                               </div>
                             </div>
                           </div>
@@ -108,18 +184,17 @@ class Contact extends Component {
 
                         <p class="icon text-center">
                           <a href="#">
-                            <img src="img/other/contact_mess.png" alt="img" />
+                            <img
+                              src={require("../component/asset/other/contact_mess.png")}
+                              alt="img"
+                            />
                           </a>
                         </p>
 
                         <div class="d-flex justify-content-center">
                           <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                             <div class="contact-form">
-                              <form
-                                action="#"
-                                method="post"
-                                enctype="multipart/form-data"
-                              >
+                              <form onSubmit={(e) => this.addContact(e)}>
                                 <div class="form-fields">
                                   <div class="form-group row">
                                     <div class="col-md-6">
@@ -127,15 +202,36 @@ class Contact extends Component {
                                         class="form-control"
                                         name="name"
                                         placeholder="Your name"
+                                        onChange={this.onChageName}
                                       />
                                     </div>
                                     <div class="col-md-6 margin-bottom-mobie">
                                       <input
                                         class="form-control"
-                                        name="from"
+                                        name="email"
                                         type="email"
-                                        value=""
                                         placeholder="Your email"
+                                        onChange={this.onChageEmail}
+                                      />
+                                    </div>
+                                  </div>
+                                  <div class="form-group row">
+                                    <div class="col-md-6">
+                                      <input
+                                        class="form-control"
+                                        name="hotline"
+                                        type="number"
+                                        placeholder="Number phone"
+                                        onChange={this.onChageHotline}
+                                      />
+                                    </div>
+                                    <div class="col-md-6 margin-bottom-mobie">
+                                      <input
+                                        class="form-control"
+                                        name="address"
+                                        type="text"
+                                        placeholder="Your address"
+                                        onChange={this.onChageAddress}
                                       />
                                     </div>
                                   </div>
@@ -143,10 +239,10 @@ class Contact extends Component {
                                     <div class="col-md-12 margin-bottom-mobie">
                                       <input
                                         class="form-control"
-                                        name="from"
-                                        type="email"
-                                        value=""
+                                        name="title"
+                                        type="text"
                                         placeholder="Subject"
+                                        onChange={this.onChageTitle}
                                       />
                                     </div>
                                   </div>
@@ -154,9 +250,10 @@ class Contact extends Component {
                                     <div class="col-md-12">
                                       <textarea
                                         class="form-control"
-                                        name="message"
+                                        name="description"
                                         placeholder="Message"
                                         rows="8"
+                                        onChange={this.onChageDescription}
                                       ></textarea>
                                     </div>
                                   </div>
@@ -169,7 +266,7 @@ class Contact extends Component {
                                   >
                                     <img
                                       class="img-fl"
-                                      src="img/other/contact_email.png"
+                                      src={require("../component/asset/other/contact_email.png")}
                                       alt="img"
                                     />
                                     Send message

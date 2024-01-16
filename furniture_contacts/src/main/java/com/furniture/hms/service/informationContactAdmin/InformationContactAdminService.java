@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,17 +23,18 @@ public class InformationContactAdminService {
         List<InformationContactAdmin> arrInformationContactAdmin = repository.findAll();
 
         InformationContactAdminResponse response =  new InformationContactAdminResponse();
+        List<InformationContactAdminResponse.InformationContactAdminDetail> informationContactAdminDetailList = new ArrayList<>();
+
         if(arrInformationContactAdmin.size() > 0) {
             arrInformationContactAdmin.stream().forEach(informationContactAdmin -> {
                 if(informationContactAdmin.getStatus() == StatusEnum.VALID) {
-                    response.setInformationContactAdminDetailList(List.of(
+                    informationContactAdminDetailList.add(
                             InformationContactAdminMapper.INSTANT.toInformationContactAdminResponse(
                                     informationContactAdmin
-                            )
-                    ));
-
+                            ));
                 }
             });
+            response.setInformationContactAdminDetailList(informationContactAdminDetailList);
             return response;
         } else {
             return response;

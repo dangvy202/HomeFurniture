@@ -13,9 +13,11 @@ public interface InformationContactClientMapper {
     InformationContactClientMapper INSTANT = Mappers.getMapper(InformationContactClientMapper.class);
 
     @Mapping(target = "createDate" , source = "createDate")
+    @Mapping(target = "name" , source = "name")
     InformationContactClient toInformationContactClientEntity(
             InformationContactClientRequest request,
             Instant createDate,
+            String name,
             int status
     );
 }
