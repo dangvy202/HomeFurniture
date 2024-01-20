@@ -1,16 +1,15 @@
 package com.furniture.hms.dto.contactHistory;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.furniture.hms.dto.contactDescription.ContactDescriptionRequest;
 import com.furniture.hms.dto.informationContactClient.InformationContactClientRequest;
 import com.furniture.hms.entity.InformationContactClient;
 import com.furniture.hms.enums.ProcessEnum;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.io.IOException;
 import java.time.Instant;
 
 @Data
@@ -33,12 +32,17 @@ public class ContactHistoryRequest {
     @Data
     @FieldDefaults(level = AccessLevel.PRIVATE)
     public static class ContactDescriptionDetail {
-        public ContactDescriptionRequest contactDescriptionRequest;
+
+        @JsonProperty("contactDescriptionRequest")
+        private ContactDescriptionRequest contactDescriptionRequest;
     }
 
     @Data
     @FieldDefaults(level = AccessLevel.PRIVATE)
     public static class InformationContactClientDetail {
-        public InformationContactClientRequest informationContactClientRequest;
+
+
+        @JsonProperty("informationContactClientRequest")
+        private InformationContactClientRequest informationContactClientRequest;
     }
 }

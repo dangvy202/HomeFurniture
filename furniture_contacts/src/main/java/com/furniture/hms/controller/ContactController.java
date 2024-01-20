@@ -9,6 +9,7 @@ import com.furniture.hms.service.informationContactAdmin.InformationContactAdmin
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,7 +23,7 @@ public class ContactController {
     private final InformationContactAdminService informationContactAdminService;
 
     @PostMapping
-    public ResponseEntity<ContactHistoryResponse> saveContact(@RequestBody ContactHistoryRequest request) {
+    public ResponseEntity<ContactHistoryResponse> saveContact(@RequestBody @Validated ContactHistoryRequest request) {
         ContactHistoryResponse response = contactservice.saveContactClient(request);
 
         if(response.getStatus() == Boolean.TRUE && response.getMessage() == ContactMessage.SUCCESS) {

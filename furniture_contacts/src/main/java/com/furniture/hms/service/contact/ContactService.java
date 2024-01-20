@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.time.Instant;
 
@@ -40,11 +41,8 @@ public class ContactService {
 
         ContactHistoryResponse response = new ContactHistoryResponse();
 
-        if(contactDescriptionRequest.getDescription() != null ||
-                contactDescriptionRequest.getTitle() != null ||
-                informationContactClientRequest.getEmail() != null ||
-                informationContactClientRequest.getPhone() != null ||
-                informationContactClientRequest.getAddress() != null
+        if(!StringUtils.isEmpty(request.getInformationContactClientDetail().getInformationContactClientRequest().getEmail()) ||
+                !StringUtils.isEmpty(request.getInformationContactClientDetail().getInformationContactClientRequest().getPhone())
         ) {
             try{
                 Instant dateNow = Instant.now();

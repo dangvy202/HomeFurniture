@@ -12,7 +12,10 @@ class Contact extends Component {
       address: "",
       title: "",
       description: "",
+      message: "",
       informationContactAdmin: [],
+      contactDescription: {},
+      informationContactClient: {},
     };
     this.onChageName = this.onChageName.bind(this);
     this.onChageEmail = this.onChageEmail.bind(this);
@@ -20,6 +23,7 @@ class Contact extends Component {
     this.onChageAddress = this.onChageAddress.bind(this);
     this.onChageTitle = this.onChageTitle.bind(this);
     this.onChageDescription = this.onChageDescription.bind(this);
+    this.addContact = this.addContact.bind(this);
   }
 
   onChageName(e) {
@@ -47,24 +51,96 @@ class Contact extends Component {
   }
 
   componentDidMount() {
-    ContactService.getInformationContactAdmin()
-      .then((res) => {
-        this.setState({
-          informationContactAdmin: res.data.informationContactAdminDetailList,
-        });
-      })
-      .catch((error) => {
-        alert(error);
+    ContactService.getInformationContactAdmin().then((res) => {
+      this.setState({
+        informationContactAdmin: res.data.informationContactAdminDetailList,
       });
+    });
   }
 
   addContact(e) {
     e.preventDefault();
+    let process = "CREATE";
+    let message = "CONTACT SUCCESS";
+
+    ContactService.saveContact(
+      process,
+      message,
+      this.state.title,
+      this.state.description,
+      this.state.name,
+      this.state.email,
+      this.state.hotline,
+      this.state.address
+    )
+      .then((res) => {
+        this.setState({ message: res.data.message });
+      })
+      .catch((error) => {
+        this.setState({ message: error.response.data.message });
+      });
   }
   render() {
     return (
       <div id="contact">
         <div class="main-content">
+          <div
+            className="modal fade"
+            id="exampleModal"
+            tabIndex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div className="modal-dialog" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title" id="exampleModalLabel">
+                    {(() => {
+                      if (this.state.message === "SUCCESS") {
+                        return <>Notification</>;
+                      } else {
+                        return <>Error !</>;
+                      }
+                    })()}
+                  </h5>
+                  <button
+                    type="button"
+                    className="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div className="modal-body">
+                  {(() => {
+                    if (this.state.message === "SUCCESS") {
+                      return (
+                        <>Success, we will send you a message to your gmail</>
+                      );
+                    } else {
+                      return <>Fail, please try again !</>;
+                    }
+                  })()}
+                </div>
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    Close
+                  </button>
+                  {/* <a href="/" className="btn btn-primary">
+                            
+                          </a> */}
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* <!-- breadcrumb --> */}
           <nav class="breadcrumb-bg">
             <div class="container no-index">
@@ -260,9 +336,11 @@ class Contact extends Component {
                                 </div>
                                 <div>
                                   <button
-                                    class="btn"
-                                    type="submit"
+                                    className="effect-btn btn btn-secondary"
                                     name="submitMessage"
+                                    type="submit"
+                                    data-target="#exampleModal"
+                                    data-toggle="modal"
                                   >
                                     <img
                                       class="img-fl"

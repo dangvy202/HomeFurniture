@@ -3,6 +3,7 @@ package com.furniture.hms.dto.informationContactClient;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 
 @Data
@@ -14,9 +15,11 @@ public class InformationContactClientRequest {
     private String name;
 
     @JsonProperty("email")
+    @NonNull
     private String email;
 
     @JsonProperty("phone")
+    @NonNull
     private String phone;
 
     @JsonProperty("address")
