@@ -12,6 +12,7 @@ import ProductAll from './page/ProductAll';
 import NotFound from './page/NotFound';
 import React, { Component } from "react";
 import Contact from './page/Contact';
+import BlogDetail from './page/BlogDetail';
 
 
 class App extends Component {
@@ -51,6 +52,7 @@ class App extends Component {
             <Route path="/product/:category" element={<ProductAll />} />
             <Route path="/product/:room" element={<ProductAll />} />
             <Route path="/contact" element={<Contact/>} />
+            <Route path="/blog-detail/:idBlog" element={<BlogDetail/>} />
               
   
   
