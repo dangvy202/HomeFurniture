@@ -1,5 +1,6 @@
 package com.furniture.hms.entity;
 
+import java.time.Instant;
 import java.util.Date;
 
 import jakarta.persistence.CascadeType;
@@ -36,8 +37,11 @@ public class Comment {
     @Column(name = "status")
     private Integer status;
 
-    @Column(name = "id_user")
-    private Integer user;
+    @Column(name = "username")
+    private String userName;
+
+    @Column(name = "picture")
+    private String picture;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_blog", referencedColumnName = "id_blog")
@@ -53,5 +57,5 @@ public class Comment {
     private String updateBy;
 
     @Column(name = "update_date")
-    private Date updateDate;
+    private Instant updateDate;
 }

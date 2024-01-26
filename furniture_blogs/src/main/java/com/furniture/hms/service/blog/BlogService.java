@@ -60,6 +60,7 @@ public class BlogService {
 	Blog blog = blogRepository.findById(id).orElse(null);
 	if (blog != null && blog.getStatus() != 0) {
 	    response = BlogMapper.INSTANCE.toBlogResponse(blog);
+	    response.setCommentBlog(commentService.getCommentByIdBlog(blog.getId()));
 	    return response;
 	} else {
 	    return null;

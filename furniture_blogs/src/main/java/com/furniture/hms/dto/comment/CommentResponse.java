@@ -1,5 +1,6 @@
 package com.furniture.hms.dto.comment;
 
+import java.time.Instant;
 import java.util.List;
 
 import lombok.AccessLevel;
@@ -27,5 +28,16 @@ public class CommentResponse {
 	private Integer id;
 	private String content;
 	private Integer status;
+	private Instant updateDate;
+	private UserInforDetail user;
+
+	@Data
+	@FieldDefaults(level = AccessLevel.PRIVATE)
+	public static class UserInforDetail {
+	    private String userName;
+
+	    private String picture;
+	}
+
     }
 }

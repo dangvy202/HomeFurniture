@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import CategoryBlog from "../component/sidebar/CategoryBlog";
 import TagBlog from "../component/tagblog/TagBlog";
 import BlogService from "../service/BlogService";
-import img from "../component/asset/blog/3.jpg"
 
 class BlogDetail extends Component {
     constructor(props) {
@@ -14,6 +13,7 @@ class BlogDetail extends Component {
             blogAvatar:"",
             updateBy:"",
             updateDate:"",
+            comment:[]
         };
     }
 
@@ -28,9 +28,12 @@ class BlogDetail extends Component {
             this.setState({blogAvatar: res.data.blogAvatar})
             this.setState({updateBy: res.data.updateBy})
             this.setState({updateDate: res.data.updateDate})
+            this.setState({comment: res.data.commentBlog.comment})
+            debugger;
         }).catch((error) => {
             window.location.href="/404"
         })
+        
     }
 
     render() {
@@ -92,7 +95,7 @@ class BlogDetail extends Component {
                                                         <img src={require("../component/asset/blog/detail.jpg")} alt="img" class="img-fluid" />
                                                     </div>
                                                     <div class="late-item">
-                                                    <img class="img-fluid" src="../component/asset/blog/3.jpg" alt="banner-1" title="banner-1" />
+                                                    {/* <img class="img-fluid" src={require("../../public/image/img/blog/1.jpg")} alt="banner-1" title="banner-1" /> */}
 
                                                         <div dangerouslySetInnerHTML={{ __html: this.state.content }}></div>
 
@@ -120,6 +123,7 @@ class BlogDetail extends Component {
                                                     </div>
 
                                                     <div class="admin">
+
                                                         <img src="img/blog/user.jpg" alt="img" class="float-left right" />
                                                         <div class="info">
                                                             <p>
@@ -135,117 +139,47 @@ class BlogDetail extends Component {
                                                             </p>
                                                         </div>
                                                     </div>
-                                                    <div class="related">
-                                                        <h2 class="title-block">Related News</h2>
-                                                        <div class="main-blogs">
-                                                            <div class="row">
-                                                                <div class="col-md-4">
-                                                                    <div class="hover-after">
-                                                                        <a href="blog-detail.html">
-                                                                            <img src="img/blog/7.jpg" alt="img" class="img-fluid" />
-                                                                        </a>
-                                                                    </div>
-                                                                    <div class="late-item">
-                                                                        <p class="content-title">
-                                                                            <a href="blog-detail.html">Lorem ipsum dolor sit amet</a>
-                                                                        </p>
-                                                                        <p class="description">Proin gravida nibh vel velit auctor aliquet. Aenean sollicudin,
-                                                                            lorem quis bibendum auctor.
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-4">
-                                                                    <div class="hover-after">
-                                                                        <a href="blog-detail.html">
-                                                                            <img src="img/blog/8.jpg" alt="img" class="img-fluid" />
-                                                                        </a>
-                                                                    </div>
-                                                                    <div class="late-item">
-                                                                        <p class="content-title">
-                                                                            <a href="blog-detail.html">Lorem ipsum dolor sit amet</a>
-                                                                        </p>
-                                                                        <p class="description">Proin gravida nibh vel velit auctor aliquet. Aenean sollicudin,
-                                                                            lorem quis bibendum auctor.
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-4">
-                                                                    <div class="hover-after">
-                                                                        <a href="blog-detail.html">
-                                                                            <img src="img/blog/9.jpg" alt="img" class="img-fluid" />
-                                                                        </a>
-                                                                    </div>
-                                                                    <div class="late-item">
-                                                                        <p class="content-title">
-                                                                            <a href="blog-detail.html">Lorem ipsum dolor sit amet</a>
-                                                                        </p>
-                                                                        <p class="description">Proin gravida nibh vel velit auctor aliquet. Aenean sollicudin,
-                                                                            lorem quis bibendum auctor .
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                     <div class="reply late-item">
                                                         <div class="blog-comment" id="blog-comment">
                                                             <h2 class="title-block">Comments</h2>
-                                                            <img src="img/blog/user1.jpg" alt="img" class="float-left right" />
                                                         </div>
-                                                        <div class="comment-content">
-                                                            <p class="user-title">
-                                                                <a href="#">JOHN DOE</a>
-                                                                <span class="time">Posted on Mar 17, 2017 at 6:57am /
-                                                                    <a href="#">repost</a> /
-                                                                    <span class="green">
-                                                                        <a href="#">Reply</a>
-                                                                    </span>
-                                                                </span>
-                                                            </p>
-                                                            <p class="content-comment">Lorem ipsum dolor sit amet, consectetur adipisicing elit, do eiusmod tempor
-                                                                incididunt ut labore et dolore magna aliqua. Ut enim adminim veniam.
-                                                            </p>
-                                                        </div>
-                                                        <div class="blog-comment margin-right-comment">
-                                                            <div class="avatar">
-                                                                <img src="img/blog/user2.jpg" alt="img" class="float-left" />
-                                                            </div>
-                                                            <div class="comment-content">
-                                                                <p class="user-title">
-                                                                    <a href="#">JOHN DOE</a>
-                                                                    <span class="time">Posted on Mar 17, 2017 at 6:57am /
-                                                                        <a href="#">repost</a> /
-                                                                        <span class="green">
-                                                                            <a href="#">Reply</a>
+
+                                                        {this.state.comment.map(
+                                                            (item) => (
+                                                            <>
+
+                                                                <div class="blog-comment">
+                                                                    <div class="avatar">
+                                                                        <img style={{borderRadius:"100%", height:"100px", width:"100px"}} src={require("../component/asset/infomation/"+item.user.picture)}
+                                                                         alt="img" class="float-left right" />
+                                                                    </div>
+                                                                    <div class="comment-content">
+                                                                        <p class="user-title">
+                                                                            <a href="#">{item.user.userName}</a>
+                                                                            <span class="time">Posted on {item.updateDate}</span>
+                                                                        </p>
+                                                                        <p class="content-comment"> {item.content} </p>
+                                                                    </div>
+                                                                </div> <br/>
+
+                                                        
+                                                                {/* <img style={{borderRadius:"100%"}}
+                                                                src={require("../component/asset/blog/user1.jpg")} alt="img" class="float-left right" />
+                                                                <div class="comment-content">
+                                                                    <p class="user-title">
+                                                                        <a href="#">{item.content}</a>
+                                                                        <span class="time">Posted on Mar 17, 2017 at 6:57am 
                                                                         </span>
-                                                                    </span>
-                                                                </p>
-                                                                <p class="content-comment">Lorem ipsum dolor sit amet, consectetur adipisicing elit, do eiusmod
-                                                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim adminim
-                                                                    veniam.
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="blog-comment">
-                                                            <div class="avatar">
-                                                                <img src="img/blog/user1.jpg" alt="img" class="float-left right" />
-                                                            </div>
-                                                            <div class="comment-content">
-                                                                <p class="user-title">
-                                                                    <a href="#">JOHN DOE</a>
-                                                                    <span class="time">Posted on Mar 17, 2017 at 6:57am /
-                                                                        <a href="#">repost</a> /
-                                                                        <span class="green">
-                                                                            <a href="#">Reply</a>
-                                                                        </span>
-                                                                    </span>
-                                                                </p>
-                                                                <p class="content-comment">Lorem ipsum dolor sit amet, consectetur adipisicing elit, do eiusmod
-                                                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim adminim
-                                                                    veniam.
-                                                                </p>
-                                                            </div>
-                                                        </div>
+                                                                    </p>
+                                                                    <p class="content-comment">{item.content}</p>
+                                                                </div> */}
+                                                            </>
+                                                            )
+                                                        )}
+
+                                                        
+
+                                                        
                                                     </div>
                                                     <div class="submit-comment" id="respond">
                                                         <h2 class="title-block">Submit comment</h2>

@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.furniture.hms.dto.comment.CommentResponse;
+import com.furniture.hms.dto.comment.CommentResponse.CommentDetail;
 import com.furniture.hms.entity.Comment;
 import com.furniture.hms.mapper.comment.CommentBlogMapper;
 import com.furniture.hms.repository.comment.CommentBlogRepository;
@@ -26,19 +27,24 @@ public class CommentService {
 	List<Comment> arrComment = commentBlogRepository.findCommentByIdBlog(id);
 
 	CommentResponse response = new CommentResponse();
-	List<CommentResponse.CommentDetail> commentDetail = new ArrayList<>();
+	List<CommentResponse.CommentDetail> arrCommentDetail = new ArrayList<>();
 	if (!arrComment.isEmpty()) {
 	    for (Comment comment : arrComment) {
 		if (comment.getStatus() != 0) {
-		    commentDetail.add(CommentBlogMapper.INSTANCE.toCommentResponse(comment));
+		    CommentResponse.CommentDetail commentDetail = new CommentDetail();
+		    commentDetail = CommentBlogMapper.INSTANCE.toCommentResponse(comment.getContent(),
+			    comment.getStatus(), comment.getUpdateDate());
+		    commentDetail.setUser(CommentBlogMapper.INSTANCE.toCommentUserInforDetail(comment.getUserName(),
+			    comment.getPicture()));
+		    arrCommentDetail.add(commentDetail);
 		}
 	    }
 	    response.setTotal(count);
-	    response.setComment(commentDetail);
+	    response.setComment(arrCommentDetail);
 	    return response;
 	} else {
 	    response.setTotal(count);
-	    response.setComment(commentDetail);
+	    response.setComment(arrCommentDetail);
 	    return response;
 	}
     }
