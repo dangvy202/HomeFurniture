@@ -17,10 +17,10 @@ class Login extends Component {
   }
   componentDidMount() {
     if (
-      sessionStorage.getItem("status") != null ||
-      sessionStorage.getItem("message") != null ||
-      sessionStorage.getItem("token") != null ||
-      sessionStorage.getItem("expired") != null ||
+      sessionStorage.getItem("status") != null &&
+      sessionStorage.getItem("message") != null &&
+      sessionStorage.getItem("token") != null &&
+      sessionStorage.getItem("expired") != null &&
       sessionStorage.getItem("email") != null
     ) {
       window.location.href = "/infomation";

@@ -2,44 +2,124 @@ import React, { Component } from "react";
 import CategoryBlog from "../component/sidebar/CategoryBlog";
 import TagBlog from "../component/tagblog/TagBlog";
 import BlogService from "../service/BlogService";
+import moment from "moment";
 
 class BlogDetail extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            blogTitle:"",
-            content:"",
-            shortContent:"",
-            blogAvatar:"",
-            updateBy:"",
-            updateDate:"",
-            comment:[]
+            blogTitle: "",
+            content: "",
+            shortContent: "",
+            blogAvatar: "",
+            updateBy: "",
+            updateDate: "",
+            comment: [],
+            message:"",
+            notification:""
         };
+        this.addComment = this.addComment.bind(this);
+        this.onChangeMessage = this.onChangeMessage.bind(this);
     }
 
     componentDidMount() {
         const pathName = window.location.pathname;
         var arrPath = pathName.split("/");
-        var idBlog = arrPath[arrPath.length-1];
+        var idBlog = arrPath[arrPath.length - 1];
         BlogService.getBlogDetailById(idBlog).then((res) => {
-            this.setState({blogTitle: res.data.blogTitle})
-            this.setState({content: res.data.content})
-            this.setState({shortContent: res.data.shortContent})
-            this.setState({blogAvatar: res.data.blogAvatar})
-            this.setState({updateBy: res.data.updateBy})
-            this.setState({updateDate: res.data.updateDate})
-            this.setState({comment: res.data.commentBlog.comment})
-            debugger;
+            this.setState({ blogTitle: res.data.blogTitle })
+            this.setState({ content: res.data.content })
+            this.setState({ shortContent: res.data.shortContent })
+            this.setState({ blogAvatar: require("../component/asset/blog/" + res.data.blogAvatar) })
+            this.setState({ updateBy: res.data.updateBy })
+            this.setState({ updateDate: res.data.updateDate })
+            this.setState({ comment: res.data.commentBlog.comment })
         }).catch((error) => {
-            window.location.href="/404"
+            window.location.href = "/404"
         })
-        
+    }
+
+    addComment(e) {
+        e.preventDefault();
+        alert("this = " + this.state.message)
+        if (
+            sessionStorage.getItem("status") != null &&
+            sessionStorage.getItem("message") != null &&
+            sessionStorage.getItem("token") != null &&
+            sessionStorage.getItem("expired") != null &&
+            sessionStorage.getItem("email") != null
+        ) {
+        } else {
+            
+        }
+
+    }
+    
+    onChangeMessage(e) {
+        this.setState({ message: e.target.value });
     }
 
     render() {
         return (
             <div id="blog-detail" className="blog">
                 <div className="main-content">
+                    <div
+                        className="modal fade"
+                        id="exampleModal"
+                        tabIndex="-1"
+                        role="dialog"
+                        aria-labelledby="exampleModalLabel"
+                        aria-hidden="true"
+                    >
+                        <div className="modal-dialog" role="document">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title" id="exampleModalLabel">
+                                        {/* {(() => {
+                                        if (this.state.message === "SUCCESS") {
+                                            return <>Notification</>;
+                                        } else {
+                                            return <>Error !</>;
+                                        }
+                                    })()} */}
+                                    </h5>
+                                    <button
+                                        type="button"
+                                        className="close"
+                                        data-dismiss="modal"
+                                        aria-label="Close"
+                                    >
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div className="modal-body">
+                                    Success, we will send you a discount ticket
+                                    {/* {(() => {
+                                                                if (this.state.message === "SUCCESS") {
+                                                                return (
+                                                                    <>Success, we will send you a discount ticket</>
+                                                                );
+                                                                } else {
+                                                                return <>Fail, please try again !</>;
+                                                                }
+                                                            })()} */}
+                                </div>
+                                <div className="modal-footer">
+                                    <button
+                                        type="button"
+                                        className="btn btn-primary"
+                                        data-dismiss="modal"
+                                        aria-label="Close"
+                                    >
+                                        Close
+                                    </button>
+                                    {/* <a href="/" className="btn btn-primary">
+                                                                
+                                                            </a> */}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div id="wrapper-site">
                         <div id="content-wrapper">
                             <div id="main">
@@ -65,7 +145,7 @@ class BlogDetail extends Component {
                                         <div className="content">
                                             <div className="row">
                                                 <div className="sidebar-3 sidebar-collection col-lg-3 col-md-3 col-sm-4">
-                                                    
+
                                                     {/* <!-- category --> */}
                                                     <CategoryBlog />
 
@@ -89,127 +169,84 @@ class BlogDetail extends Component {
                                                     </div>
                                                 </div>
 
-                                                <div class="col-sm-8 col-lg-9 col-md-9 flex-xs-first main-blogs">
-                                                    <h3>Rutrum Nonvopxe Sapiente Delectus Aut Bonbde</h3>
-                                                    <div class="hover-after">
-                                                        <img src={require("../component/asset/blog/detail.jpg")} alt="img" class="img-fluid" />
+                                                <div className="col-sm-8 col-lg-9 col-md-9 flex-xs-first main-blogs">
+                                                    <h3>{this.state.blogTitle}</h3>
+                                                    <div className="hover-after">
+                                                        <img src={this.state.blogAvatar} alt="img" className="img-fluid" />
                                                     </div>
-                                                    <div class="late-item">
-                                                    {/* <img class="img-fluid" src={require("../../public/image/img/blog/1.jpg")} alt="banner-1" title="banner-1" /> */}
+                                                    <div className="late-item">
+                                                        {/* <img class="img-fluid" src={require("../../public/image/img/blog/1.jpg")} alt="banner-1" title="banner-1" /> */}
 
                                                         <div dangerouslySetInnerHTML={{ __html: this.state.content }}></div>
 
-                                                        <div class="border-detail">
-                                                            <p class="post-info float-left">
-                                                                <span>3 minitunes ago</span>
-                                                                <span>113 Comments</span>
-                                                                <span>TIVATHEME</span>
+                                                        <div className="border-detail" style={{ marginTop: "30px" }}>
+                                                            <p className="post-info float-left">
+                                                                <span>{this.state.comment.length} Comments</span>
                                                             </p>
-                                                            <div class="btn-group">
+                                                            <div className="btn-group">
                                                                 <a href="#">
-                                                                    <i class="zmdi zmdi-share"></i>
+                                                                    <i className="zmdi zmdi-share"></i>
                                                                     <span>Share</span>
-                                                                </a>
-                                                                <a href="#" class="email">
-                                                                    <i class="fa fa-envelope" aria-hidden="true"></i>
-                                                                    <span>SEN TO A FRIEND</span>
-                                                                </a>
-                                                                <a href="#" class="print">
-                                                                    <i class="zmdi zmdi-print"></i>
-                                                                    <span>Print</span>
                                                                 </a>
                                                             </div>
                                                         </div>
                                                     </div>
-
-                                                    <div class="admin">
-
-                                                        <img src="img/blog/user.jpg" alt="img" class="float-left right" />
-                                                        <div class="info">
-                                                            <p>
-                                                                <a href="#">
-                                                                    <span class="content-title">
-                                                                        John doe
-                                                                    </span>
-                                                                </a>
-                                                                <span>Administrator, Web Designer</span>
-                                                            </p>
-                                                            <p class="descript">
-                                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, do eiusmod tempor incididunt. ut labore et dolore magna aliqua.
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="reply late-item">
-                                                        <div class="blog-comment" id="blog-comment">
-                                                            <h2 class="title-block">Comments</h2>
+                                                    <div className="reply late-item">
+                                                        <div className="blog-comment" id="blog-comment">
+                                                            <h2 className="title-block">Comments</h2>
                                                         </div>
 
                                                         {this.state.comment.map(
                                                             (item) => (
-                                                            <>
-
-                                                                <div class="blog-comment">
-                                                                    <div class="avatar">
-                                                                        <img style={{borderRadius:"100%", height:"100px", width:"100px"}} src={require("../component/asset/infomation/"+item.user.picture)}
-                                                                         alt="img" class="float-left right" />
-                                                                    </div>
-                                                                    <div class="comment-content">
-                                                                        <p class="user-title">
-                                                                            <a href="#">{item.user.userName}</a>
-                                                                            <span class="time">Posted on {item.updateDate}</span>
-                                                                        </p>
-                                                                        <p class="content-comment"> {item.content} </p>
-                                                                    </div>
-                                                                </div> <br/>
-
-                                                        
-                                                                {/* <img style={{borderRadius:"100%"}}
-                                                                src={require("../component/asset/blog/user1.jpg")} alt="img" class="float-left right" />
-                                                                <div class="comment-content">
-                                                                    <p class="user-title">
-                                                                        <a href="#">{item.content}</a>
-                                                                        <span class="time">Posted on Mar 17, 2017 at 6:57am 
-                                                                        </span>
-                                                                    </p>
-                                                                    <p class="content-comment">{item.content}</p>
-                                                                </div> */}
-                                                            </>
+                                                                <>
+                                                                    <div className="blog-comment">
+                                                                        <div className="avatar">
+                                                                            <img width={"75px"} height={"75px"} style={{ borderRadius: "100%" }} src={require("../component/asset/infomation/" + item.user.picture)} alt="img" className="float-left right" />
+                                                                        </div>
+                                                                        <div className="comment-content">
+                                                                            <p className="user-title">
+                                                                                <a href="#">{item.user.userName}</a>
+                                                                                <span className="time">Posted on {
+                                                                                    moment
+                                                                                        .utc(item.updateDate)
+                                                                                        .format("DD/MM/YYYY")
+                                                                                }
+                                                                                </span>
+                                                                            </p>
+                                                                            <p className="content-comment">{item.content}</p>
+                                                                        </div>
+                                                                    </div><br />
+                                                                </>
                                                             )
                                                         )}
-
-                                                        
-
-                                                        
                                                     </div>
-                                                    <div class="submit-comment" id="respond">
-                                                        <h2 class="title-block">Submit comment</h2>
+
+                                                    <div className="submit-comment" id="respond">
+                                                        <h2 className="title-block">Submit comment</h2>
                                                         <div id="commentInput">
-                                                            <form action="#" method="post" id="commentform">
-                                                                <input type="hidden" name="comment_parent" id="comment_parent" value="0" />
-                                                                <div class="row">
-                                                                    <div class="form-group col col-sm-12 col-md-4 ">
-                                                                        <input type="text" class="inputName form-control" name="name" placeholder="Your Name *" />
-                                                                    </div>
-                                                                    <div class="form-group col col-sm-12  col-md-4">
-                                                                        <input type="text" class="inputMail form-control" name="mail" placeholder="Your E-mail *" />
-                                                                    </div>
-                                                                    <div class="form-group col col-sm-12  col-md-4">
-                                                                        <input type="text" class="form-control" name="website" placeholder="Your Website" />
+                                                            <form id="commentform" onSubmit={(e) => this.addComment(e)}>
+                                                                <div className="row">
+                                                                    <div className="form-group col col-md-12">
+                                                                        <textarea tabIndex="4" className="inputContent form-control grey"  onChange={this.onChangeMessage} rows="10" name="comment" placeholder="Your Message"></textarea>
                                                                     </div>
                                                                 </div>
-                                                                <div class="row">
-                                                                    <div class="form-group col col-md-12">
-                                                                        <textarea tabindex="4" class="inputContent form-control grey" rows="10" name="comment" placeholder="Your Message"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="submit">
-                                                                    <input type="submit" name="addComment" id="submitComment" class="btn btn-default" value="Send Message" />
+                                                                <div className="submit">
+                                                                    {/* <button
+                                                                        className="btn btn-default"
+                                                                        id="submitComment"
+                                                                        data-toggle="modal"
+                                                                        data-target="#exampleModal"
+                                                                        type="submit"
+                                                                    >
+                                                                        Send Message
+                                                                    </button> */}
+                                                                    <input type="submit" data-toggle="modal"
+                                                                        data-target="#exampleModal" name="addComment" id="submitComment" className="btn btn-default" value="Send Message" />
                                                                 </div>
                                                             </form>
                                                         </div>
                                                     </div>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>

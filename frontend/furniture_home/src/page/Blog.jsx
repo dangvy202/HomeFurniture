@@ -3,7 +3,6 @@ import CategoryBlog from "../component/sidebar/CategoryBlog";
 import TagBlog from "../component/tagblog/TagBlog";
 import BlogService from "../service/BlogService";
 import CooperateBlogTagService from "../service/CooperateBlogTagService";
-import Pagination from "../service/Pagination";
 
 class Blog extends Component {
   constructor(props) {
@@ -115,7 +114,7 @@ class Blog extends Component {
                           {currentPosts.map((item) => (
                             <div className="list-content row">
                               <div className="hover-after col-md-5 col-xs-12">
-                                <a href="blog-detail.html">
+                                <a href={"/blog-detail/"+item.id}>
                                   <img
                                     src={require("../component/asset/blog/" +
                                       item.blogAvatar)}
@@ -125,7 +124,7 @@ class Blog extends Component {
                               </div>
                               <div className="late-item col-md-7 col-xs-12">
                                 <p className="content-title">
-                                  <a href="blog-detail.html">
+                                  <a href={"/blog-detail/"+item.id}>
                                     {item.blogTitle}
                                   </a>
                                 </p>
@@ -138,7 +137,7 @@ class Blog extends Component {
                                   {item.shortContent}...
                                 </p>
                                 <span className="view-more">
-                                  <a href="blog-detail.html">view more</a>
+                                  <a href={"/blog-detail/"+item.id}>view more</a>
                                 </span>
                               </div>
                             </div>

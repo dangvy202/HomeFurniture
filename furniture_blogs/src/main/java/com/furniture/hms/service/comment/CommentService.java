@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.furniture.hms.dto.comment.CommentRequest;
 import com.furniture.hms.dto.comment.CommentResponse;
 import com.furniture.hms.dto.comment.CommentResponse.CommentDetail;
 import com.furniture.hms.entity.Comment;
+import com.furniture.hms.feign.UserFeign;
 import com.furniture.hms.mapper.comment.CommentBlogMapper;
 import com.furniture.hms.repository.comment.CommentBlogRepository;
 
@@ -20,6 +22,17 @@ import lombok.extern.slf4j.Slf4j;
 public class CommentService {
 
     private final CommentBlogRepository commentBlogRepository;
+
+    private final UserFeign userFeign;
+
+    private final com.furniture.hms.feign.interceptor.TokenProvider tokenProvider;
+
+    public CommentResponse saveCommmentBlog(CommentRequest request) {
+	tokenProvider.setToken(request.getToken());
+	var a = userFeign.infomationAccount("Vy.Tran@nttdata.com");
+	System.out.println("check it ne = " + a);
+	return null;
+    }
 
     public CommentResponse getCommentByIdBlog(int id) {
 	int count = commentBlogRepository.countByIdBlog(id);
