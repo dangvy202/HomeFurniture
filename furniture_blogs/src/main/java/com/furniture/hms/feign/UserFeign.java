@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @FeignClient(name = "furnitureInfomations", configuration = UserFeignInterceptor.class, fallbackFactory = UserFeign.UserFeignFallBack.class)
 public interface UserFeign {
 
-    @GetMapping("/infomation/{email}")
+    @GetMapping("/user/infomation/{email}")
     UserResponse infomationAccount(@PathVariable("email") String email);
 
     @Component
@@ -31,6 +31,5 @@ public interface UserFeign {
 		}
 	    };
 	}
-
     }
 }

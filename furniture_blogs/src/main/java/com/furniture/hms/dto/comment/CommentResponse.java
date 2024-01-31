@@ -18,6 +18,12 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 public class CommentResponse {
 
+    private Boolean status;
+
+    private String error;
+
+    private String message;
+
     private Integer total;
 
     private List<CommentDetail> comment;
