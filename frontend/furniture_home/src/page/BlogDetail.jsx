@@ -3,10 +3,14 @@ import CategoryBlog from "../component/sidebar/CategoryBlog";
 import TagBlog from "../component/tagblog/TagBlog";
 import BlogService from "../service/BlogService";
 import moment from "moment";
+import CommentService from "../service/CommentService";
 
 class BlogDetail extends Component {
     constructor(props) {
         super(props);
+        const pathName = window.location.pathname;
+        var arrPath = pathName.split("/");
+        var idBlog = arrPath[arrPath.length - 1];
         this.state = {
             blogTitle: "",
             content: "",
@@ -15,18 +19,16 @@ class BlogDetail extends Component {
             updateBy: "",
             updateDate: "",
             comment: [],
-            message:"",
-            notification:""
+            message: "",
+            notification: "",
+            blogId: idBlog
         };
         this.addComment = this.addComment.bind(this);
         this.onChangeMessage = this.onChangeMessage.bind(this);
     }
 
     componentDidMount() {
-        const pathName = window.location.pathname;
-        var arrPath = pathName.split("/");
-        var idBlog = arrPath[arrPath.length - 1];
-        BlogService.getBlogDetailById(idBlog).then((res) => {
+        BlogService.getBlogDetailById(this.state.blogId).then((res) => {
             this.setState({ blogTitle: res.data.blogTitle })
             this.setState({ content: res.data.content })
             this.setState({ shortContent: res.data.shortContent })
@@ -41,23 +43,31 @@ class BlogDetail extends Component {
 
     addComment(e) {
         e.preventDefault();
-        alert("this = " + this.state.message)
         if (
             sessionStorage.getItem("status") != null &&
             sessionStorage.getItem("message") != null &&
             sessionStorage.getItem("token") != null &&
             sessionStorage.getItem("expired") != null &&
-            sessionStorage.getItem("email") != null
+            sessionStorage.getItem("email") != null &&
+            this.state.message != null
         ) {
-            
+            CommentService.commentBlog(sessionStorage.getItem("token"), sessionStorage.getItem("email"), this.state.message, this.state.blogId).then((res) => {
+                this.setState({ notification: res.data.message })
+            }).catch((error) => {
+                this.setState({ notification: error.response.data.message })
+            })
         } else {
-            
+            this.setState({ notification: "Please login first and fill comment before submit" })
         }
 
     }
-    
+
     onChangeMessage(e) {
         this.setState({ message: e.target.value });
+    }
+
+    loadPage() {
+        window.location.reload();
     }
 
     render() {
@@ -76,13 +86,13 @@ class BlogDetail extends Component {
                             <div className="modal-content">
                                 <div className="modal-header">
                                     <h5 className="modal-title" id="exampleModalLabel">
-                                        {/* {(() => {
-                                        if (this.state.message === "SUCCESS") {
-                                            return <>Notification</>;
-                                        } else {
-                                            return <>Error !</>;
-                                        }
-                                    })()} */}
+                                        {(() => {
+                                            if (this.state.notification === "COMMENT_SUCCESS") {
+                                                return <>Notification</>;
+                                            } else {
+                                                return <>Error !</>;
+                                            }
+                                        })()}
                                     </h5>
                                     <button
                                         type="button"
@@ -94,16 +104,15 @@ class BlogDetail extends Component {
                                     </button>
                                 </div>
                                 <div className="modal-body">
-                                    Success, we will send you a discount ticket
-                                    {/* {(() => {
-                                                                if (this.state.message === "SUCCESS") {
-                                                                return (
-                                                                    <>Success, we will send you a discount ticket</>
-                                                                );
-                                                                } else {
-                                                                return <>Fail, please try again !</>;
-                                                                }
-                                                            })()} */}
+                                    {(() => {
+                                        if (this.state.notification === "COMMENT_SUCCESS") {
+                                            return (
+                                                <>Success, the comment added</>
+                                            );
+                                        } else {
+                                            return <>{this.state.notification}</>;
+                                        }
+                                    })()}
                                 </div>
                                 <div className="modal-footer">
                                     <button
@@ -111,12 +120,10 @@ class BlogDetail extends Component {
                                         className="btn btn-primary"
                                         data-dismiss="modal"
                                         aria-label="Close"
+                                        onClick={this.loadPage}
                                     >
                                         Close
                                     </button>
-                                    {/* <a href="/" className="btn btn-primary">
-                                                                
-                                                            </a> */}
                                 </div>
                             </div>
                         </div>
@@ -228,7 +235,7 @@ class BlogDetail extends Component {
                                                             <form id="commentform" onSubmit={(e) => this.addComment(e)}>
                                                                 <div className="row">
                                                                     <div className="form-group col col-md-12">
-                                                                        <textarea tabIndex="4" className="inputContent form-control grey"  onChange={this.onChangeMessage} rows="10" name="comment" placeholder="Your Message"></textarea>
+                                                                        <textarea tabIndex="4" className="inputContent form-control grey" onChange={this.onChangeMessage} rows="10" name="comment" placeholder="Your Message"></textarea>
                                                                     </div>
                                                                 </div>
                                                                 <div className="submit">

@@ -23,6 +23,7 @@ public interface CommentBlogMapper {
     @Mapping(target = "picture", source = "picture")
     CommentResponse.CommentDetail.UserInforDetail toCommentUserInforDetail(String userName, String picture);
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "content", source = "content")
     @Mapping(target = "status", source = "status")
     @Mapping(target = "userName", source = "userName")
