@@ -10,10 +10,12 @@ class Product extends Component {
       product: [],
       products: [],
       category: [],
+      cart: [],
       visible: 4,
     };
     this.showMoreProduct = this.showMoreProduct.bind(this);
     this.hideProduct = this.hideProduct.bind(this);
+    this.addToCart = this.addToCart.bind(this);
   }
 
   componentDidMount() {
@@ -51,6 +53,33 @@ class Product extends Component {
       };
     });
   }
+
+  addToCart = (product) => {
+    this.setState(
+      (prevState) => {
+        const { cart } = prevState;
+
+        const existingProduct = cart.find((item) => item.id === product.id);
+
+        if (existingProduct) {
+          const updatedCart = cart.map((item) =>
+            item.id === product.id
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          );
+
+          return { cart: updatedCart };
+        } else {
+          const updatedCart = [...cart, { ...product, quantity: 1 }];
+
+          return { cart: updatedCart };
+        }
+      },
+      () => {
+        sessionStorage.setItem("cart", JSON.stringify(this.state.cart));
+      }
+    );
+  };
 
   render() {
     return (
@@ -187,6 +216,7 @@ class Product extends Component {
                                 <a
                                   className="add-to-cart"
                                   href="#"
+                                  onClick={() => this.addToCart(item)}
                                   data-button-action="add-to-cart"
                                 >
                                   <i
@@ -491,6 +521,10 @@ class Product extends Component {
                                 <a
                                   className="add-to-cart"
                                   href="#"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    this.addToCart(item);
+                                  }}
                                   data-button-action="add-to-cart"
                                 >
                                   <i

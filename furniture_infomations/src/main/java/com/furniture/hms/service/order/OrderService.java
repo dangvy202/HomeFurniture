@@ -4,11 +4,15 @@ import com.furniture.hms.constant.OrderMessage;
 import com.furniture.hms.dto.order.OrderRequest;
 import com.furniture.hms.dto.order.OrderResponse;
 import com.furniture.hms.entity.Order;
+import com.furniture.hms.entity.OrderDetail;
 import com.furniture.hms.entity.User;
+import com.furniture.hms.enums.OrderStatusEnum;
 import com.furniture.hms.feign.ProductFeign;
 import com.furniture.hms.feign.response.ProductResponse.ProductResponse;
 import com.furniture.hms.mapper.order.OrderMapper;
+import com.furniture.hms.mapper.orderDetail.OrderDetailMapper;
 import com.furniture.hms.repository.order.OrderRepository;
+import com.furniture.hms.repository.orderDetail.OrderDetailRepository;
 import com.furniture.hms.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +29,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class OrderService {
 
+    private final OrderDetailRepository orderDetailRepository;
+
     private final OrderRepository orderRepository;
 
     private final UserRepository userRepository;
@@ -34,20 +40,24 @@ public class OrderService {
 
     @Transactional
     public String addOrder(List<OrderRequest> requests) {
-        List<Order> listOrder = new ArrayList<>();
+        List<OrderDetail> listOrder = new ArrayList<>();
         OrderResponse.OrderDetail listOrderResponse = new OrderResponse.OrderDetail();
-        for (int i = 0 ; i < requests.size() ; i++){
-            ProductResponse product = productFeign.getDetailByIdProduct(requests.get(i).getIdProduct());
-            User user = userRepository.findUserByEmail(requests.get(i).getUser().getEmail());
+        String orderQr = UUID.randomUUID().toString();
+        User user = new User();
+
+        Instant createDate = Instant.now();
+        Instant updateDate = Instant.now();
+
+        for(OrderRequest orderRequest : requests) {
+            ProductResponse product = productFeign.getDetailByIdProduct(orderRequest.getIdProduct());
+            user = userRepository.findUserByEmail(orderRequest.getUser().getEmail());
 
             if (product != null && user != null) {
-                Instant createDate = Instant.now();
-                Instant updateDate = Instant.now();
 
-                String orderQr = UUID.randomUUID().toString();
-                Order order = OrderMapper.INSTANCE.toOrder(
+                OrderDetail order = OrderDetailMapper.INSTANCE.toOrder(
+                        OrderStatusEnum.UNPAID,
                         orderQr,
-                        requests.get(i).getOrderQuantity(),
+                        orderRequest.getOrderQuantity(),
                         user,
                         product.getId(),
                         createDate,
@@ -56,7 +66,10 @@ public class OrderService {
             }
         }
         if(listOrder.size() != 0 ) {
-            orderRepository.saveAll(listOrder);
+            Order order = OrderMapper.INSTANCE.toOrderEntity
+                    (user.getUserName(),createDate,orderQr,OrderStatusEnum.UNPAID, user.getUserName(), updateDate,user);
+            orderRepository.save(order);
+            orderDetailRepository.saveAll(listOrder);
             return OrderMessage.ORDER_SUCCESS;
         }else {
             return OrderMessage.ORDER_FAIL;
@@ -68,10 +81,10 @@ public class OrderService {
         User user = userRepository.findUserByEmail(email);
         OrderResponse orderResponse = new OrderResponse();
         if(user != null) {
-            List<Order> listOrder = orderRepository.findOrderByUser(user);
+            List<OrderDetail> listOrder = orderDetailRepository.findOrderByUser(user);
             if(listOrder.size() != 0) {
-                orderResponse           = OrderMapper.INSTANCE.toOrderRes(true,null,OrderMessage.ORDER_SUCCESS);
-                for (Order order : listOrder){
+                orderResponse = OrderDetailMapper.INSTANCE.toOrderRes(true,null,OrderMessage.ORDER_SUCCESS);
+                for (OrderDetail order : listOrder){
                     //create variable instant
                     OrderResponse.OrderDetail orderDetailResponse = new OrderResponse.OrderDetail();
                     OrderResponse.OrderDetail.Product orderProductResponse = new OrderResponse.OrderDetail.Product();
@@ -79,9 +92,9 @@ public class OrderService {
                     //get feign
                     ProductResponse product = productFeign.getDetailByIdProduct(order.getIdProduct());
                     //set mapping element
-                    orderDetailResponse     = OrderMapper.INSTANCE.toOrderDetailRes(order);
-                    orderProductResponse    = OrderMapper.INSTANCE.toOrderProductRes(product.getProductName(),product.getProductPrice(),product.getProductSaleoff());
-                    orderPictureResponse    = OrderMapper.INSTANCE.toOrderPictureRes(product.getPicture().getPictureFirst());
+                    orderDetailResponse     = OrderDetailMapper.INSTANCE.toOrderDetailRes(order);
+                    orderProductResponse    = OrderDetailMapper.INSTANCE.toOrderProductRes(product.getProductName(),product.getProductPrice(),product.getProductSaleoff());
+                    orderPictureResponse    = OrderDetailMapper.INSTANCE.toOrderPictureRes(product.getPicture().getPictureFirst());
                     //set one by one element
                     orderProductResponse.setPicture(orderPictureResponse);
                     orderDetailResponse.setProduct(orderProductResponse);
@@ -91,23 +104,24 @@ public class OrderService {
                 orderResponse.setOrderDetails(listOrderDetail);
                 return orderResponse;
             }else {
-                orderResponse = OrderMapper.INSTANCE.toOrderRes(true,null,OrderMessage.ORDER_EXIST);
+                orderResponse = OrderDetailMapper.INSTANCE.toOrderRes(true,null,OrderMessage.ORDER_EXIST);
                 return orderResponse;
             }
         } else {
-            orderResponse = OrderMapper.INSTANCE.toOrderRes(false,OrderMessage.ORDER_FAIL,OrderMessage.ORDER_FAIL);
+            orderResponse = OrderDetailMapper.INSTANCE.toOrderRes(false,OrderMessage.ORDER_FAIL,OrderMessage.ORDER_FAIL);
             return orderResponse;
         }
     }
 
     public String updateOrder(String idOrder, OrderRequest request) {
-        Order order = orderRepository.findOrderByOrderId(idOrder);
+        OrderDetail order = orderDetailRepository.findOrderByOrderCode(idOrder);
         Instant createDate = Instant.now();
         Instant updateDate = Instant.now();
         int id = order.getId();
         if( order != null ) {
-            order = OrderMapper.INSTANCE.toOrder(
-                    order.getOrderId(),
+            order = OrderDetailMapper.INSTANCE.toOrder(
+                    OrderStatusEnum.UNPAID,
+                    order.getOrderCode(),
                     request.getOrderQuantity(),
                     order.getUser(),
                     request.getIdProduct(),
@@ -115,7 +129,7 @@ public class OrderService {
                     updateDate);
             order.setId(id);
             try {
-                orderRepository.save(order);
+                orderDetailRepository.save(order);
                 return OrderMessage.ORDER_SUCCESS;
             } catch (Exception ex) {
                 log.error(ex.getMessage());
@@ -127,10 +141,10 @@ public class OrderService {
     }
 
     public String deleteOrder(String idOrder) {
-        Order order = orderRepository.findOrderByOrderId(idOrder);
+        OrderDetail order = orderDetailRepository.findOrderByOrderCode(idOrder);
         if(order != null){
             try {
-                orderRepository.deleteOrderByOrderId(order.getOrderId());
+                orderDetailRepository.deleteOrderByOrderId(order.getOrderCode());
                 return OrderMessage.ORDER_SUCCESS;
             } catch (Exception ex) {
                 log.error(ex.getMessage());

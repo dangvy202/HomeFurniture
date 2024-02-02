@@ -22,6 +22,7 @@ class ProductsAll extends Component {
       navbar: "",
       quantityProduct: 0,
     };
+    this.addToCart = this.addToCart.bind(this);
   }
 
   componentDidMount() {
@@ -66,6 +67,10 @@ class ProductsAll extends Component {
     } else {
       window.location.href = "/404";
     }
+  }
+
+  addToCart() {
+    alert("hjgjhghjg");
   }
 
   render() {
@@ -310,6 +315,7 @@ class ProductsAll extends Component {
                                                 <a
                                                   class="add-to-cart"
                                                   href="#"
+                                                  onClick={() => this.addToCart}
                                                   data-button-action="add-to-cart"
                                                 >
                                                   <i
@@ -473,6 +479,9 @@ class ProductsAll extends Component {
                                                     <a
                                                       class="add-to-cart"
                                                       href="#"
+                                                      onClick={() =>
+                                                        this.addToCart
+                                                      }
                                                       data-button-action="add-to-cart"
                                                     >
                                                       <i
