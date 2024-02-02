@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import ProductService from "../service/ProductService";
+import OrderService from "../service/OrderService";
 
 class Cart extends Component {
   constructor(props) {
@@ -7,7 +8,9 @@ class Cart extends Component {
     this.state = {
       cartInstant: [],
       totalProduct: "",
+      notification:"",
     };
+    this.addOrderCart = this.addOrderCart.bind(this);
   }
 
   componentDidMount() {
@@ -29,7 +32,38 @@ class Cart extends Component {
         this.setState({ totalProduct: totalPrice });
       });
     }
-    debugger;
+  }
+
+  addOrderCart() {
+    if (
+        sessionStorage.getItem("status") != null &&
+        sessionStorage.getItem("message") != null &&
+        sessionStorage.getItem("token") != null &&
+        sessionStorage.getItem("expired") != null &&
+        sessionStorage.getItem("email") != null && 
+        this.state.cartInstant.length > 0
+    ) {
+      var orderList = new Array();
+      
+      for(var i = 0 ; i < this.state.cartInstant.length ; i ++) {
+        const jsonDetailProduct = {
+                                      "order_quantity": this.state.cartInstant[i].quantity,
+                                      "id_product": this.state.cartInstant[i].id,
+                                      "user" : {
+                                          "email" : sessionStorage.getItem("email")
+                                      }
+                                  };
+        orderList.push(jsonDetailProduct);
+      }
+
+      OrderService.orderProducts(orderList).then((res) => {
+        alert("success ne")
+      }).catch((error) => {
+
+      })
+    } else {
+      window.location.href="/login"
+    }
   }
 
   render() {
@@ -184,10 +218,11 @@ class Cart extends Component {
                           </div>
                         </div>
                         <a
-                          href="product-checkout.html"
+                          href="#"
+                          onClick={this.addOrderCart}
                           className="continue btn btn-primary pull-xs-right"
                         >
-                          Continue
+                          Accept Order
                         </a>
                       </div>
                       <div className="cart-grid-right col-xs-12 col-lg-3">

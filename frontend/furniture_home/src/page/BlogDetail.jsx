@@ -239,15 +239,6 @@ class BlogDetail extends Component {
                                                                     </div>
                                                                 </div>
                                                                 <div className="submit">
-                                                                    {/* <button
-                                                                        className="btn btn-default"
-                                                                        id="submitComment"
-                                                                        data-toggle="modal"
-                                                                        data-target="#exampleModal"
-                                                                        type="submit"
-                                                                    >
-                                                                        Send Message
-                                                                    </button> */}
                                                                     <input type="submit" data-toggle="modal"
                                                                         data-target="#exampleModal" name="addComment" id="submitComment" className="btn btn-default" value="Send Message" />
                                                                 </div>

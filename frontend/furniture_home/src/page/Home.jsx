@@ -21,7 +21,7 @@ class Home extends Component {
                 {/* <!-- product living room --> */}
                 <div
                   className="section living-room background-none"
-                  style={{ marginTop: "-10%" }}
+                  style={{ marginTop: "-5%" }}
                 >
                   <div className="container">
                     <div className="tiva-row-wrap row">

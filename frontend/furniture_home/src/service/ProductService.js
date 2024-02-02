@@ -23,7 +23,7 @@ class ProductService {
     }
 
     getProductByIdCart() {
-        var listIdAddCart = JSON.parse(sessionStorage.getItem("cart")); debugger;
+        var listIdAddCart = JSON.parse(sessionStorage.getItem("cart"));
         if (listIdAddCart != null) {
             var arrId = new Array();
             for (var i = 0; i < listIdAddCart.length; i++){
