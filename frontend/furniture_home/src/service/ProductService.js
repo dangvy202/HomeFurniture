@@ -21,6 +21,21 @@ class ProductService {
     getProductByRoomRedirect(roomRedirect) {
         return axios.get(PRODUCT_API_BASE_URL + `/room-redirect/${roomRedirect}`);
     }
+
+    getProductByIdCart() {
+        var listIdAddCart = JSON.parse(sessionStorage.getItem("cart")); debugger;
+        if (listIdAddCart != null) {
+            var arrId = new Array();
+            for (var i = 0; i < listIdAddCart.length; i++){
+                arrId.push(listIdAddCart[i].id)
+            }
+            return axios.post(PRODUCT_API_BASE_URL + `/cart`, arrId,{
+                headers:{
+                            'Content-Type': 'application/json',
+                    }
+            });
+        }
+    }
 }
 
 export default new ProductService();

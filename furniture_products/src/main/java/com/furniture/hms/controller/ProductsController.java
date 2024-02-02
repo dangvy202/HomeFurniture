@@ -27,6 +27,16 @@ public class ProductsController {
         }
     }
 
+    @PostMapping("/cart")
+    public ResponseEntity<List<ProductResponse.ProductList>> getAllProductByIdCart(@RequestBody List<Integer> id) {
+        List<ProductResponse.ProductList> response = productService.getAllProductByIdCart(id);
+        if(response != null){
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping("/category/{id}")
     public ResponseEntity<List<ProductResponse.ProductList>> getProductByCategory(@PathVariable("id") Integer id){
         List<ProductResponse.ProductList> response = productService.getProductByCategory(id);

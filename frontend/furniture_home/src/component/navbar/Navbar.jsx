@@ -412,7 +412,7 @@ class Navbar extends Component {
                               className="d-flex justify-content-center"
                             >
                               <div className="cart-button">
-                                <a href="product-cart.html" title="View Cart">
+                                <a href="/cart" title="View Cart">
                                   View Cart
                                 </a>
                                 <a

@@ -26,6 +26,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "p.room.id IN (SELECT r.id FROM Room r WHERE r.roomRedirect = :redirect)")
     List<Product> findProductByRoomRedirect(String redirect);
 
+    List<Product> findByIdIn(List<Integer> id);
 
     List<Product> findByProductNameContaining(String nameProduct);
 }

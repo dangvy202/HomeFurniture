@@ -2,7 +2,10 @@ package com.furniture.hms.dto.product;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
+
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @Builder
@@ -10,19 +13,11 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class ProductRequest {
 
-    @JsonProperty("product_name")
-    private String productName;
+    List<ProductDetail> productDetailList;
 
-    @JsonProperty("product_price")
-    private BigDecimal productPrice;
+    @FieldDefaults(level = AccessLevel.PRIVATE)
+    @Data
+    public static class ProductDetail {
 
-    @JsonProperty("product_saleoff")
-    private BigDecimal productSaleoff;
-
-    @JsonProperty("product_color")
-    private String productColor;
-
-    @JsonProperty("product_property")
-    private String productProperty;
-
+    }
 }

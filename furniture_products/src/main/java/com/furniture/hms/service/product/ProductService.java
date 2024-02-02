@@ -20,6 +20,22 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final InventoryFeign inventoryFeign;
 
+    public List<ProductResponse.ProductList> getAllProductByIdCart(List<Integer> id) {
+        List<Product> listProduct = productRepository.findByIdIn(id);
+
+        List<ProductResponse.ProductList> listProductResponse = new ArrayList<>();
+
+        if(!listProduct.isEmpty()) {
+            for (Product product : listProduct){
+                ProductResponse.ProductList detailResponse = ProductMapper.INSTANCE.toProductRes(product);
+                detailResponse.setInventory(this.handleInventory(product.getId()));
+                listProductResponse.add(detailResponse);
+            }
+            return listProductResponse;
+        }else {
+            return null;
+        }
+    }
     public List<ProductResponse.ProductList> getAllProduct(){
         List<Product> listProduct = productRepository.findAll();
 
