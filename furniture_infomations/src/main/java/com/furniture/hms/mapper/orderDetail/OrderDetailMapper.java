@@ -15,6 +15,7 @@ import java.time.Instant;
 public interface OrderDetailMapper {
     OrderDetailMapper INSTANCE = Mappers.getMapper(OrderDetailMapper.class);
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "orderCode" , source = "orderCode")
     @Mapping(target = "orderStatus" , source = "orderStatusEnum")
     @Mapping(target = "orderQuantity" , source = "quantity")

@@ -8,7 +8,7 @@ class Cart extends Component {
     this.state = {
       cartInstant: [],
       totalProduct: "",
-      notification:"",
+      notification: "",
     };
     this.addOrderCart = this.addOrderCart.bind(this);
   }
@@ -36,33 +36,36 @@ class Cart extends Component {
 
   addOrderCart() {
     if (
-        sessionStorage.getItem("status") != null &&
-        sessionStorage.getItem("message") != null &&
-        sessionStorage.getItem("token") != null &&
-        sessionStorage.getItem("expired") != null &&
-        sessionStorage.getItem("email") != null && 
-        this.state.cartInstant.length > 0
+      sessionStorage.getItem("status") != null &&
+      sessionStorage.getItem("message") != null &&
+      sessionStorage.getItem("token") != null &&
+      sessionStorage.getItem("expired") != null &&
+      sessionStorage.getItem("email") != null
     ) {
-      var orderList = new Array();
-      
-      for(var i = 0 ; i < this.state.cartInstant.length ; i ++) {
-        const jsonDetailProduct = {
-                                      "order_quantity": this.state.cartInstant[i].quantity,
-                                      "id_product": this.state.cartInstant[i].id,
-                                      "user" : {
-                                          "email" : sessionStorage.getItem("email")
-                                      }
-                                  };
-        orderList.push(jsonDetailProduct);
+      if (this.state.cartInstant.length > 0) {
+        var orderList = new Array();
+
+        for (var i = 0; i < this.state.cartInstant.length; i++) {
+          const jsonDetailProduct = {
+            order_quantity: this.state.cartInstant[i].quantity,
+            id_product: this.state.cartInstant[i].id,
+            user: {
+              email: sessionStorage.getItem("email"),
+            },
+          };
+          orderList.push(jsonDetailProduct);
+        }
+
+        OrderService.orderProducts(orderList)
+          .then((res) => {
+            alert("success ne");
+          })
+          .catch((error) => {});
+      } else {
+        this.setState({ notification: "EMPTY_CART" });
       }
-
-      OrderService.orderProducts(orderList).then((res) => {
-        alert("success ne")
-      }).catch((error) => {
-
-      })
     } else {
-      window.location.href="/login"
+      window.location.href = "/login";
     }
   }
 

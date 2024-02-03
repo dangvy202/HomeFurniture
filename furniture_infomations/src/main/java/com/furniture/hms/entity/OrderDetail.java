@@ -29,7 +29,7 @@ public class OrderDetail {
     @Column(name = "order_quantity")
     private Integer orderQuantity;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_user " , referencedColumnName = "id_user")
     private User user;
 
