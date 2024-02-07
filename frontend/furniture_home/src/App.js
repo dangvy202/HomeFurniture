@@ -14,6 +14,7 @@ import React, { Component } from "react";
 import Contact from './page/Contact';
 import BlogDetail from './page/BlogDetail';
 import Cart from './page/Cart';
+import InformationOrder from './page/InformationOrder';
 
 
 class App extends Component {
@@ -56,6 +57,7 @@ class App extends Component {
             <Route path="/contact" element={<Contact/>} />
             <Route path="/blog-detail/:idBlog" element={<BlogDetail />} />
             <Route path="/cart" element={<Cart/>} />
+            <Route path="/information-order/:orderCode" element={<InformationOrder />} />
               
   
   

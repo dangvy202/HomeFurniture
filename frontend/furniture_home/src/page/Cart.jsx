@@ -11,6 +11,7 @@ class Cart extends Component {
       notification: "",
     };
     this.addOrderCart = this.addOrderCart.bind(this);
+    this.informationOrder = this.informationOrder.bind(this);
   }
 
   componentDidMount() {
@@ -34,7 +35,8 @@ class Cart extends Component {
     }
   }
 
-  addOrderCart() {
+  addOrderCart(e) {
+    e.preventDefault();
     if (
       sessionStorage.getItem("status") != null &&
       sessionStorage.getItem("message") != null &&
@@ -62,9 +64,12 @@ class Cart extends Component {
 
         OrderService.orderProducts(orderList)
           .then((res) => {
-            alert("success ne");
+            this.setState({ notification: res.data })
+            sessionStorage.removeItem("cart")
           })
-          .catch((error) => {});
+          .catch((error) => {
+            this.setState({ notification: error.response.data.message })
+          });
       } else {
         this.setState({ notification: "EMPTY_CART" });
       }
@@ -73,10 +78,70 @@ class Cart extends Component {
     }
   }
 
+  informationOrder() {
+    if(this.state.notification === "ORDER_SUCCESS") {
+      window.location.href = ""
+    }
+  }
   render() {
     return (
       <div className="product-cart checkout-cart blog">
         <div className="main-content" id="cart">
+          <div
+            className="modal fade"
+            id="exampleModal"
+            tabIndex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div className="modal-dialog" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title" id="exampleModalLabel">
+                    {(() => {
+                      if (this.state.notification === "ORDER_SUCCESS") {
+                        return <>Notification</>;
+                      } else {
+                        return <>Error !</>;
+                      }
+                    })()}
+                  </h5>
+                  <button
+                    type="button"
+                    className="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div className="modal-body">
+                  {(() => {
+                    if (this.state.notification === "ORDER_SUCCESS") {
+                      return (
+                        <>Success, next step</>
+                      );
+                    } else if(this.state.notification === "EMPTY_CART") {
+                      return <>Fail, cart is empty</>;
+                    } else {
+                      return <>Fail</>;
+                    }
+                  })()}
+                </div>
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    data-dismiss="modal"
+                    onClick={this.informationOrder}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
           {/* <!-- main --> */}
           <div id="wrapper-site">
             {/* <!-- breadcrumb --> */}
@@ -153,7 +218,7 @@ class Cart extends Component {
                                             currency: "VND",
                                           }).format(
                                             item.productPrice -
-                                              item.productSaleoff
+                                            item.productSaleoff
                                           )}
                                         </span>
                                       </div>
@@ -196,7 +261,7 @@ class Cart extends Component {
                                             }).format(
                                               (item.productPrice -
                                                 item.productSaleoff) *
-                                                item.quantity
+                                              item.quantity
                                             )}
                                           </div>
                                         </div>
@@ -226,8 +291,10 @@ class Cart extends Component {
                         </div>
                         <a
                           href="#"
-                          onClick={this.addOrderCart}
-                          className="continue btn btn-primary pull-xs-right"
+                          onClick={(e) => this.addOrderCart(e)}
+                          className="continue btn btn-primary pull-xs-right btn-default" 
+                          data-toggle="modal"
+                          data-target="#exampleModal"
                         >
                           Accept Order
                         </a>
