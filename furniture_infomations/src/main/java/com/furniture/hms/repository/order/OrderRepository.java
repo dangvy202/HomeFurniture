@@ -1,10 +1,14 @@
 package com.furniture.hms.repository.order;
 
-import com.furniture.hms.entity.Order;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface OrderRepository extends JpaRepository<Order,Integer> {
+import com.furniture.hms.entity.Order;
 
+@Repository
+public interface OrderRepository extends JpaRepository<Order, Integer> {
+
+    Optional<Order> findOrderByOrderCode(String code);
 }
