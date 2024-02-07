@@ -49,6 +49,10 @@ class Cart extends Component {
           const jsonDetailProduct = {
             order_quantity: this.state.cartInstant[i].quantity,
             id_product: this.state.cartInstant[i].id,
+            total_price:
+              (this.state.cartInstant[i].productPrice -
+                this.state.cartInstant[i].productSaleoff) *
+              this.state.cartInstant[i].quantity,
             user: {
               email: sessionStorage.getItem("email"),
             },

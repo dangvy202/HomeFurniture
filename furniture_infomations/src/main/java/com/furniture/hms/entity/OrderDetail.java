@@ -4,6 +4,7 @@ import com.furniture.hms.enums.OrderStatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 @Data
@@ -28,6 +29,9 @@ public class OrderDetail {
 
     @Column(name = "order_quantity")
     private Integer orderQuantity;
+
+    @Column(name = "total_price")
+    private BigDecimal totalPrice;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_user " , referencedColumnName = "id_user")

@@ -1,5 +1,6 @@
 package com.furniture.hms.mapper.order;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 import org.mapstruct.Mapper;
@@ -22,6 +23,7 @@ public interface OrderMapper {
     @Mapping(target = "updateBy", source = "updateBy")
     @Mapping(target = "updateDate", source = "updateDate")
     @Mapping(target = "user", source = "user")
+    @Mapping(target = "totalOrder", source = "totalOrder")
     Order toOrderEntity(String createBy, Instant createDate, String orderCode, OrderStatusEnum orderStatus,
-	    String updateBy, Instant updateDate, User user);
+                        String updateBy, Instant updateDate, User user, BigDecimal totalOrder);
 }

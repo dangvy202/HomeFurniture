@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,8 @@ public class OrderService {
         Instant createDate = Instant.now();
         Instant updateDate = Instant.now();
 
+        BigDecimal totalOrder = BigDecimal.ZERO;
+
         for(OrderRequest orderRequest : requests) {
             ProductResponse product = productFeign.getDetailByIdProduct(orderRequest.getIdProduct());
             user = userRepository.findUserByEmail(orderRequest.getUser().getEmail());
@@ -61,13 +64,16 @@ public class OrderService {
                         user,
                         product.getId(),
                         createDate,
-                        updateDate);
+                        updateDate,
+                        orderRequest.getTotalPrice());
+                totalOrder = totalOrder.add(orderRequest.getTotalPrice());
                 listOrder.add(order);
             }
         }
         if(listOrder.size() != 0 ) {
             Order order = OrderMapper.INSTANCE.toOrderEntity
-                    (user.getUserName(),createDate,orderQr,OrderStatusEnum.UNPAID, user.getUserName(), updateDate,user);
+                    (user.getUserName(),createDate,orderQr,OrderStatusEnum.UNPAID, user.getUserName(),
+                            updateDate,user,totalOrder);
             orderRepository.save(order);
             orderDetailRepository.saveAll(listOrder);
             return OrderMessage.ORDER_SUCCESS;
@@ -119,15 +125,15 @@ public class OrderService {
         Instant updateDate = Instant.now();
         int id = order.getId();
         if( order != null ) {
-            order = OrderDetailMapper.INSTANCE.toOrder(
-                    OrderStatusEnum.UNPAID,
-                    order.getOrderCode(),
-                    request.getOrderQuantity(),
-                    order.getUser(),
-                    request.getIdProduct(),
-                    createDate,
-                    updateDate);
-            order.setId(id);
+//            order = OrderDetailMapper.INSTANCE.toOrder(
+//                    OrderStatusEnum.UNPAID,
+//                    order.getOrderCode(),
+//                    request.getOrderQuantity(),
+//                    order.getUser(),
+//                    request.getIdProduct(),
+//                    createDate,
+//                    updateDate);
+//            order.setId(id);
             try {
                 orderDetailRepository.save(order);
                 return OrderMessage.ORDER_SUCCESS;

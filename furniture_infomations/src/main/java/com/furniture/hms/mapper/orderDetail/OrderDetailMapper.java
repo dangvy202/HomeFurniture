@@ -25,7 +25,9 @@ public interface OrderDetailMapper {
     @Mapping(target = "createDate" , source = "createDate")
     @Mapping(target = "updateBy" , source = "user.lastName")
     @Mapping(target = "updateDate" , source = "updateDate")
-    OrderDetail toOrder(OrderStatusEnum orderStatusEnum, String orderCode, int quantity, User user, int idProduct, Instant createDate, Instant updateDate);
+    @Mapping(target = "totalPrice" , source = "totalPrice")
+    OrderDetail toOrder(OrderStatusEnum orderStatusEnum, String orderCode, int quantity, User user, int idProduct,
+                        Instant createDate, Instant updateDate, BigDecimal totalPrice);
 
 
     @Mapping(target = "status" , source = "status")
