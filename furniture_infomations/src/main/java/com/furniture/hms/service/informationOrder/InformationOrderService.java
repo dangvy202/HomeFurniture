@@ -30,6 +30,35 @@ public class InformationOrderService {
 
     private final InformationOrderRepository informationOrderRepository;
 
+	public InformationOrderResponse getInformationOrderByOrderCode(String code) {
+		InformationOrderResponse response = new InformationOrderResponse();
+
+		Order order = orderRepository.findOrderByOrderCode(code).orElse(null);
+
+		if(order != null) {
+			InformationOrder informationOrder = informationOrderRepository.findInformationOrderByIdOrder(order.getId()).orElse(null);
+			if(informationOrder != null) {
+				response.setError(null);
+				response.setMessage(InformationOrderMessage.INFORMATION_ORDER_SUCCESS);
+				response.setStatus(true);
+				response.setInformationOrderDetail(InformationOrderMapper.INSTANCE.toInformationOrderDetail(
+						informationOrder.getAddress(), informationOrder.getEmail(), informationOrder.getPhone().toString(),
+						informationOrder.getUserName()));
+				return response;
+			} else {
+				response.setError(null);
+				response.setMessage(InformationOrderMessage.INFORMATION_ORDER_NULL);
+				response.setStatus(true);
+				return response;
+			}
+		} else {
+			response.setError(InformationOrderMessage.INFORMATION_ORDER_FAIL);
+			response.setMessage(OrderMessage.ORDER_EXIST);
+			response.setStatus(false);
+			return response;
+		}
+	}
+
     public InformationOrderResponse addInformationOrder(InformationOrderRequest request) {
 	Order order = orderRepository.findOrderByOrderCode(request.getOrderCode()).orElse(null);
 
@@ -50,7 +79,7 @@ public class InformationOrderService {
 			request.getAddress(), request.getEmail(), request.getPhone(), request.getUserName()));
 		return response;
 	    } catch (Exception ex) {
-		response.setError(ex.getMessage());
+		response.setError(InformationOrderMessage.INFORMATION_ORDER_EXIST);
 		response.setMessage(InformationOrderMessage.INFORMATION_ORDER_FAIL);
 		response.setStatus(false);
 		return response;

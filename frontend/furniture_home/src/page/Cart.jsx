@@ -9,6 +9,7 @@ class Cart extends Component {
       cartInstant: [],
       totalProduct: "",
       notification: "",
+      qrCode: "",
     };
     this.addOrderCart = this.addOrderCart.bind(this);
     this.informationOrder = this.informationOrder.bind(this);
@@ -104,7 +105,8 @@ class Cart extends Component {
 
         OrderService.orderProducts(orderList)
           .then((res) => {
-            this.setState({ notification: res.data });
+            this.setState({ notification: res.data.message });
+            this.setState({ qrCode: res.data.orderCode });
             sessionStorage.removeItem("cart");
           })
           .catch((error) => {
@@ -118,9 +120,10 @@ class Cart extends Component {
     }
   }
 
-  informationOrder() {
+  informationOrder(e, orderCode) {
+    e.preventDefault();
     if (this.state.notification === "ORDER_SUCCESS") {
-      window.location.href = "";
+      window.location.href = "/information-order/" + orderCode;
     }
   }
   render() {
@@ -172,9 +175,9 @@ class Cart extends Component {
                     type="button"
                     className="btn btn-primary"
                     data-dismiss="modal"
-                    onClick={this.informationOrder}
+                    onClick={(e) => this.informationOrder(e, this.state.qrCode)}
                   >
-                    Close
+                    Confirm Information Order
                   </button>
                 </div>
               </div>

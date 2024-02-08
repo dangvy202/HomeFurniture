@@ -18,6 +18,8 @@ public class OrderResponse {
 
     private String message;
 
+    private String orderCode;
+
     List<OrderDetail> orderDetails;
 
     @Data

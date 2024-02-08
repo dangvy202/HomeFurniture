@@ -3,6 +3,14 @@ import axios from 'axios';
 const INFORMATION_ORDER_API_BASE_URL = "http://localhost:8005/information-order";
 class InformationOrderService {
 
+    getInformationOrder(orderCode){
+        return axios.get(INFORMATION_ORDER_API_BASE_URL + `/order-code/${orderCode}`, {
+            headers:{
+                  'Authorization': "Bearer " + sessionStorage.getItem("token"),
+          }
+        });
+    }
+
     addInformationOrder(username,email,phone,address,orderCode){
         const request = {
             username : username,

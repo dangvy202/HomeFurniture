@@ -41,8 +41,9 @@ public class OrderService {
     private final ProductFeign productFeign;
 
     @Transactional
-    public String addOrder(List<OrderRequest> requests) {
+    public OrderResponse addOrder(List<OrderRequest> requests) {
 	List<OrderDetail> listOrder = new ArrayList<>();
+	OrderResponse response = new OrderResponse();
 	String orderQr = UUID.randomUUID().toString();
 	User user = new User();
 
@@ -56,12 +57,11 @@ public class OrderService {
 	    user = userRepository.findUserByEmail(orderRequest.getUser().getEmail());
 
 	    if (product != null && user != null) {
-
-		OrderDetail order = OrderDetailMapper.INSTANCE.toOrder(OrderStatusEnum.UNPAID, orderQr,
-			orderRequest.getOrderQuantity(), user, product.getId(), createDate, updateDate,
-			orderRequest.getTotalPrice());
-		totalOrder = totalOrder.add(orderRequest.getTotalPrice());
-		listOrder.add(order);
+			OrderDetail order = OrderDetailMapper.INSTANCE.toOrder(OrderStatusEnum.UNPAID, orderQr,
+				orderRequest.getOrderQuantity(), user, product.getId(), createDate, updateDate,
+				orderRequest.getTotalPrice());
+			totalOrder = totalOrder.add(orderRequest.getTotalPrice());
+			listOrder.add(order);
 	    }
 	}
 	if (listOrder.size() != 0) {
@@ -69,9 +69,16 @@ public class OrderService {
 		    OrderStatusEnum.UNPAID, user.getUserName(), updateDate, user, totalOrder);
 	    orderRepository.save(order);
 	    orderDetailRepository.saveAll(listOrder);
-	    return OrderMessage.ORDER_SUCCESS;
+		response.setError(null);
+		response.setMessage(OrderMessage.ORDER_SUCCESS);
+		response.setStatus(true);
+		response.setOrderCode(orderQr);
+	    return response;
 	} else {
-	    return OrderMessage.ORDER_FAIL;
+		response.setError(OrderMessage.ORDER_FAIL);
+		response.setMessage(OrderMessage.ORDER_FAIL);
+		response.setStatus(false);
+	    return response;
 	}
     }
 

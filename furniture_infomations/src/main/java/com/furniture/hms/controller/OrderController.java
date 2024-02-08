@@ -51,12 +51,12 @@ public class OrderController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addOrder(@RequestBody List<OrderRequest> requests) {
-        String response = orderService.addOrder(requests);
-        if(response == OrderMessage.ORDER_SUCCESS) {
-            return new ResponseEntity<>(OrderMessage.ORDER_SUCCESS , HttpStatus.CREATED);
+    public ResponseEntity<OrderResponse> addOrder(@RequestBody List<OrderRequest> requests) {
+        OrderResponse response = orderService.addOrder(requests);
+        if(response.getMessage() == OrderMessage.ORDER_SUCCESS) {
+            return new ResponseEntity<>(response , HttpStatus.CREATED);
         } else{
-            return new ResponseEntity<>(OrderMessage.ORDER_FAIL,HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
