@@ -12,26 +12,66 @@ class Cart extends Component {
     };
     this.addOrderCart = this.addOrderCart.bind(this);
     this.informationOrder = this.informationOrder.bind(this);
+    this.increaseProduct = this.increaseProduct.bind(this);
+    this.reductionProduct = this.reductionProduct.bind(this);
+    this.trashProduct = this.trashProduct.bind(this);
+  }
+
+  trashProduct(idProduct) {
+    var listSessionStorageCart = JSON.parse(sessionStorage.getItem("cart"));
+    const delProducts = listSessionStorageCart.filter(
+      (product) => product.id !== idProduct
+    );
+    sessionStorage.setItem("cart", JSON.stringify(delProducts));
+    window.location.reload();
+  }
+
+  increaseProduct(idProduct) {
+    var listSessionStorageCart = JSON.parse(sessionStorage.getItem("cart"));
+
+    const updateProduct = listSessionStorageCart.map((item) => {
+      if (item.id === idProduct) {
+        item.quantity = item.quantity + 1;
+      }
+      return item;
+    });
+    sessionStorage.setItem("cart", JSON.stringify(updateProduct));
+    window.location.reload();
+  }
+
+  reductionProduct(idProduct) {
+    var listSessionStorageCart = JSON.parse(sessionStorage.getItem("cart"));
+
+    const updateProduct = listSessionStorageCart.map((item) => {
+      if (item.id === idProduct && item.quantity > 1) {
+        item.quantity = item.quantity - 1;
+      }
+      return item;
+    });
+    sessionStorage.setItem("cart", JSON.stringify(updateProduct));
+    window.location.reload();
   }
 
   componentDidMount() {
     var listIdAddCart = JSON.parse(sessionStorage.getItem("cart"));
     if (listIdAddCart != null) {
-      ProductService.getProductByIdCart().then((res) => {
-        var arrCartInstant = new Array();
-        var totalPrice = 0;
-        for (var i = 0; i < res.data.length; i++) {
-          arrCartInstant.push({
-            ...res.data[i],
-            quantity: listIdAddCart[i].quantity,
-          });
-          totalPrice +=
-            (res.data[i].productPrice - res.data[i].productSaleoff) *
-            listIdAddCart[i].quantity;
-        }
-        this.setState({ cartInstant: arrCartInstant });
-        this.setState({ totalProduct: totalPrice });
-      });
+      ProductService.getProductByIdCart()
+        .then((res) => {
+          var arrCartInstant = new Array();
+          var totalPrice = 0;
+          for (var i = 0; i < res.data.length; i++) {
+            arrCartInstant.push({
+              ...res.data[i],
+              quantity: listIdAddCart[i].quantity,
+            });
+            totalPrice +=
+              (res.data[i].productPrice - res.data[i].productSaleoff) *
+              listIdAddCart[i].quantity;
+          }
+          this.setState({ cartInstant: arrCartInstant });
+          this.setState({ totalProduct: totalPrice });
+        })
+        .catch((error) => {});
     }
   }
 
@@ -64,11 +104,11 @@ class Cart extends Component {
 
         OrderService.orderProducts(orderList)
           .then((res) => {
-            this.setState({ notification: res.data })
-            sessionStorage.removeItem("cart")
+            this.setState({ notification: res.data });
+            sessionStorage.removeItem("cart");
           })
           .catch((error) => {
-            this.setState({ notification: error.response.data.message })
+            this.setState({ notification: error.response.data.message });
           });
       } else {
         this.setState({ notification: "EMPTY_CART" });
@@ -79,8 +119,8 @@ class Cart extends Component {
   }
 
   informationOrder() {
-    if(this.state.notification === "ORDER_SUCCESS") {
-      window.location.href = ""
+    if (this.state.notification === "ORDER_SUCCESS") {
+      window.location.href = "";
     }
   }
   render() {
@@ -119,10 +159,8 @@ class Cart extends Component {
                 <div className="modal-body">
                   {(() => {
                     if (this.state.notification === "ORDER_SUCCESS") {
-                      return (
-                        <>Success, next step</>
-                      );
-                    } else if(this.state.notification === "EMPTY_CART") {
+                      return <>Success, next step</>;
+                    } else if (this.state.notification === "EMPTY_CART") {
                       return <>Fail, cart is empty</>;
                     } else {
                       return <>Fail</>;
@@ -218,7 +256,7 @@ class Cart extends Component {
                                             currency: "VND",
                                           }).format(
                                             item.productPrice -
-                                            item.productSaleoff
+                                              item.productSaleoff
                                           )}
                                         </span>
                                       </div>
@@ -240,12 +278,18 @@ class Cart extends Component {
                                               <button
                                                 className="btn btn-touchspin js-touchspin bootstrap-touchspin-up"
                                                 type="button"
+                                                onClick={(e) =>
+                                                  this.increaseProduct(item.id)
+                                                }
                                               >
                                                 +
                                               </button>
                                               <button
                                                 className="btn btn-touchspin js-touchspin bootstrap-touchspin-down"
                                                 type="button"
+                                                onClick={(e) =>
+                                                  this.reductionProduct(item.id)
+                                                }
                                               >
                                                 -
                                               </button>
@@ -261,7 +305,7 @@ class Cart extends Component {
                                             }).format(
                                               (item.productPrice -
                                                 item.productSaleoff) *
-                                              item.quantity
+                                                item.quantity
                                             )}
                                           </div>
                                         </div>
@@ -271,6 +315,9 @@ class Cart extends Component {
                                               className="remove-from-cart"
                                               rel="nofollow"
                                               href="#"
+                                              onClick={() =>
+                                                this.trashProduct(item.id)
+                                              }
                                               data-link-action="delete-from-cart"
                                               data-id-product="1"
                                             >
@@ -292,7 +339,7 @@ class Cart extends Component {
                         <a
                           href="#"
                           onClick={(e) => this.addOrderCart(e)}
-                          className="continue btn btn-primary pull-xs-right btn-default" 
+                          className="continue btn btn-primary pull-xs-right btn-default"
                           data-toggle="modal"
                           data-target="#exampleModal"
                         >
