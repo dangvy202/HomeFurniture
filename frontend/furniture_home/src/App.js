@@ -15,6 +15,8 @@ import Contact from './page/Contact';
 import BlogDetail from './page/BlogDetail';
 import Cart from './page/Cart';
 import InformationOrder from './page/InformationOrder';
+import OrderHistory from './page/OrderHistory';
+import OrderDetail from './page/OrderDetail';
 
 
 class App extends Component {
@@ -58,11 +60,11 @@ class App extends Component {
             <Route path="/blog-detail/:idBlog" element={<BlogDetail />} />
             <Route path="/cart" element={<Cart/>} />
             <Route path="/information-order/:orderCode" element={<InformationOrder />} />
-              
-  
-  
+            <Route path="/order-history" element={<OrderHistory />} />
+            <Route path="/order-detail/:orderCode" element={<OrderDetail />} />
+            
+            {/* NOT FOUND PAGE */}
             <Route path="*" element={<NotFound />} />
-              
             <Route path="/404" element={<NotFound />} />
           </Routes>
           <Footer />

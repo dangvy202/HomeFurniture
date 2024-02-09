@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface OrderDetailRepository extends JpaRepository<OrderDetail,Integer> {
-    List<OrderDetail> findOrderByUser(User email);
+    List<OrderDetail> findOrderByUserAndOrderCode(User email,String orderCode);
 
     OrderDetail findOrderByOrderCode(String orderCode);
 

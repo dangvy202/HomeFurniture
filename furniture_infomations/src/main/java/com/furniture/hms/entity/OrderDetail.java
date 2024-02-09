@@ -23,10 +23,6 @@ public class OrderDetail {
     @Column(name = "order_code")
     private String orderCode;
 
-    @Column(name = "order_status")
-    @Enumerated(EnumType.STRING)
-    private OrderStatusEnum orderStatus;
-
     @Column(name = "order_quantity")
     private Integer orderQuantity;
 

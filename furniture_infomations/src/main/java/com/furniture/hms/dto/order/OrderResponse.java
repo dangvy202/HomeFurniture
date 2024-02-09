@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 
 @Data
@@ -20,16 +21,20 @@ public class OrderResponse {
 
     private String orderCode;
 
+    private String orderStatus;
+
+    private BigDecimal totalOrder;
+
+    private Instant updateDate;
+
+    private String userName;
+
     List<OrderDetail> orderDetails;
 
     @Data
     @FieldDefaults(level = AccessLevel.PRIVATE)
     public static class OrderDetail {
         private String orderId;
-
-        private String orderStatus;
-
-        private Integer orderQuantity;
 
         private Product product;
 
@@ -41,6 +46,8 @@ public class OrderResponse {
             private BigDecimal productPrice;
 
             private BigDecimal productSaleoff;
+
+            private Integer orderQuantity;
 
             private Picture picture;
 

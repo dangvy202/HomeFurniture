@@ -25,7 +25,7 @@ public class UserDetailConfiguration {
         return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                User user = userRepository.findUserByEmail(username);
+                User user = userRepository.findUserByEmail(username).orElse(null);
                 if(user == null){
                     throw new UsernameNotFoundException("USER NOT FOUND");
                 }

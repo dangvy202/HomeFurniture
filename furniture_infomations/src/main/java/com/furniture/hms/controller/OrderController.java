@@ -38,9 +38,15 @@ public class OrderController {
         return new ResponseEntity<>(OrderMessage.ORDER_SUCCESS,HttpStatus.OK);
     }
 
+    @GetMapping
+    public ResponseEntity<List<OrderResponse>> getOrderByEmailUser(@RequestHeader("email") String email) {
+        var orderResponse = orderService.getOrderByEmailUser(email);
+        return new ResponseEntity<>(orderResponse,HttpStatus.OK);
+    }
+
     @GetMapping("/detail")
-    public ResponseEntity<OrderResponse> getOrderDetailByUser(@RequestHeader("email") String email) {
-        OrderResponse orderResponse = orderService.getOrderDetailByUser(email);
+    public ResponseEntity<OrderResponse> getOrderDetailByUser(@RequestHeader("email") String email, @RequestHeader("orderCode") String orderCode) {
+        OrderResponse orderResponse = orderService.getOrderDetailByUser(email,orderCode);
         if(orderResponse.getStatus() == true && orderResponse.getMessage() == OrderMessage.ORDER_SUCCESS )  {
             return new ResponseEntity<>(orderResponse , HttpStatus.OK);
         }else if (orderResponse.getStatus() == true && orderResponse.getMessage() == OrderMessage.ORDER_EXIST){

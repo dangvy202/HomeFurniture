@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,10 +55,10 @@ public class OrderService {
 
 	for (OrderRequest orderRequest : requests) {
 	    ProductResponse product = productFeign.getDetailByIdProduct(orderRequest.getIdProduct());
-	    user = userRepository.findUserByEmail(orderRequest.getUser().getEmail());
+	    user = userRepository.findUserByEmail(orderRequest.getUser().getEmail()).orElse(null);
 
 	    if (product != null && user != null) {
-			OrderDetail order = OrderDetailMapper.INSTANCE.toOrder(OrderStatusEnum.UNPAID, orderQr,
+			OrderDetail order = OrderDetailMapper.INSTANCE.toOrder(orderQr,
 				orderRequest.getOrderQuantity(), user, product.getId(), createDate, updateDate,
 				orderRequest.getTotalPrice());
 			totalOrder = totalOrder.add(orderRequest.getTotalPrice());
@@ -82,12 +83,27 @@ public class OrderService {
 	}
     }
 
-    public OrderResponse getOrderDetailByUser(String email) {
+	public List<OrderResponse> getOrderByEmailUser(String email) {
+		List<OrderResponse> response = new ArrayList<>();
+		AtomicReference<OrderResponse> orderResponse = new AtomicReference<>(new OrderResponse());
+		User user = userRepository.findUserByEmail(email).orElse(null);
+		if(user != null) {
+			List<Order> listOrder = orderRepository.findOrderByUser(user);
+			listOrder.stream().forEach(orderDetail -> {
+				response.add(OrderMapper.INSTANCE.toOrderResponse(true, null, OrderMessage.ORDER_SUCCESS, orderDetail));
+			});
+			return response;
+		} else {
+			return response;
+		}
+	}
+
+    public OrderResponse getOrderDetailByUser(String email,String orderCode) {
 	List<OrderResponse.OrderDetail> listOrderDetail = new ArrayList<>();
-	User user = userRepository.findUserByEmail(email);
+	User user = userRepository.findUserByEmail(email).orElse(null);
 	OrderResponse orderResponse = new OrderResponse();
 	if (user != null) {
-	    List<OrderDetail> listOrder = orderDetailRepository.findOrderByUser(user);
+	    List<OrderDetail> listOrder = orderDetailRepository.findOrderByUserAndOrderCode(user,orderCode);
 	    if (listOrder.size() != 0) {
 		orderResponse = OrderDetailMapper.INSTANCE.toOrderRes(true, null, OrderMessage.ORDER_SUCCESS);
 		for (OrderDetail order : listOrder) {
@@ -99,7 +115,7 @@ public class OrderService {
 		    ProductResponse product = productFeign.getDetailByIdProduct(order.getIdProduct());
 		    // set mapping element
 		    orderDetailResponse = OrderDetailMapper.INSTANCE.toOrderDetailRes(order);
-		    orderProductResponse = OrderDetailMapper.INSTANCE.toOrderProductRes(product.getProductName(),
+		    orderProductResponse = OrderDetailMapper.INSTANCE.toOrderProductRes(order,product.getProductName(),
 			    product.getProductPrice(), product.getProductSaleoff());
 		    orderPictureResponse = OrderDetailMapper.INSTANCE
 			    .toOrderPictureRes(product.getPicture().getPictureFirst());

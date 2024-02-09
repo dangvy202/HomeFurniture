@@ -17,7 +17,6 @@ public interface OrderDetailMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "orderCode" , source = "orderCode")
-    @Mapping(target = "orderStatus" , source = "orderStatusEnum")
     @Mapping(target = "orderQuantity" , source = "quantity")
     @Mapping(target = "user" , source = "user")
     @Mapping(target = "idProduct" , source = "idProduct")
@@ -26,7 +25,7 @@ public interface OrderDetailMapper {
     @Mapping(target = "updateBy" , source = "user.lastName")
     @Mapping(target = "updateDate" , source = "updateDate")
     @Mapping(target = "totalPrice" , source = "totalPrice")
-    OrderDetail toOrder(OrderStatusEnum orderStatusEnum, String orderCode, int quantity, User user, int idProduct,
+    OrderDetail toOrder(String orderCode, int quantity, User user, int idProduct,
                         Instant createDate, Instant updateDate, BigDecimal totalPrice);
 
 
@@ -36,14 +35,13 @@ public interface OrderDetailMapper {
     OrderResponse toOrderRes(Boolean status , String error , String message);
 
     @Mapping(target = "orderId" , source = "order.orderCode")
-    @Mapping(target = "orderStatus" , source = "order.orderStatus")
-    @Mapping(target = "orderQuantity" , source = "order.orderQuantity")
     OrderResponse.OrderDetail toOrderDetailRes(OrderDetail order);
 
     @Mapping(target = "productName" , source = "productName")
     @Mapping(target = "productPrice" , source = "productPrice")
     @Mapping(target = "productSaleoff" , source = "productSaleoff")
-    OrderResponse.OrderDetail.Product toOrderProductRes(String productName , BigDecimal productPrice , BigDecimal productSaleoff);
+    @Mapping(target = "orderQuantity" , source = "order.orderQuantity")
+    OrderResponse.OrderDetail.Product toOrderProductRes(OrderDetail order, String productName , BigDecimal productPrice , BigDecimal productSaleoff);
 
     @Mapping(target = "picture" , source = "picture")
     OrderResponse.OrderDetail.Product.Picture toOrderPictureRes(String picture);

@@ -52,7 +52,7 @@ public class UserService {
     public UserResponse saveEditAccount(UserRequest request) {
         UserResponse response = new UserResponse();
 
-        User userDetail = userRepository.findUserByEmail(request.getEmail());
+        User userDetail = userRepository.findUserByEmail(request.getEmail()).orElse(null);
 
         if(userDetail != null) {
             try{
@@ -142,7 +142,7 @@ public class UserService {
         UserResponse userResponse = new UserResponse();
         try{
             //check mail
-            User userCheck = userRepository.findUserByEmail(userRequest.getEmail());
+            User userCheck = userRepository.findUserByEmail(userRequest.getEmail()).orElse(null);
             if(userCheck != null){
                 userResponse.setStatus(false);
                 userResponse.setError(UserMessage.FAIL);
@@ -183,7 +183,7 @@ public class UserService {
 
     public UserResponse getInfomation(String request){
         UserResponse userResponse = new UserResponse();
-        User userCheck = userRepository.findUserByEmail(request);
+        User userCheck = userRepository.findUserByEmail(request).orElse(null);
         if(userCheck != null){
             userResponse.setStatus(true);
             userResponse.setError(null);
@@ -199,7 +199,7 @@ public class UserService {
     }
 
     public AuthenticationResponse login(AuthenticationRequest request) {
-        var userEntity = userRepository.findUserByEmail(request.getEmail());
+        User userEntity = userRepository.findUserByEmail(request.getEmail()).orElse(null);
         if(userEntity == null){
             return AuthenticationResponse.builder()
                     .status(false)

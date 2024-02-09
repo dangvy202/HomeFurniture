@@ -23,7 +23,7 @@ class InformationOrder extends Component {
     this.orderForAccount = this.orderForAccount.bind(this);
   }
   orderForAccount() {
-    window.location.href = "/information";
+    window.location.href = "/order-history";
   }
   addInformationOrder(e) {
     e.preventDefault();
