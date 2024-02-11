@@ -1,5 +1,6 @@
 import React from "react";
 import { Component } from "react";
+import InformationOrderService from "../service/InformationOrderService";
 import OrderService from "../service/OrderService";
 
 class OrderHistory extends Component {

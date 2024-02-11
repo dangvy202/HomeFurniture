@@ -4,6 +4,7 @@ import logomobie from "../asset/home/logo-mobie.png";
 import CategoryBlogService from "../../service/CategoryBlogService";
 import CategoryService from "../../service/CategoryService";
 import RoomService from "../../service/RoomService";
+import ProductService from "../../service/ProductService";
 
 class Navbar extends Component {
   constructor(props) {
@@ -12,6 +13,8 @@ class Navbar extends Component {
       categoryBlog: [],
       categoryProduct: [],
       room: [],
+      cartInstant: [],
+      totalProduct: "",
     };
     this.logout = this.logout.bind(this);
   }
@@ -28,6 +31,27 @@ class Navbar extends Component {
     RoomService.getAllRoom().then((res) => {
       this.setState({ room: res.data });
     });
+
+    var listIdAddCart = JSON.parse(sessionStorage.getItem("cart"));
+    if (listIdAddCart != null) {
+      ProductService.getProductByIdCart()
+        .then((res) => {
+          var arrCartInstant = new Array();
+          var totalPrice = 0;
+          for (var i = 0; i < res.data.length; i++) {
+            arrCartInstant.push({
+              ...res.data[i],
+              quantity: listIdAddCart[i].quantity,
+            });
+            totalPrice +=
+              (res.data[i].productPrice - res.data[i].productSaleoff) *
+              listIdAddCart[i].quantity;
+          }
+          this.setState({ cartInstant: arrCartInstant });
+          this.setState({ totalProduct: totalPrice });
+        })
+        .catch((error) => {});
+    }
   }
 
   logout() {
@@ -350,12 +374,12 @@ class Navbar extends Component {
                     <div>
                       <a
                         className="check-out"
-                        href="product-checkout.html"
+                        href="/order-history"
                         rel="nofollow"
                         title="Checkout"
                       >
                         <i className="fa fa-check" aria-hidden="true"></i>
-                        <span>Checkout</span>
+                        <span>Order History</span>
                       </a>
                     </div>
                     <div>
@@ -376,34 +400,54 @@ class Navbar extends Component {
                     <div className="cart-content">
                       <table>
                         <tbody>
-                          <tr>
-                            <td className="product-image">
-                              <a href="product-detail.html">
-                                <img src="img/product/5.jpg" alt="Product" />
-                              </a>
-                            </td>
-                            <td>
-                              <div className="product-name">
+                          {this.state.cartInstant.map((item) => (
+                            <tr>
+                              <td className="product-image">
                                 <a href="product-detail.html">
-                                  Organic Strawberry Fruits
+                                  <img
+                                    src={require("../asset/product/" +
+                                      item.picture.pictureFirst)}
+                                    alt="Product"
+                                  />
                                 </a>
-                              </div>
-                              <div>
-                                2 x<span className="product-price">£28.98</span>
-                              </div>
-                            </td>
-                            <td className="action">
-                              <a className="remove" href="#">
-                                <i
-                                  className="fa fa-trash-o"
-                                  aria-hidden="true"
-                                ></i>
-                              </a>
-                            </td>
-                          </tr>
+                              </td>
+                              <td>
+                                <div className="product-name">
+                                  <a href="product-detail.html">
+                                    {item.productName}
+                                  </a>
+                                </div>
+                                <div>
+                                  2 x
+                                  <span className="product-price">
+                                    {Intl.NumberFormat("vi-VN", {
+                                      style: "currency",
+                                      currency: "VND",
+                                    }).format(
+                                      item.productPrice - item.productSaleoff
+                                    )}
+                                  </span>
+                                </div>
+                              </td>
+                              <td className="action">
+                                <a className="remove" href="#">
+                                  <i
+                                    className="fa fa-trash-o"
+                                    aria-hidden="true"
+                                  ></i>
+                                </a>
+                              </td>
+                            </tr>
+                          ))}
+
                           <tr className="total">
                             <td colSpan="2">Total:</td>
-                            <td>£92.96</td>
+                            <td>
+                              {Intl.NumberFormat("vi-VN", {
+                                style: "currency",
+                                currency: "VND",
+                              }).format(this.state.totalProduct)}
+                            </td>
                           </tr>
 
                           <tr>

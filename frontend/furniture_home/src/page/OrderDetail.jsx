@@ -1,5 +1,6 @@
 import React from "react";
 import { Component } from "react";
+import InformationOrderService from "../service/InformationOrderService";
 import OrderService from "../service/OrderService";
 
 class OrderDetail extends Component {
@@ -11,6 +12,7 @@ class OrderDetail extends Component {
     this.state = {
       orderDetail: [],
       orderCode: orderCodeParameter,
+      informationConfirmMessage: "",
     };
   }
   componentDidMount() {
@@ -21,6 +23,11 @@ class OrderDetail extends Component {
       sessionStorage.getItem("expired") != null &&
       sessionStorage.getItem("email") != null
     ) {
+      InformationOrderService.getInformationOrder(this.state.orderCode).then(
+        (res) => {
+          this.setState({ informationConfirmMessage: res.data.message });
+        }
+      );
       OrderService.getOrderDetail(
         sessionStorage.getItem("email"),
         this.state.orderCode
@@ -86,6 +93,9 @@ class OrderDetail extends Component {
                                 </th>
                                 <th class="item mywishlist_second">Quantity</th>
                                 <th class="item mywishlist_second">Total</th>
+                                <th class="item mywishlist_second">
+                                  Information Confirm
+                                </th>
                               </tr>
                             </thead>
                             <tbody>
@@ -122,6 +132,29 @@ class OrderDetail extends Component {
                                         item.product.productSaleoff) *
                                         item.product.orderQuantity
                                     )}
+                                  </td>
+                                  <td>
+                                    {(() => {
+                                      if (
+                                        this.state.informationConfirmMessage ===
+                                        "INFORMATION_ORDER_SUCCESS"
+                                      ) {
+                                        return <>Confirm Information Success</>;
+                                      } else {
+                                        return (
+                                          <>
+                                            <a
+                                              href={
+                                                "/information-order/" +
+                                                this.state.orderCode
+                                              }
+                                            >
+                                              Not yet
+                                            </a>
+                                          </>
+                                        );
+                                      }
+                                    })()}
                                   </td>
                                 </tr>
                               ))}
