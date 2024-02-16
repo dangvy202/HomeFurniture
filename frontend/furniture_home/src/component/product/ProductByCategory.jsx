@@ -19,9 +19,7 @@ class ProductByCategory extends Component {
   componentDidMount() {
     CategoryService.getCategory().then((res) => {
       this.setState({ category: res.data });
-      // console.log("asdad = " + Object.values(Object.values(res[0])));
       for (var i = 0; i < res.data.length; i++) {
-        console.log("checkkk = " + Object.values(res.data[i]));
         ProductService.getProductByCategory(res.data[i].id).then(
           (resProductByCategory) => {
             this.setState({ product: resProductByCategory.data });
