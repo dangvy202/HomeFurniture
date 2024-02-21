@@ -19,7 +19,7 @@ class Navbar extends Component {
     this.logout = this.logout.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     CategoryBlogService.getCategory()
       .then((res) => {
         this.setState({ categoryBlog: res.data });
@@ -31,27 +31,6 @@ class Navbar extends Component {
     RoomService.getAllRoom().then((res) => {
       this.setState({ room: res.data });
     });
-
-    var listIdAddCart = JSON.parse(sessionStorage.getItem("cart"));
-    if (listIdAddCart != null) {
-      ProductService.getProductByIdCart()
-        .then((res) => {
-          var arrCartInstant = new Array();
-          var totalPrice = 0;
-          for (var i = 0; i < res.data.length; i++) {
-            arrCartInstant.push({
-              ...res.data[i],
-              quantity: listIdAddCart[i].quantity,
-            });
-            totalPrice +=
-              (res.data[i].productPrice - res.data[i].productSaleoff) *
-              listIdAddCart[i].quantity;
-          }
-          this.setState({ cartInstant: arrCartInstant });
-          this.setState({ totalProduct: totalPrice });
-        })
-        .catch((error) => {});
-    }
   }
 
   logout() {
@@ -393,84 +372,9 @@ class Navbar extends Component {
               <div className="desktop_cart d-flex align-items-center">
                 <div className="blockcart block-cart cart-preview tiva-toggle">
                   <div className="header-cart tiva-toggle-btn">
-                    <span className="cart-products-count">1</span>
-                    <i className="fa fa-shopping-cart" aria-hidden="true"></i>
-                  </div>
-                  <div className="dropdown-content">
-                    <div className="cart-content">
-                      <table>
-                        <tbody>
-                          {this.state.cartInstant.map((item) => (
-                            <tr>
-                              <td className="product-image">
-                                <a href="product-detail.html">
-                                  <img
-                                    src={require("../asset/product/" +
-                                      item.picture.pictureFirst)}
-                                    alt="Product"
-                                  />
-                                </a>
-                              </td>
-                              <td>
-                                <div className="product-name">
-                                  <a href="product-detail.html">
-                                    {item.productName}
-                                  </a>
-                                </div>
-                                <div>
-                                  2 x
-                                  <span className="product-price">
-                                    {Intl.NumberFormat("vi-VN", {
-                                      style: "currency",
-                                      currency: "VND",
-                                    }).format(
-                                      item.productPrice - item.productSaleoff
-                                    )}
-                                  </span>
-                                </div>
-                              </td>
-                              <td className="action">
-                                <a className="remove" href="#">
-                                  <i
-                                    className="fa fa-trash-o"
-                                    aria-hidden="true"
-                                  ></i>
-                                </a>
-                              </td>
-                            </tr>
-                          ))}
-
-                          <tr className="total">
-                            <td colSpan="2">Total:</td>
-                            <td>
-                              {Intl.NumberFormat("vi-VN", {
-                                style: "currency",
-                                currency: "VND",
-                              }).format(this.state.totalProduct)}
-                            </td>
-                          </tr>
-
-                          <tr>
-                            <td
-                              colSpan="3"
-                              className="d-flex justify-content-center"
-                            >
-                              <div className="cart-button">
-                                <a href="/cart" title="View Cart">
-                                  View Cart
-                                </a>
-                                <a
-                                  href="product-checkout.html"
-                                  title="Checkout"
-                                >
-                                  Checkout
-                                </a>
-                              </div>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
+                    <a href="/cart">
+                      <i className="fa fa-shopping-cart" aria-hidden="true"></i>
+                    </a>
                   </div>
                 </div>
               </div>

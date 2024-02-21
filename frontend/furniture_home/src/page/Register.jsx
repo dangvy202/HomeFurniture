@@ -92,7 +92,6 @@ class Register extends Component {
         this.setState({ message: "REJECT" });
       });
   }
-  async openPopup() {}
   render() {
     return (
       <div className="user-register blog">

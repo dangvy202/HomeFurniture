@@ -85,6 +85,45 @@ class Product extends Component {
     return (
       <>
         <div className="title-tab-content d-flex">
+          <div
+            className="modal fade"
+            id="exampleModal"
+            tabIndex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div className="modal-dialog" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title" id="exampleModalLabel">
+                    Notification
+                  </h5>
+                  <button
+                    type="button"
+                    className="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div className="modal-body">Add Cart Success</div>
+                <div className="modal-footer">
+                  <a href="/cart" className="btn btn-primary">
+                    Go To Cart
+                  </a>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
           {/* <!-- tab product --> */}
           <div className="dropdown-toggle toggle-category tab-category-none">
             Select Category
@@ -156,19 +195,9 @@ class Product extends Component {
                           <div className="product-description">
                             <div className="product-groups">
                               <div className="product-title">
-                                <a href="product-detail.html">
-                                  {item.productName}
-                                </a>
+                                {item.productName}
                               </div>
-                              <div className="rating">
-                                <div className="star-content">
-                                  <div className="star"></div>
-                                  <div className="star"></div>
-                                  <div className="star"></div>
-                                  <div className="star"></div>
-                                  <div className="star"></div>
-                                </div>
-                              </div>
+
                               <div className="product-group-price">
                                 <div className="product-price-and-shipping">
                                   {(() => {
@@ -214,9 +243,14 @@ class Product extends Component {
                               >
                                 <input type="hidden" name="token" />
                                 <a
-                                  className="add-to-cart"
                                   href="#"
-                                  onClick={() => this.addToCart(item)}
+                                  className="btn add-to-cart"
+                                  data-toggle="modal"
+                                  data-target="#exampleModal"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    this.addToCart(item);
+                                  }}
                                   data-button-action="add-to-cart"
                                 >
                                   <i
@@ -237,7 +271,7 @@ class Product extends Component {
                                 ></i>
                               </a>
                               <a
-                                href="#"
+                                href={"product-detail/" + item.id}
                                 className="quick-view hidden-sm-down"
                                 data-link-action="quickview"
                               >
@@ -256,8 +290,7 @@ class Product extends Component {
                             style={{ height: "100%" }}
                             className="thumbnail-container"
                           >
-                            <a
-                              href="product-detail.html"
+                            <div
                               style={{
                                 backgroundColor: "gray",
                               }}
@@ -285,7 +318,7 @@ class Product extends Component {
                                   item.picture.pictureFirst)}
                                 alt="img"
                               />
-                            </a>
+                            </div>
                             {(() => {
                               if (item.productSaleoff != 0) {
                                 return (
@@ -308,18 +341,7 @@ class Product extends Component {
                           <div className="product-description">
                             <div className="product-groups">
                               <div className="product-title">
-                                <a href="product-detail.html">
-                                  {item.productName}
-                                </a>
-                              </div>
-                              <div className="rating">
-                                <div className="star-content">
-                                  <div className="star"></div>
-                                  <div className="star"></div>
-                                  <div className="star"></div>
-                                  <div className="star"></div>
-                                  <div className="star"></div>
-                                </div>
+                                {item.productName}
                               </div>
                               <div className="product-group-price">
                                 <div className="product-price-and-shipping">
@@ -431,14 +453,12 @@ class Product extends Component {
                             style={{ height: "100%" }}
                             className="thumbnail-container"
                           >
-                            <a href="product-detail.html">
-                              <img
-                                className="img-fluid"
-                                src={require("../asset/product/" +
-                                  item.picture.pictureFirst)}
-                                alt="img"
-                              />
-                            </a>
+                            <img
+                              className="img-fluid"
+                              src={require("../asset/product/" +
+                                item.picture.pictureFirst)}
+                              alt="img"
+                            />
                             {(() => {
                               if (item.productSaleoff != 0) {
                                 return (
@@ -461,18 +481,7 @@ class Product extends Component {
                           <div className="product-description">
                             <div className="product-groups">
                               <div className="product-title">
-                                <a href="product-detail.html">
-                                  {item.productName}
-                                </a>
-                              </div>
-                              <div className="rating">
-                                <div className="star-content">
-                                  <div className="star"></div>
-                                  <div className="star"></div>
-                                  <div className="star"></div>
-                                  <div className="star"></div>
-                                  <div className="star"></div>
-                                </div>
+                                {item.productName}
                               </div>
                               <div className="product-group-price">
                                 <div className="product-price-and-shipping">
@@ -519,8 +528,10 @@ class Product extends Component {
                               >
                                 <input type="hidden" name="token" />
                                 <a
-                                  className="add-to-cart"
                                   href="#"
+                                  className="add-to-cart"
+                                  data-toggle="modal"
+                                  data-target="#exampleModal"
                                   onClick={(e) => {
                                     e.preventDefault();
                                     this.addToCart(item);
@@ -545,7 +556,7 @@ class Product extends Component {
                                 ></i>
                               </a>
                               <a
-                                href="#"
+                                href={"product-detail/" + item.id}
                                 className="quick-view hidden-sm-down"
                                 data-link-action="quickview"
                               >
@@ -564,8 +575,7 @@ class Product extends Component {
                             style={{ height: "100%" }}
                             className="thumbnail-container"
                           >
-                            <a
-                              href="product-detail.html"
+                            <div
                               style={{
                                 backgroundColor: "gray",
                               }}
@@ -593,7 +603,7 @@ class Product extends Component {
                                   item.picture.pictureFirst)}
                                 alt="img"
                               />
-                            </a>
+                            </div>
                             {(() => {
                               if (item.productSaleoff != 0) {
                                 return (
@@ -616,9 +626,7 @@ class Product extends Component {
                           <div className="product-description">
                             <div className="product-groups">
                               <div className="product-title">
-                                <a href="product-detail.html">
-                                  {item.productName}
-                                </a>
+                                {item.productName}
                               </div>
                               <div className="rating">
                                 <div className="star-content">
