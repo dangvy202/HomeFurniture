@@ -22,7 +22,10 @@ class ProductDetail extends Component {
       pictureThird: "",
       categoryName: "",
       roomName: "",
+      quantity: 1,
     };
+    this.increaseProduct = this.increaseProduct.bind(this);
+    this.reductionProduct = this.reductionProduct.bind(this);
   }
 
   componentDidMount() {
@@ -50,6 +53,18 @@ class ProductDetail extends Component {
         this.setState({ roomName: res.data.room.roomName });
       })
       .catch((error) => {});
+  }
+
+  increaseProduct() {
+    var sum = this.state.quantity + 1;
+    this.setState({ quantity: sum });
+  }
+
+  reductionProduct() {
+    if (this.state.quantity > 1) {
+      var sum = this.state.quantity - 1;
+      this.setState({ quantity: sum });
+    }
   }
   render() {
     return (
@@ -257,7 +272,40 @@ class ProductDetail extends Component {
                               <div className="product-info col-xs-12 col-md-7 col-sm-7">
                                 <div className="detail-description">
                                   <div className="price-del">
-                                    <span className="price">£150.00</span>
+                                    {(() => {
+                                      if (this.state.productSaleoff != 0) {
+                                        return (
+                                          <>
+                                            <span className="price">
+                                              {Intl.NumberFormat("vi-VN", {
+                                                style: "currency",
+                                                currency: "VND",
+                                              }).format(
+                                                this.state.productPrice -
+                                                  this.state.productSaleoff
+                                              )}
+                                            </span>
+                                            <del style={{ marginLeft: "20px" }}>
+                                              {Intl.NumberFormat("vi-VN", {
+                                                style: "currency",
+                                                currency: "VND",
+                                              }).format(
+                                                this.state.productPrice
+                                              )}
+                                            </del>
+                                          </>
+                                        );
+                                      } else {
+                                        return (
+                                          <span className="price">
+                                            {Intl.NumberFormat("vi-VN", {
+                                              style: "currency",
+                                              currency: "VND",
+                                            }).format(this.state.productPrice)}
+                                          </span>
+                                        );
+                                      }
+                                    })()}
                                     <span className="float-right">
                                       <span className="availb">
                                         Availability:{" "}
@@ -286,20 +334,29 @@ class ProductDetail extends Component {
                                               type="text"
                                               name="qty"
                                               id="quantity_wanted"
-                                              value="1"
                                               className="input-group form-control"
+                                              value={this.state.quantity}
+                                              min={1}
                                             />
 
                                             <span className="input-group-btn-vertical">
                                               <button
                                                 className="btn btn-touchspin js-touchspin bootstrap-touchspin-up"
                                                 type="button"
+                                                onClick={(e) => {
+                                                  e.preventDefault();
+                                                  this.increaseProduct();
+                                                }}
                                               >
                                                 +
                                               </button>
                                               <button
                                                 className="btn btn-touchspin js-touchspin bootstrap-touchspin-down"
                                                 type="button"
+                                                onClick={(e) => {
+                                                  e.preventDefault();
+                                                  this.reductionProduct();
+                                                }}
                                               >
                                                 -
                                               </button>
