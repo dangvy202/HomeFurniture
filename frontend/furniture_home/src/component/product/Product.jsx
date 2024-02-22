@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ProductService from "../../service/ProductService";
 import CategoryService from "../../service/CategoryService";
-import ProductByCategory from "./ProductByCategory";
+import WishlistService from "../../service/WishlistService";
 
 class Product extends Component {
   constructor(props) {
@@ -12,10 +12,13 @@ class Product extends Component {
       category: [],
       cart: [],
       visible: 4,
+      notification: "",
+      popupType: ""
     };
     this.showMoreProduct = this.showMoreProduct.bind(this);
     this.hideProduct = this.hideProduct.bind(this);
     this.addToCart = this.addToCart.bind(this);
+    this.addWishlistOrder = this.addWishlistOrder.bind(this);
   }
 
   componentDidMount() {
@@ -76,10 +79,32 @@ class Product extends Component {
         }
       },
       () => {
+        this.setState({ popupType: "ADD_TO_CART" })
         sessionStorage.setItem("cart", JSON.stringify(this.state.cart));
       }
     );
   };
+
+  addWishlistOrder(product) {
+    if (
+      sessionStorage.getItem("status") != null &&
+      sessionStorage.getItem("message") != null &&
+      sessionStorage.getItem("token") != null &&
+      sessionStorage.getItem("expired") != null &&
+      sessionStorage.getItem("email") != null
+    ) {
+      const request = {
+        email: sessionStorage.getItem("email"),
+        id_product: product.id
+      }
+      WishlistService.addWishlist(request).then((res) => {
+        this.setState({ notification: res.data.message })
+        this.setState({ popupType: "ADD_TO_WISHLIST" })
+      })
+    } else {
+      window.location.href = "/login"
+    }
+  }
 
   render() {
     return (
@@ -108,11 +133,32 @@ class Product extends Component {
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
-                <div className="modal-body">Add Cart Success</div>
+                <div className="modal-body">
+                  {(() => {
+                    if (this.state.popupType === "ADD_TO_CART") {
+                      return <>Add to cart success !</>;
+                    } else {
+                      return <>Add to wishlist success !</>;
+                    }
+                  })()}
+                </div>
                 <div className="modal-footer">
-                  <a href="/cart" className="btn btn-primary">
-                    Go To Cart
-                  </a>
+                  {(() => {
+                    if (this.state.popupType === "ADD_TO_CART") {
+                      return <>
+                        <a href="/cart" className="btn btn-primary">
+                          Go To Cart
+                        </a>
+                      </>;
+                    } else {
+                      return <>
+                        <a href="/wishlist" className="btn btn-primary">
+                          Go To wishlist
+                        </a>
+                      </>;
+                    }
+                  })()}
+
                   <button
                     type="button"
                     className="btn btn-secondary"
@@ -147,6 +193,8 @@ class Product extends Component {
             ))}
           </ul>
         </div>
+
+
         <div className="tab-content">
           <div id="choice" className="tab-pane fade">
             <div className="item text-center row">
@@ -169,7 +217,7 @@ class Product extends Component {
                               />
                             </a>
                             {(() => {
-                              if (item.productSaleoff != 0) {
+                              if (item.productSaleoff !== 0) {
                                 return (
                                   <>
                                     <div className="product-flags discount">
@@ -201,7 +249,7 @@ class Product extends Component {
                               <div className="product-group-price">
                                 <div className="product-price-and-shipping">
                                   {(() => {
-                                    if (item.productSaleoff != 0) {
+                                    if (item.productSaleoff !== 0) {
                                       return (
                                         <>
                                           <span className="price">
@@ -210,7 +258,7 @@ class Product extends Component {
                                               currency: "VND",
                                             }).format(
                                               item.productPrice -
-                                                item.productSaleoff
+                                              item.productSaleoff
                                             )}
                                           </span>
                                           <del className="regular-price">
@@ -261,9 +309,11 @@ class Product extends Component {
                               </form>
                               <a
                                 className="addToWishlist wishlistProd_1"
+                                data-toggle="modal"
+                                data-target="#exampleModal"
                                 href="#"
+                                onClick={(e) => { e.preventDefault(); this.addWishlistOrder(item) }}
                                 data-rel="1"
-                                // onclick=""
                               >
                                 <i
                                   className="fa fa-heart"
@@ -320,7 +370,7 @@ class Product extends Component {
                               />
                             </div>
                             {(() => {
-                              if (item.productSaleoff != 0) {
+                              if (item.productSaleoff !== 0) {
                                 return (
                                   <div className="product-flags discount">
                                     {(item.productSaleoff / item.productPrice) *
@@ -346,7 +396,7 @@ class Product extends Component {
                               <div className="product-group-price">
                                 <div className="product-price-and-shipping">
                                   {(() => {
-                                    if (item.productSaleoff != 0) {
+                                    if (item.productSaleoff !== 0) {
                                       return (
                                         <>
                                           <span className="price">
@@ -355,7 +405,7 @@ class Product extends Component {
                                               currency: "VND",
                                             }).format(
                                               item.productPrice -
-                                                item.productSaleoff
+                                              item.productSaleoff
                                             )}
                                           </span>
                                           <del className="regular-price">
@@ -391,7 +441,7 @@ class Product extends Component {
 
             <div className="content-showmore text-center has-showmore">
               {(() => {
-                if (this.state.visible != this.state.products.length) {
+                if (this.state.visible !== this.state.products.length) {
                   if (this.state.visible > this.state.products.length) {
                     return (
                       <button
@@ -460,7 +510,7 @@ class Product extends Component {
                               alt="img"
                             />
                             {(() => {
-                              if (item.productSaleoff != 0) {
+                              if (item.productSaleoff !== 0) {
                                 return (
                                   <div className="product-flags discount">
                                     {(item.productSaleoff / item.productPrice) *
@@ -486,7 +536,7 @@ class Product extends Component {
                               <div className="product-group-price">
                                 <div className="product-price-and-shipping">
                                   {(() => {
-                                    if (item.productSaleoff != 0) {
+                                    if (item.productSaleoff !== 0) {
                                       return (
                                         <>
                                           <span className="price">
@@ -495,7 +545,7 @@ class Product extends Component {
                                               currency: "VND",
                                             }).format(
                                               item.productPrice -
-                                                item.productSaleoff
+                                              item.productSaleoff
                                             )}
                                           </span>
                                           <del className="regular-price">
@@ -546,9 +596,11 @@ class Product extends Component {
                               </form>
                               <a
                                 className="addToWishlist wishlistProd_1"
+                                data-toggle="modal"
+                                data-target="#exampleModal"
                                 href="#"
+                                onClick={(e) => { e.preventDefault(); this.addWishlistOrder(item) }}
                                 data-rel="1"
-                                // onclick=""
                               >
                                 <i
                                   className="fa fa-heart"
@@ -605,7 +657,7 @@ class Product extends Component {
                               />
                             </div>
                             {(() => {
-                              if (item.productSaleoff != 0) {
+                              if (item.productSaleoff !== 0) {
                                 return (
                                   <div className="product-flags discount">
                                     {(item.productSaleoff / item.productPrice) *
@@ -640,7 +692,7 @@ class Product extends Component {
                               <div className="product-group-price">
                                 <div className="product-price-and-shipping">
                                   {(() => {
-                                    if (item.productSaleoff != 0) {
+                                    if (item.productSaleoff !== 0) {
                                       return (
                                         <>
                                           <span className="price">
@@ -649,7 +701,7 @@ class Product extends Component {
                                               currency: "VND",
                                             }).format(
                                               item.productPrice -
-                                                item.productSaleoff
+                                              item.productSaleoff
                                             )}
                                           </span>
                                           <del className="regular-price">
@@ -685,7 +737,7 @@ class Product extends Component {
 
             <div className="content-showmore text-center has-showmore">
               {(() => {
-                if (this.state.visible != this.state.product.length) {
+                if (this.state.visible !== this.state.product.length) {
                   if (this.state.visible > this.state.product.length) {
                     return (
                       <button
