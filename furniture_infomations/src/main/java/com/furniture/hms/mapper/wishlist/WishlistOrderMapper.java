@@ -1,11 +1,13 @@
 package com.furniture.hms.mapper.wishlist;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import com.furniture.hms.dto.wishlist.WishlistOrderResponse;
 import com.furniture.hms.entity.User;
 import com.furniture.hms.entity.WishlistOrder;
 
@@ -24,4 +26,14 @@ public interface WishlistOrderMapper {
     @Mapping(target = "updateDate", source = "updateDate")
     WishlistOrder toWishlistOrderEntity(int idProduct, int wishlistQuantity, User user, String createBy,
 	    Instant createDate, String updateBy, Instant updateDate);
+
+    @Mapping(target = "productName", source = "productName")
+    @Mapping(target = "productPrice", source = "productPrice")
+    @Mapping(target = "productSaleoff", source = "productSaleoff")
+    @Mapping(target = "quantity", source = "quantity")
+    WishlistOrderResponse.Product toWishlistProductOrderResponse(String productName, BigDecimal productPrice,
+	    BigDecimal productSaleoff, int quantity);
+
+    @Mapping(target = "picture", source = "picture")
+    WishlistOrderResponse.Product.Picture toWishlistPictureOrderResponse(String picture);
 }

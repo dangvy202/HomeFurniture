@@ -1,6 +1,8 @@
 package com.furniture.hms.service.wishlist;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,41 @@ public class WishlistOrderService {
     private final ProductFeign productFeign;
 
     private final WishlistOrderRepository wishlistRepository;
+
+    public List<WishlistOrderResponse> getAllWishlistOrderByEmail(String email) {
+	List<WishlistOrderResponse> response = new ArrayList<>();
+
+	User user = userRepository.findUserByEmail(email).orElse(null);
+
+	if (user != null) {
+	    List<WishlistOrder> arrWishlistOrder = wishlistRepository.findWishlistOrderByUser(user);
+	    List<WishlistOrderResponse.Product> arrProduct = new ArrayList<>();
+	    if (arrWishlistOrder.size() > 0) {
+		arrWishlistOrder.stream().forEach(wishlistOrder -> {
+		    WishlistOrderResponse.Product wishlistProduct = new WishlistOrderResponse.Product();
+
+		    ProductResponse product = productFeign.getDetailByIdProduct(wishlistOrder.getIdProduct());
+
+		    wishlistProduct = WishlistOrderMapper.INSTANCE.toWishlistProductOrderResponse(
+			    product.getProductName(), product.getProductPrice(), product.getProductSaleoff(),
+			    wishlistOrder.getWishlistQuantity());
+		    wishlistProduct.setPicture(WishlistOrderMapper.INSTANCE
+			    .toWishlistPictureOrderResponse(product.getPicture().getPictureFirst()));
+		    arrProduct.add(wishlistProduct);
+		});
+		WishlistOrderResponse wishlistOrderResponse = new WishlistOrderResponse();
+		wishlistOrderResponse.getUser().setEmail(user.getEmail());
+		wishlistOrderResponse.setProduct(arrProduct);
+		wishlistOrderResponse.setError(null);
+		wishlistOrderResponse.setMessage(WishlistOrderMessage.SUCCESS);
+		wishlistOrderResponse.setStatus(Boolean.TRUE);
+		response.add(wishlistOrderResponse);
+	    }
+	    return response;
+	} else {
+	    return response;
+	}
+    }
 
     public WishlistOrderResponse addWishlistOrder(WishlistOrderRequest request) {
 

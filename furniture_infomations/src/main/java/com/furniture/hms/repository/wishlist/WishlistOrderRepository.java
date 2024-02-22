@@ -1,5 +1,6 @@
 package com.furniture.hms.repository.wishlist;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,4 +13,6 @@ import com.furniture.hms.entity.WishlistOrder;
 public interface WishlistOrderRepository extends JpaRepository<WishlistOrder, Integer> {
 
     Optional<WishlistOrder> findWishlistOrderByUserAndIdProduct(User user, int idProduct);
+
+    List<WishlistOrder> findWishlistOrderByUser(User user);
 }
