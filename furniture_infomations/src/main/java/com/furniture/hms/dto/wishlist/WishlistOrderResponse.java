@@ -46,8 +46,8 @@ public class WishlistOrderResponse {
 	@JsonProperty("productSaleoff")
 	private BigDecimal productSaleoff;
 
-	@JsonProperty("orderQuantity")
-	private Integer orderQuantity;
+	@JsonProperty("quantity")
+	private Integer quantity;
 
 	private Picture picture;
 

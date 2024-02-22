@@ -31,6 +31,9 @@ public class WishlistOrder {
     @Column(name = "id_product")
     private Integer idProduct;
 
+    @Column(name = "wishlist_quantity")
+    private Integer wishlistQuantity;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_user", referencedColumnName = "id_user")
     private User user;
