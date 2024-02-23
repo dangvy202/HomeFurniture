@@ -1,7 +1,6 @@
 import React from "react";
 import { Component } from "react";
 import ProductService from "../service/ProductService";
-import { useParams } from "react-router-dom";
 
 class ProductDetail extends Component {
   constructor(props) {
@@ -273,7 +272,7 @@ class ProductDetail extends Component {
                                 <div className="detail-description">
                                   <div className="price-del">
                                     {(() => {
-                                      if (this.state.productSaleoff != 0) {
+                                      if (this.state.productSaleoff !== 0) {
                                         return (
                                           <>
                                             <span className="price">

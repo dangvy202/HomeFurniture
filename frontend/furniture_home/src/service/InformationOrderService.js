@@ -29,4 +29,5 @@ class InformationOrderService {
     }
 }
 
-export default new InformationOrderService();
+const informationOrderService = new InformationOrderService();
+export default informationOrderService;

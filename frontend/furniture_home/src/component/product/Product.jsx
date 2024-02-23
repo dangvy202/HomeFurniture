@@ -100,6 +100,8 @@ class Product extends Component {
       WishlistService.addWishlist(request).then((res) => {
         this.setState({ notification: res.data.message })
         this.setState({ popupType: "ADD_TO_WISHLIST" })
+      }).catch((error) => {
+        this.setState({ notification: "FAIL" })
       })
     } else {
       window.location.href = "/login"
@@ -138,7 +140,11 @@ class Product extends Component {
                     if (this.state.popupType === "ADD_TO_CART") {
                       return <>Add to cart success !</>;
                     } else {
-                      return <>Add to wishlist success !</>;
+                      if (this.state.notification === "FAIL") {
+                        return <>Add to wishlist fail, check your account please !</>;
+                      } else {
+                        return <>Add to wishlist success !</>;
+                      }
                     }
                   })()}
                 </div>
@@ -151,11 +157,14 @@ class Product extends Component {
                         </a>
                       </>;
                     } else {
-                      return <>
-                        <a href="/wishlist" className="btn btn-primary">
-                          Go To wishlist
-                        </a>
-                      </>;
+                      if (this.state.notification !== "FAIL") {
+                        return <>
+                          <a href="/wishlist" className="btn btn-primary">
+                            Go To wishlist
+                          </a>
+                        </>;
+                      }
+
                     }
                   })()}
 

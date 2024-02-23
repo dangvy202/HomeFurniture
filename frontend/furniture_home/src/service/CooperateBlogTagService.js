@@ -8,4 +8,5 @@ class CooperateService {
     }
 }
 
-export default new CooperateService();
+const cooperateService = new CooperateService();
+export default cooperateService;

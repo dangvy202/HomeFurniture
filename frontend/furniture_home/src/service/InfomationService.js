@@ -56,4 +56,6 @@ class InfomationService {
       );
   }
 }
-export default new InfomationService();
+
+const infomationService = new InfomationService();
+export default infomationService;

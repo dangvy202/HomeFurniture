@@ -8,4 +8,5 @@ class SubscribeService {
     }
 }
 
-export default new SubscribeService();
+const subscribeService = new SubscribeService();
+export default subscribeService;

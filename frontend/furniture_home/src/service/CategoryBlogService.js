@@ -8,4 +8,5 @@ class CategoryBlogService {
     }
 }
 
-export default new CategoryBlogService();
+const categoryBlogService = new CategoryBlogService();
+export default categoryBlogService;

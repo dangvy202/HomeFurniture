@@ -8,4 +8,5 @@ class TagBlogService {
     }
 }
 
-export default new TagBlogService();
+const tagBlogService = new TagBlogService();
+export default tagBlogService;

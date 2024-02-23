@@ -4,7 +4,6 @@ import logomobie from "../asset/home/logo-mobie.png";
 import CategoryBlogService from "../../service/CategoryBlogService";
 import CategoryService from "../../service/CategoryService";
 import RoomService from "../../service/RoomService";
-import ProductService from "../../service/ProductService";
 
 class Navbar extends Component {
   constructor(props) {
@@ -362,7 +361,7 @@ class Navbar extends Component {
                       </a>
                     </div>
                     <div>
-                      <a href="user-wishlist.html" title="My Wishlists">
+                      <a href="/wishlist" title="My Wishlists">
                         <i className="fa fa-heart"></i>My Wishlists
                       </a>
                     </div>

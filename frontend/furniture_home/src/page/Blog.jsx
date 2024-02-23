@@ -156,7 +156,7 @@ class Blog extends Component {
                                           className="previous disabled js-search-link"
                                           onClick={() => {
                                             setPage(
-                                              this.state.currentPage == 1
+                                              this.state.currentPage === 1
                                                 ? 1
                                                 : this.state.currentPage - 1
                                             );
