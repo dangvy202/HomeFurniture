@@ -1,5 +1,6 @@
 package com.furniture.hms.entity;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 import jakarta.persistence.CascadeType;
@@ -33,6 +34,9 @@ public class WishlistOrder {
 
     @Column(name = "wishlist_quantity")
     private Integer wishlistQuantity;
+
+    @Column(name = "total_price")
+    private BigDecimal totalPrice;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_user", referencedColumnName = "id_user")

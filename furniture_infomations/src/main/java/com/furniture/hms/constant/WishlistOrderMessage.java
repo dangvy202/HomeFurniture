@@ -8,4 +8,5 @@ public class WishlistOrderMessage {
     public static final String FAIL = "FAIL";
     public static final String NOT_FOUND = "ACCOUNT_NOT_EXIST";
     public static final String EMPTY = "WISHLIST_IS_EMPTY";
+    public static final String QUANTITY = "QUANTITY_NEED_OVER_ONE";
 }

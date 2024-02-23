@@ -1,5 +1,6 @@
 package com.furniture.hms.service.wishlist;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,10 +35,10 @@ public class WishlistOrderService {
 
     public ResultData getAllWishlistOrderByEmail(String email) {
 	WishlistOrderResponse response = new WishlistOrderResponse();
-
-	User user = userRepository.findUserByEmail(email).orElse(null);
 	WishlistOrderResponse.User userRes = new WishlistOrderResponse.User();
 	ResultData result = new ResultData();
+
+	User user = userRepository.findUserByEmail(email).orElse(null);
 
 	if (user != null) {
 	    List<WishlistOrder> arrWishlistOrder = wishlistRepository.findWishlistOrderByUser(user);
@@ -49,7 +50,8 @@ public class WishlistOrderService {
 		    ProductResponse product = productFeign.getDetailByIdProduct(wishlistOrder.getIdProduct());
 
 		    wishlistProduct = WishlistOrderMapper.INSTANCE.toWishlistProductOrderResponse(
-			    product.getProductName(), product.getProductPrice(), product.getProductSaleoff(),
+			    wishlistOrder.getTotalPrice(), product.getId(), product.getProductName(),
+			    product.getProductPrice(), product.getProductSaleoff(),
 			    wishlistOrder.getWishlistQuantity());
 		    wishlistProduct.setPicture(WishlistOrderMapper.INSTANCE
 			    .toWishlistPictureOrderResponse(product.getPicture().getPictureFirst()));
@@ -85,6 +87,7 @@ public class WishlistOrderService {
 
 	User user = userRepository.findUserByEmail(request.getEmail()).orElse(null);
 	ProductResponse product = productFeign.getDetailByIdProduct(request.getIdProduct());
+	BigDecimal priceReal = product.getProductPrice().subtract(product.getProductSaleoff());
 
 	if (user != null) {
 	    WishlistOrder wishlistOrderExist = wishlistRepository
@@ -92,8 +95,9 @@ public class WishlistOrderService {
 
 	    if (wishlistOrderExist == null) {
 		// add new wishlist
-		WishlistOrder wishlistOrder = WishlistOrderMapper.INSTANCE.toWishlistOrderEntity(request.getIdProduct(),
-			1, user, user.getUserName(), Instant.now(), user.getUserName(), Instant.now());
+		WishlistOrder wishlistOrder = WishlistOrderMapper.INSTANCE.toWishlistOrderEntity(priceReal,
+			request.getIdProduct(), 1, user, user.getUserName(), Instant.now(), user.getUserName(),
+			Instant.now());
 
 		wishlistRepository.save(wishlistOrder);
 		resultData.setStatus(Boolean.TRUE);
@@ -103,8 +107,90 @@ public class WishlistOrderService {
 
 	    } else {
 		// edit quantity old wishlist
-		wishlistOrderExist.setWishlistQuantity(wishlistOrderExist.getWishlistQuantity() + 1);
+		int quantity = wishlistOrderExist.getWishlistQuantity() + 1;
+		wishlistOrderExist.setWishlistQuantity(quantity);
+		wishlistOrderExist.setTotalPrice(priceReal.multiply(BigDecimal.valueOf(quantity)));
 		wishlistRepository.save(wishlistOrderExist);
+		resultData.setStatus(Boolean.TRUE);
+		resultData.setError(null);
+		resultData.setMessage(WishlistOrderMessage.SUCCESS);
+		return resultData;
+	    }
+
+	} else {
+	    resultData.setStatus(Boolean.FALSE);
+	    resultData.setError(WishlistOrderMessage.NOT_FOUND);
+	    resultData.setMessage(WishlistOrderMessage.FAIL);
+	    return resultData;
+	}
+    }
+
+    public ResultData subtractWishlistOrder(WishlistOrderRequest request) {
+
+	ResultData resultData = new ResultData();
+
+	User user = userRepository.findUserByEmail(request.getEmail()).orElse(null);
+	ProductResponse product = productFeign.getDetailByIdProduct(request.getIdProduct());
+	BigDecimal priceReal = product.getProductPrice().subtract(product.getProductSaleoff());
+
+	if (user != null) {
+	    WishlistOrder wishlistOrderExist = wishlistRepository
+		    .findWishlistOrderByUserAndIdProduct(user, product.getId()).orElse(null);
+
+	    if (wishlistOrderExist == null) {
+		// non data wishlist
+		resultData.setStatus(Boolean.FALSE);
+		resultData.setError(WishlistOrderMessage.EMPTY);
+		resultData.setMessage(WishlistOrderMessage.FAIL);
+		return resultData;
+
+	    } else {
+		// edit quantity old wishlist
+		if (wishlistOrderExist.getWishlistQuantity() > 1) {
+		    int quantity = wishlistOrderExist.getWishlistQuantity() - 1;
+		    wishlistOrderExist.setWishlistQuantity(quantity);
+		    wishlistOrderExist.setTotalPrice(priceReal.multiply(BigDecimal.valueOf(quantity)));
+		    wishlistRepository.save(wishlistOrderExist);
+		    resultData.setStatus(Boolean.TRUE);
+		    resultData.setError(null);
+		    resultData.setMessage(WishlistOrderMessage.SUCCESS);
+		    return resultData;
+		} else {
+		    resultData.setStatus(Boolean.FALSE);
+		    resultData.setError(WishlistOrderMessage.FAIL);
+		    resultData.setMessage(WishlistOrderMessage.QUANTITY);
+		    return resultData;
+		}
+	    }
+
+	} else {
+	    resultData.setStatus(Boolean.FALSE);
+	    resultData.setError(WishlistOrderMessage.NOT_FOUND);
+	    resultData.setMessage(WishlistOrderMessage.FAIL);
+	    return resultData;
+	}
+    }
+
+    public ResultData deleteWishlistOrder(WishlistOrderRequest request) {
+
+	ResultData resultData = new ResultData();
+
+	User user = userRepository.findUserByEmail(request.getEmail()).orElse(null);
+	ProductResponse product = productFeign.getDetailByIdProduct(request.getIdProduct());
+
+	if (user != null) {
+	    WishlistOrder wishlistOrderExist = wishlistRepository
+		    .findWishlistOrderByUserAndIdProduct(user, product.getId()).orElse(null);
+
+	    if (wishlistOrderExist == null) {
+		// non data wishlist
+		resultData.setStatus(Boolean.FALSE);
+		resultData.setError(WishlistOrderMessage.EMPTY);
+		resultData.setMessage(WishlistOrderMessage.FAIL);
+		return resultData;
+
+	    } else {
+		wishlistRepository.deleteWishlistOrderByIdProduct(wishlistOrderExist.getIdProduct());
 		resultData.setStatus(Boolean.TRUE);
 		resultData.setError(null);
 		resultData.setMessage(WishlistOrderMessage.SUCCESS);

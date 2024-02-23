@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +29,28 @@ public class WishlistOrderController {
     @PostMapping("/add")
     public ResponseEntity<ResultData> addWishlistOrder(@RequestBody WishlistOrderRequest request) {
 	ResultData response = service.addWishlistOrder(request);
+
+	if (response.getMessage() == WishlistOrderMessage.SUCCESS && response.getStatus() == Boolean.TRUE) {
+	    return new ResponseEntity<>(response, HttpStatus.OK);
+	} else {
+	    return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+    }
+
+    @PatchMapping("/subtract")
+    public ResponseEntity<ResultData> subtractWishlistOrder(@RequestBody WishlistOrderRequest request) {
+	ResultData response = service.subtractWishlistOrder(request);
+
+	if (response.getMessage() == WishlistOrderMessage.SUCCESS && response.getStatus() == Boolean.TRUE) {
+	    return new ResponseEntity<>(response, HttpStatus.OK);
+	} else {
+	    return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+    }
+
+    @PostMapping("/delete")
+    public ResponseEntity<ResultData> deleteWishlistOrder(@RequestBody WishlistOrderRequest request) {
+	ResultData response = service.deleteWishlistOrder(request);
 
 	if (response.getMessage() == WishlistOrderMessage.SUCCESS && response.getStatus() == Boolean.TRUE) {
 	    return new ResponseEntity<>(response, HttpStatus.OK);

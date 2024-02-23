@@ -31,6 +31,9 @@ public class WishlistOrderResponse {
     @FieldDefaults(level = AccessLevel.PRIVATE)
     public static class Product {
 
+	@JsonProperty("id")
+	private Integer id;
+
 	@JsonProperty("productName")
 	private String productName;
 
@@ -42,6 +45,9 @@ public class WishlistOrderResponse {
 
 	@JsonProperty("quantity")
 	private Integer quantity;
+
+	@JsonProperty("totalPrice")
+	private BigDecimal totalPrice;
 
 	private Picture picture;
 
