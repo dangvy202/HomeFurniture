@@ -16,12 +16,6 @@ import lombok.experimental.FieldDefaults;
 @Getter
 public class WishlistOrderResponse {
 
-    private Boolean status;
-
-    private String error;
-
-    private String message;
-
     private User user;
 
     private List<Product> product;
@@ -37,6 +31,9 @@ public class WishlistOrderResponse {
     @FieldDefaults(level = AccessLevel.PRIVATE)
     public static class Product {
 
+	@JsonProperty("id")
+	private Integer id;
+
 	@JsonProperty("productName")
 	private String productName;
 
@@ -48,6 +45,9 @@ public class WishlistOrderResponse {
 
 	@JsonProperty("quantity")
 	private Integer quantity;
+
+	@JsonProperty("totalPrice")
+	private BigDecimal totalPrice;
 
 	private Picture picture;
 

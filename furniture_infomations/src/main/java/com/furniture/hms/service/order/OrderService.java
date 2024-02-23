@@ -5,7 +5,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,11 +57,10 @@ public class OrderService {
 	    user = userRepository.findUserByEmail(orderRequest.getUser().getEmail()).orElse(null);
 
 	    if (product != null && user != null) {
-			OrderDetail order = OrderDetailMapper.INSTANCE.toOrder(orderQr,
-				orderRequest.getOrderQuantity(), user, product.getId(), createDate, updateDate,
-				orderRequest.getTotalPrice());
-			totalOrder = totalOrder.add(orderRequest.getTotalPrice());
-			listOrder.add(order);
+		OrderDetail order = OrderDetailMapper.INSTANCE.toOrder(orderQr, orderRequest.getOrderQuantity(), user,
+			product.getId(), createDate, updateDate, orderRequest.getTotalPrice());
+		totalOrder = totalOrder.add(orderRequest.getTotalPrice());
+		listOrder.add(order);
 	    }
 	}
 	if (listOrder.size() != 0) {
@@ -70,40 +68,39 @@ public class OrderService {
 		    OrderStatusEnum.UNPAID, user.getUserName(), updateDate, user, totalOrder);
 	    orderRepository.save(order);
 	    orderDetailRepository.saveAll(listOrder);
-		response.setError(null);
-		response.setMessage(OrderMessage.ORDER_SUCCESS);
-		response.setStatus(true);
-		response.setOrderCode(orderQr);
+	    response.setError(null);
+	    response.setMessage(OrderMessage.ORDER_SUCCESS);
+	    response.setStatus(true);
+	    response.setOrderCode(orderQr);
 	    return response;
 	} else {
-		response.setError(OrderMessage.ORDER_FAIL);
-		response.setMessage(OrderMessage.ORDER_FAIL);
-		response.setStatus(false);
+	    response.setError(OrderMessage.ORDER_FAIL);
+	    response.setMessage(OrderMessage.ORDER_FAIL);
+	    response.setStatus(false);
 	    return response;
 	}
     }
 
-	public List<OrderResponse> getOrderByEmailUser(String email) {
-		List<OrderResponse> response = new ArrayList<>();
-		AtomicReference<OrderResponse> orderResponse = new AtomicReference<>(new OrderResponse());
-		User user = userRepository.findUserByEmail(email).orElse(null);
-		if(user != null) {
-			List<Order> listOrder = orderRepository.findOrderByUser(user);
-			listOrder.stream().forEach(orderDetail -> {
-				response.add(OrderMapper.INSTANCE.toOrderResponse(true, null, OrderMessage.ORDER_SUCCESS, orderDetail));
-			});
-			return response;
-		} else {
-			return response;
-		}
+    public List<OrderResponse> getOrderByEmailUser(String email) {
+	List<OrderResponse> response = new ArrayList<>();
+	User user = userRepository.findUserByEmail(email).orElse(null);
+	if (user != null) {
+	    List<Order> listOrder = orderRepository.findOrderByUser(user);
+	    listOrder.stream().forEach(orderDetail -> {
+		response.add(OrderMapper.INSTANCE.toOrderResponse(true, null, OrderMessage.ORDER_SUCCESS, orderDetail));
+	    });
+	    return response;
+	} else {
+	    return response;
 	}
+    }
 
-    public OrderResponse getOrderDetailByUser(String email,String orderCode) {
+    public OrderResponse getOrderDetailByUser(String email, String orderCode) {
 	List<OrderResponse.OrderDetail> listOrderDetail = new ArrayList<>();
 	User user = userRepository.findUserByEmail(email).orElse(null);
 	OrderResponse orderResponse = new OrderResponse();
 	if (user != null) {
-	    List<OrderDetail> listOrder = orderDetailRepository.findOrderByUserAndOrderCode(user,orderCode);
+	    List<OrderDetail> listOrder = orderDetailRepository.findOrderByUserAndOrderCode(user, orderCode);
 	    if (listOrder.size() != 0) {
 		orderResponse = OrderDetailMapper.INSTANCE.toOrderRes(true, null, OrderMessage.ORDER_SUCCESS);
 		for (OrderDetail order : listOrder) {
@@ -115,7 +112,7 @@ public class OrderService {
 		    ProductResponse product = productFeign.getDetailByIdProduct(order.getIdProduct());
 		    // set mapping element
 		    orderDetailResponse = OrderDetailMapper.INSTANCE.toOrderDetailRes(order);
-		    orderProductResponse = OrderDetailMapper.INSTANCE.toOrderProductRes(order,product.getProductName(),
+		    orderProductResponse = OrderDetailMapper.INSTANCE.toOrderProductRes(order, product.getProductName(),
 			    product.getProductPrice(), product.getProductSaleoff());
 		    orderPictureResponse = OrderDetailMapper.INSTANCE
 			    .toOrderPictureRes(product.getPicture().getPictureFirst());
