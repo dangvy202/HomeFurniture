@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.furniture.hms.constant.WishlistOrderMessage;
+import com.furniture.hms.dto.result.ResultData;
 import com.furniture.hms.dto.wishlist.WishlistOrderRequest;
 import com.furniture.hms.dto.wishlist.WishlistOrderResponse;
 import com.furniture.hms.entity.User;
@@ -31,10 +32,12 @@ public class WishlistOrderService {
 
     private final WishlistOrderRepository wishlistRepository;
 
-    public List<WishlistOrderResponse> getAllWishlistOrderByEmail(String email) {
-	List<WishlistOrderResponse> response = new ArrayList<>();
+    public ResultData getAllWishlistOrderByEmail(String email) {
+	WishlistOrderResponse response = new WishlistOrderResponse();
 
 	User user = userRepository.findUserByEmail(email).orElse(null);
+	WishlistOrderResponse.User userRes = new WishlistOrderResponse.User();
+	ResultData result = new ResultData();
 
 	if (user != null) {
 	    List<WishlistOrder> arrWishlistOrder = wishlistRepository.findWishlistOrderByUser(user);
@@ -52,23 +55,33 @@ public class WishlistOrderService {
 			    .toWishlistPictureOrderResponse(product.getPicture().getPictureFirst()));
 		    arrProduct.add(wishlistProduct);
 		});
-		WishlistOrderResponse wishlistOrderResponse = new WishlistOrderResponse();
-		wishlistOrderResponse.getUser().setEmail(user.getEmail());
-		wishlistOrderResponse.setProduct(arrProduct);
-		wishlistOrderResponse.setError(null);
-		wishlistOrderResponse.setMessage(WishlistOrderMessage.SUCCESS);
-		wishlistOrderResponse.setStatus(Boolean.TRUE);
-		response.add(wishlistOrderResponse);
+		userRes.setEmail(user.getEmail());
+		response.setUser(userRes);
+		response.setProduct(arrProduct);
+		result.setError(null);
+		result.setMessage(WishlistOrderMessage.SUCCESS);
+		result.setStatus(Boolean.TRUE);
+		result.setResultData(response);
+		return result;
+	    } else {
+		result.setError(null);
+		result.setMessage(WishlistOrderMessage.EMPTY);
+		result.setStatus(Boolean.TRUE);
+		result.setResultData(response);
+		return result;
 	    }
-	    return response;
 	} else {
-	    return response;
+	    result.setError(WishlistOrderMessage.FAIL);
+	    result.setMessage(WishlistOrderMessage.NOT_FOUND);
+	    result.setStatus(Boolean.FALSE);
+	    result.setResultData(response);
+	    return result;
 	}
     }
 
-    public WishlistOrderResponse addWishlistOrder(WishlistOrderRequest request) {
+    public ResultData addWishlistOrder(WishlistOrderRequest request) {
 
-	WishlistOrderResponse response = new WishlistOrderResponse();
+	ResultData resultData = new ResultData();
 
 	User user = userRepository.findUserByEmail(request.getEmail()).orElse(null);
 	ProductResponse product = productFeign.getDetailByIdProduct(request.getIdProduct());
@@ -83,26 +96,26 @@ public class WishlistOrderService {
 			1, user, user.getUserName(), Instant.now(), user.getUserName(), Instant.now());
 
 		wishlistRepository.save(wishlistOrder);
-		response.setStatus(Boolean.TRUE);
-		response.setError(null);
-		response.setMessage(WishlistOrderMessage.SUCCESS);
-		return response;
+		resultData.setStatus(Boolean.TRUE);
+		resultData.setError(null);
+		resultData.setMessage(WishlistOrderMessage.SUCCESS);
+		return resultData;
 
 	    } else {
 		// edit quantity old wishlist
 		wishlistOrderExist.setWishlistQuantity(wishlistOrderExist.getWishlistQuantity() + 1);
 		wishlistRepository.save(wishlistOrderExist);
-		response.setStatus(Boolean.TRUE);
-		response.setError(null);
-		response.setMessage(WishlistOrderMessage.SUCCESS);
-		return response;
+		resultData.setStatus(Boolean.TRUE);
+		resultData.setError(null);
+		resultData.setMessage(WishlistOrderMessage.SUCCESS);
+		return resultData;
 	    }
 
 	} else {
-	    response.setStatus(Boolean.FALSE);
-	    response.setError(WishlistOrderMessage.NOT_FOUND);
-	    response.setMessage(WishlistOrderMessage.FAIL);
-	    return response;
+	    resultData.setStatus(Boolean.FALSE);
+	    resultData.setError(WishlistOrderMessage.NOT_FOUND);
+	    resultData.setMessage(WishlistOrderMessage.FAIL);
+	    return resultData;
 	}
     }
 

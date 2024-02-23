@@ -16,12 +16,6 @@ import lombok.experimental.FieldDefaults;
 @Getter
 public class WishlistOrderResponse {
 
-    private Boolean status;
-
-    private String error;
-
-    private String message;
-
     private User user;
 
     private List<Product> product;
