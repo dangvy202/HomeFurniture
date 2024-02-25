@@ -18,6 +18,8 @@ import com.furniture.hms.service.wishlist.WishlistOrderService;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/wishlist")
 @RequiredArgsConstructor
@@ -47,6 +49,17 @@ public class WishlistOrderController {
 	    return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
     }
+
+	@PostMapping("/delete-wishlist")
+	public ResponseEntity<ResultData> deleteWhenAddtocartSuccess(@RequestBody List<WishlistOrderRequest> requests) {
+		ResultData response = service.deleteWhenAddtocartSuccess(requests);
+
+		if(response.getStatus() == Boolean.TRUE) {
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
     @PostMapping("/delete")
     public ResponseEntity<ResultData> deleteWishlistOrder(@RequestBody WishlistOrderRequest request) {

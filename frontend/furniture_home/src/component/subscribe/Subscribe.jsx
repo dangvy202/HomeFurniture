@@ -42,7 +42,7 @@ class Subscribe extends Component {
 
                   <div
                     className="modal fade"
-                    id="exampleModal"
+                    id="exampleModalSubscribe"
                     tabIndex="-1"
                     role="dialog"
                     aria-labelledby="exampleModalLabel"
@@ -116,7 +116,7 @@ class Subscribe extends Component {
                             className="effect-btn btn btn-secondary"
                             name="submitNewsletter"
                             type="submit"
-                            data-target="#exampleModal"
+                            data-target="#exampleModalSubscribe"
                             data-toggle="modal"
                           >
                             <span>subscribe</span>

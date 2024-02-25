@@ -13,7 +13,7 @@ class Product extends Component {
       cart: [],
       visible: 4,
       notification: "",
-      popupType: ""
+      popupType: "",
     };
     this.showMoreProduct = this.showMoreProduct.bind(this);
     this.hideProduct = this.hideProduct.bind(this);
@@ -79,7 +79,7 @@ class Product extends Component {
         }
       },
       () => {
-        this.setState({ popupType: "ADD_TO_CART" })
+        this.setState({ popupType: "ADD_TO_CART" });
         sessionStorage.setItem("cart", JSON.stringify(this.state.cart));
       }
     );
@@ -95,16 +95,18 @@ class Product extends Component {
     ) {
       const request = {
         email: sessionStorage.getItem("email"),
-        id_product: product.id
-      }
-      WishlistService.addWishlist(request).then((res) => {
-        this.setState({ notification: res.data.message })
-        this.setState({ popupType: "ADD_TO_WISHLIST" })
-      }).catch((error) => {
-        this.setState({ notification: "FAIL" })
-      })
+        id_product: product.id,
+      };
+      WishlistService.addWishlist(request)
+        .then((res) => {
+          this.setState({ notification: res.data.message });
+          this.setState({ popupType: "ADD_TO_WISHLIST" });
+        })
+        .catch((error) => {
+          this.setState({ notification: "FAIL" });
+        });
     } else {
-      window.location.href = "/login"
+      window.location.href = "/login";
     }
   }
 
@@ -141,7 +143,9 @@ class Product extends Component {
                       return <>Add to cart success !</>;
                     } else {
                       if (this.state.notification === "FAIL") {
-                        return <>Add to wishlist fail, check your account please !</>;
+                        return (
+                          <>Add to wishlist fail, check your account please !</>
+                        );
                       } else {
                         return <>Add to wishlist success !</>;
                       }
@@ -151,20 +155,23 @@ class Product extends Component {
                 <div className="modal-footer">
                   {(() => {
                     if (this.state.popupType === "ADD_TO_CART") {
-                      return <>
-                        <a href="/cart" className="btn btn-primary">
-                          Go To Cart
-                        </a>
-                      </>;
+                      return (
+                        <>
+                          <a href="/cart" className="btn btn-primary">
+                            Go To Cart
+                          </a>
+                        </>
+                      );
                     } else {
                       if (this.state.notification !== "FAIL") {
-                        return <>
-                          <a href="/wishlist" className="btn btn-primary">
-                            Go To wishlist
-                          </a>
-                        </>;
+                        return (
+                          <>
+                            <a href="/wishlist" className="btn btn-primary">
+                              Go To wishlist
+                            </a>
+                          </>
+                        );
                       }
-
                     }
                   })()}
 
@@ -202,7 +209,6 @@ class Product extends Component {
             ))}
           </ul>
         </div>
-
 
         <div className="tab-content">
           <div id="choice" className="tab-pane fade">
@@ -267,7 +273,7 @@ class Product extends Component {
                                               currency: "VND",
                                             }).format(
                                               item.productPrice -
-                                              item.productSaleoff
+                                                item.productSaleoff
                                             )}
                                           </span>
                                           <del className="regular-price">
@@ -321,7 +327,10 @@ class Product extends Component {
                                 data-toggle="modal"
                                 data-target="#exampleModal"
                                 href="#"
-                                onClick={(e) => { e.preventDefault(); this.addWishlistOrder(item) }}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  this.addWishlistOrder(item);
+                                }}
                                 data-rel="1"
                               >
                                 <i
@@ -414,7 +423,7 @@ class Product extends Component {
                                               currency: "VND",
                                             }).format(
                                               item.productPrice -
-                                              item.productSaleoff
+                                                item.productSaleoff
                                             )}
                                           </span>
                                           <del className="regular-price">
@@ -554,7 +563,7 @@ class Product extends Component {
                                               currency: "VND",
                                             }).format(
                                               item.productPrice -
-                                              item.productSaleoff
+                                                item.productSaleoff
                                             )}
                                           </span>
                                           <del className="regular-price">
@@ -608,7 +617,10 @@ class Product extends Component {
                                 data-toggle="modal"
                                 data-target="#exampleModal"
                                 href="#"
-                                onClick={(e) => { e.preventDefault(); this.addWishlistOrder(item) }}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  this.addWishlistOrder(item);
+                                }}
                                 data-rel="1"
                               >
                                 <i
@@ -710,7 +722,7 @@ class Product extends Component {
                                               currency: "VND",
                                             }).format(
                                               item.productPrice -
-                                              item.productSaleoff
+                                                item.productSaleoff
                                             )}
                                           </span>
                                           <del className="regular-price">

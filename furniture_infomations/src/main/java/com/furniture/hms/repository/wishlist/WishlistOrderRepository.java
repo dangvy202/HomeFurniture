@@ -22,6 +22,11 @@ public interface WishlistOrderRepository extends JpaRepository<WishlistOrder, In
 
     @Transactional
     @Modifying
+    @Query("DELETE FROM WishlistOrder w WHERE w.idProduct IN :ids")
+    void deleteWishlistOrderByIdProductIn(List<Integer> ids);
+
+    @Transactional
+    @Modifying
     @Query("DELETE FROM WishlistOrder w WHERE w.idProduct = :idProduct")
     void deleteWishlistOrderByIdProduct(int idProduct);
 }

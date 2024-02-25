@@ -5,6 +5,8 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.furniture.hms.constant.UserMessage;
+import io.jsonwebtoken.lang.Collections;
 import org.springframework.stereotype.Service;
 
 import com.furniture.hms.constant.WishlistOrderMessage;
@@ -205,4 +207,50 @@ public class WishlistOrderService {
 	}
     }
 
+	public ResultData deleteWhenAddtocartSuccess(List<WishlistOrderRequest> requests) {
+		ResultData response = new ResultData();
+
+		List<WishlistOrder> arrWishlistAdd = new ArrayList<>();
+
+		requests.stream().forEach(wishlistOrderRequest -> {
+			User user = userRepository.findUserByEmail(wishlistOrderRequest.getEmail()).orElse(null);
+			if(response.getStatus() == Boolean.FALSE && response.getError() == WishlistOrderMessage.FAIL) {
+				arrWishlistAdd.clear();
+				return;
+			}
+			if(user != null) {
+				WishlistOrder wishlistOrderDetail = wishlistRepository.findWishlistOrderByUserAndIdProduct
+						(user,wishlistOrderRequest.getIdProduct()).orElse(null);
+				if(wishlistOrderDetail != null) {
+					response.setError(null);
+					response.setMessage(WishlistOrderMessage.SUCCESS);
+					response.setStatus(Boolean.TRUE);
+					arrWishlistAdd.add(wishlistOrderDetail);
+				} else {
+					response.setError(WishlistOrderMessage.FAIL);
+					response.setMessage(WishlistOrderMessage.EMPTY);
+					response.setStatus(Boolean.FALSE);
+					return;
+				}
+			} else {
+				response.setError(WishlistOrderMessage.FAIL);
+				response.setMessage(WishlistOrderMessage.NOT_FOUND);
+				response.setStatus(Boolean.FALSE);
+				return;
+			}
+		});
+		if(!Collections.isEmpty(arrWishlistAdd)) {
+			deleteWishListOrderByArr(arrWishlistAdd);
+		}
+		return response;
+	}
+
+	public void deleteWishListOrderByArr(List<WishlistOrder> arrWishlistOrders) {
+		List<Integer> listIdProduct = new ArrayList<>();
+		arrWishlistOrders.stream().forEach(wishlistOrder -> {
+			listIdProduct.add(wishlistOrder.getIdProduct());
+		});
+
+		wishlistRepository.deleteWishlistOrderByIdProductIn(listIdProduct);
+	}
 }
