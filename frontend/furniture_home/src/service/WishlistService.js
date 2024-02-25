@@ -13,6 +13,16 @@ class WishlistService {
         });
     }
 
+    deleteWishlistOrderWhenAddtocart(wishlistOrder){
+        return axios.post(WISHLIST_API_BASE_URL + "/delete-wishlist", wishlistOrder , {
+            headers:{
+                Accept: 'application/json',
+                  'Content-Type': 'application/json',
+                  'Authorization': "Bearer " + sessionStorage.getItem("token"),
+          },
+        });
+    }
+
     deleteWishlistOrder(wishlistOrder){
         return axios.post(WISHLIST_API_BASE_URL + "/delete", wishlistOrder , {
             headers:{

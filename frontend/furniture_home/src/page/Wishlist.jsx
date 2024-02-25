@@ -85,7 +85,23 @@ class Wishlist extends Component {
   }
 
   addToCart(productList) {
-    sessionStorage.setItem("cart", JSON.stringify(productList));
+    const arrRequest = new Array();
+    if (productList !== null) {
+      for (var i = 0; i < productList.length; i++) {
+        const request = {
+          email: sessionStorage.getItem("email"),
+          id_product: productList[i].id,
+        };
+        arrRequest.push(request);
+      }
+      wishlistService
+        .deleteWishlistOrderWhenAddtocart(arrRequest)
+        .then((res) => {
+          sessionStorage.setItem("cart", JSON.stringify(productList));
+          window.location.href = "/cart";
+        })
+        .catch((error) => {});
+    }
   }
   render() {
     return (
