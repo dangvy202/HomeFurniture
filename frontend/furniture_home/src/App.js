@@ -56,6 +56,7 @@ class App extends Component {
             <Route path="/editAccount" element={<EditAccount />} />
             <Route path="/product/:category" element={<ProductAll />} />
             <Route path="/product/:room" element={<ProductAll />} />
+            <Route path="/product/:keyWord" element={<ProductAll />} />
             <Route path="/contact" element={<Contact/>} />
             <Route path="/blog-detail/:idBlog" element={<BlogDetail />} />
             <Route path="/cart" element={<Cart/>} />

@@ -307,7 +307,7 @@ class Product extends Component {
                                 <input type="hidden" name="token" />
                                 <a
                                   href="#"
-                                  className="btn add-to-cart"
+                                  className="add-to-cart"
                                   data-toggle="modal"
                                   data-target="#exampleModal"
                                   onClick={(e) => {
@@ -410,6 +410,15 @@ class Product extends Component {
                             <div className="product-groups">
                               <div className="product-title">
                                 {item.productName}
+                              </div>
+                              <div class="rating">
+                                <div class="star-content">
+                                  <div class="star"></div>
+                                  <div class="star"></div>
+                                  <div class="star"></div>
+                                  <div class="star"></div>
+                                  <div class="star"></div>
+                                </div>
                               </div>
                               <div className="product-group-price">
                                 <div className="product-price-and-shipping">
@@ -550,6 +559,15 @@ class Product extends Component {
                             <div className="product-groups">
                               <div className="product-title">
                                 {item.productName}
+                              </div>
+                              <div class="rating">
+                                <div class="star-content">
+                                  <div class="star"></div>
+                                  <div class="star"></div>
+                                  <div class="star"></div>
+                                  <div class="star"></div>
+                                  <div class="star"></div>
+                                </div>
                               </div>
                               <div className="product-group-price">
                                 <div className="product-price-and-shipping">
