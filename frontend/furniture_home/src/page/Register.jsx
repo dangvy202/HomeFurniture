@@ -69,7 +69,6 @@ class Register extends Component {
 
   regiterAccount(e) {
     e.preventDefault();
-    // popup.hidden();
     InfomationService.register(
       this.state.first_name,
       this.state.last_name,

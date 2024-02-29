@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import CategoryService from "../service/CategoryService";
 import ProductService from "../service/ProductService";
 import RoomService from "../service/RoomService";
+import WishlistService from "../service/WishlistService";
 
 class ProductsAll extends Component {
   constructor(props) {
@@ -21,6 +22,9 @@ class ProductsAll extends Component {
       pathname: extensionCategory,
       navbar: "",
       quantityProduct: 0,
+      cart: [],
+      notification: "",
+      popupType: "",
     };
     this.addToCart = this.addToCart.bind(this);
   }
@@ -64,19 +68,155 @@ class ProductsAll extends Component {
         .catch((error) => {
           window.location.href = "/404";
         });
-    } else {
+    } else if (this.state.pathname === "search") {
+      ProductService.searchProduct(this.state.title)
+        .then((res) => {
+          this.setState({ products: res.data });
+          var count = 0;
+          for (var i = 0; i < res.data.length; i++) {
+            if (res.data[i].inventory.message.message === "AVAILABLE") {
+              count++;
+            }
+          }
+          this.setState({ quantityProduct: count });
+        })
+        .catch((error) => {
+        });
+    } 
+    else {
       window.location.href = "/404";
     }
   }
 
-  addToCart() {
-    alert("hjgjhghjg");
+  addWishlistOrder(product) {
+    if (
+      sessionStorage.getItem("status") != null &&
+      sessionStorage.getItem("message") != null &&
+      sessionStorage.getItem("token") != null &&
+      sessionStorage.getItem("expired") != null &&
+      sessionStorage.getItem("email") != null
+    ) {
+      const request = {
+        email: sessionStorage.getItem("email"),
+        id_product: product.id,
+      };
+      WishlistService.addWishlist(request)
+        .then((res) => {
+          this.setState({ notification: res.data.message });
+          this.setState({ popupType: "ADD_TO_WISHLIST" });
+        })
+        .catch((error) => {
+          this.setState({ notification: "FAIL" });
+        });
+    } else {
+      window.location.href = "/login";
+    }
   }
+
+  addToCart = (product) => {
+    this.setState(
+      (prevState) => {
+        const { cart } = prevState;
+
+        const existingProduct = cart.find((item) => item.id === product.id);
+
+        if (existingProduct) {
+          const updatedCart = cart.map((item) =>
+            item.id === product.id
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          );
+
+          return { cart: updatedCart };
+        } else {
+          const updatedCart = [...cart, { ...product, quantity: 1 }];
+
+          return { cart: updatedCart };
+        }
+      },
+      () => {
+        this.setState({ popupType: "ADD_TO_CART" });
+        sessionStorage.setItem("cart", JSON.stringify(this.state.cart));
+      }
+    );
+  };
 
   render() {
     return (
       <div id="product-sidebar-left" class="product-grid-sidebar-left">
         <div class="main-content">
+        <div
+            className="modal fade"
+            id="exampleModal"
+            tabIndex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div className="modal-dialog" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title" id="exampleModalLabel">
+                    Notification
+                  </h5>
+                  <button
+                    type="button"
+                    className="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div className="modal-body">
+                  {(() => {
+                    if (this.state.popupType === "ADD_TO_CART") {
+                      return <>Add to cart success !</>;
+                    } else {
+                      if (this.state.notification === "FAIL") {
+                        return (
+                          <>Add to wishlist fail, check your account please !</>
+                        );
+                      } else {
+                        return <>Add to wishlist success !</>;
+                      }
+                    }
+                  })()}
+                </div>
+                <div className="modal-footer">
+                  {(() => {
+                    if (this.state.popupType === "ADD_TO_CART") {
+                      return (
+                        <>
+                          <a href="/cart" className="btn btn-primary">
+                            Go To Cart
+                          </a>
+                        </>
+                      );
+                    } else {
+                      if (this.state.notification !== "FAIL") {
+                        return (
+                          <>
+                            <a href="/wishlist" className="btn btn-primary">
+                              Go To wishlist
+                            </a>
+                          </>
+                        );
+                      }
+                    }
+                  })()}
+
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
           <div id="wrapper-site">
             <div id="content-wrapper" class="full-width">
               <div id="main">
@@ -208,7 +348,7 @@ class ProductsAll extends Component {
                                       <div class="item text-center col-md-4">
                                         <div class="product-miniature js-product-miniature item-one first-item">
                                           <div class="thumbnail-container border">
-                                            <a href="product-detail.html">
+                                            <a href={"/product-detail/"+item.id}>
                                               <img
                                                 class="img-fluid image-cover"
                                                 src={require("../component/asset/product/" +
@@ -226,7 +366,7 @@ class ProductsAll extends Component {
                                           <div class="product-description">
                                             <div class="product-groups">
                                               <div class="product-title">
-                                                <a href="product-detail.html">
+                                                <a href={"/product-detail/"+item.id}>
                                                   {item.productName}
                                                 </a>
                                               </div>
@@ -243,7 +383,7 @@ class ProductsAll extends Component {
                                                 <div class="product-price-and-shipping">
                                                   {(() => {
                                                     if (
-                                                      item.productSaleoff != 0
+                                                      item.productSaleoff !== 0
                                                     ) {
                                                       return (
                                                         <>
@@ -314,8 +454,11 @@ class ProductsAll extends Component {
                                                 />
                                                 <a
                                                   class="add-to-cart"
-                                                  href="#"
-                                                  onClick={() => this.addToCart}
+                                                  href="/"
+                                                  data-toggle="modal"
+                                                  data-target="#exampleModal"
+                                                  onClick={(e) => {
+                                                  e.preventDefault();this.addToCart(item)}}
                                                   data-button-action="add-to-cart"
                                                 >
                                                   <i
@@ -328,7 +471,12 @@ class ProductsAll extends Component {
                                                 class="addToWishlist"
                                                 href="#"
                                                 data-rel="1"
-                                                onclick=""
+                                                data-toggle="modal"
+                                                data-target="#exampleModal"
+                                                onClick={(e) => {
+                                                  e.preventDefault();
+                                                  this.addWishlistOrder(item);
+                                                }}
                                               >
                                                 <i
                                                   class="fa fa-heart"
@@ -336,7 +484,7 @@ class ProductsAll extends Component {
                                                 ></i>
                                               </a>
                                               <a
-                                                href="#"
+                                                href={"/product-detail/"+item.id}
                                                 class="quick-view hidden-sm-down"
                                                 data-link-action="quickview"
                                               >
@@ -367,7 +515,7 @@ class ProductsAll extends Component {
                                           <div class="row">
                                             <div class="col-md-4">
                                               <div class="thumbnail-container border">
-                                                <a href="product-detail.html">
+                                                <a href={"/product-detail/"+item.id}>
                                                   <img
                                                     class="img-fluid image-cover"
                                                     src={require("../component/asset/product/" +
@@ -389,7 +537,7 @@ class ProductsAll extends Component {
                                               <div class="product-description">
                                                 <div class="product-groups">
                                                   <div class="product-title">
-                                                    <a href="product-detail.html">
+                                                    <a href={"/product-detail/"+item.id}>
                                                       {item.productName}
                                                     </a>
                                                   </div>
@@ -406,7 +554,7 @@ class ProductsAll extends Component {
                                                     <div class="product-price-and-shipping">
                                                       {(() => {
                                                         if (
-                                                          item.productSaleoff !=
+                                                          item.productSaleoff !==
                                                           0
                                                         ) {
                                                           return (
@@ -479,8 +627,10 @@ class ProductsAll extends Component {
                                                     <a
                                                       class="add-to-cart"
                                                       href="#"
-                                                      onClick={() =>
-                                                        this.addToCart
+                                                      data-toggle="modal"
+                                                      data-target="#exampleModal"
+                                                      onClick={(e) =>
+                                                        {e.preventDefault();this.addToCart(item)}
                                                       }
                                                       data-button-action="add-to-cart"
                                                     >
@@ -495,7 +645,12 @@ class ProductsAll extends Component {
                                                     class="addToWishlist"
                                                     href="#"
                                                     data-rel="1"
-                                                    onclick=""
+                                                    data-toggle="modal"
+                                                    data-target="#exampleModal"
+                                                    onClick={(e) => {
+                                                      e.preventDefault();
+                                                      this.addWishlistOrder(item);
+                                                    }}
                                                   >
                                                     <i
                                                       class="fa fa-heart"
@@ -503,7 +658,7 @@ class ProductsAll extends Component {
                                                     ></i>
                                                   </a>
                                                   <a
-                                                    href="#"
+                                                    href={"/product-detail/"+item.id}
                                                     class="quick-view hidden-sm-down"
                                                     data-link-action="quickview"
                                                   >
