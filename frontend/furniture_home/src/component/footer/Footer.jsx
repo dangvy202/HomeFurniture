@@ -4,24 +4,40 @@ import homepolicy2 from "../asset/home/home1-policy2.png";
 import homepolicy3 from "../asset/home/home1-policy3.png";
 import payment from "../asset/home/payment.jpg";
 import productService from "../../service/ProductService";
+import showroomService from "../../service/ShowroomService";
 
 class Footer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      productName: ""
-    }
+      productName: "",
+      address: "",
+      dayOpen: "",
+      timeOpen: "",
+      mail: "",
+      phone: "",
+    };
     this.searchProduct = this.searchProduct.bind(this);
     this.redirectProductSearch = this.redirectProductSearch.bind(this);
   }
 
+  componentDidMount() {
+    showroomService.getAllShowroom().then((res) => {
+      this.setState({ address: res.data.address });
+      this.setState({ dayOpen: res.data.dayOpen });
+      this.setState({ timeOpen: res.data.timeOpen });
+      this.setState({ mail: res.data.mail });
+      this.setState({ phone: res.data.phone });
+    });
+  }
+
   searchProduct(e) {
-    this.setState({ productName : e.target.value });
+    this.setState({ productName: e.target.value });
   }
 
   redirectProductSearch() {
-    if(this.state.productName !== "") {
-      window.location.href = "/product/search?=" + this.state.productName
+    if (this.state.productName !== "") {
+      window.location.href = "/product/search?=" + this.state.productName;
     }
   }
 
@@ -97,9 +113,8 @@ class Footer extends Component {
                             aria-hidden="true"
                           ></i>
                           <div className="content-data">
-                            <b className="mr-2">Showroom:</b>123 Suspendis matti,
-                            Visaosang Building, VST District NY Accums, Kansas
-                            City, North American
+                            <b className="mr-2">Showroom:</b>
+                            {this.state.address}
                           </div>
                         </div>
                         <div className="data align-self-stretch d-flex">
@@ -108,20 +123,23 @@ class Footer extends Component {
                             aria-hidden="true"
                           ></i>
                           <div className="content-data">
-                            <b className="mr-2">Opening Hours:</b>Monday - Sunday
-                            / 08.00AM - 19.00 (Except Holidays)
+                            <b className="mr-2">Opening Hours:</b>
+                            {this.state.dayOpen} / {this.state.timeOpen}
                           </div>
                         </div>
                         <div className="support align-self-stretch d-flex">
                           <div className="data d-flex align-self-stretch mail-support">
-                            <i className="fa fa-envelope" aria-hidden="true"></i>
-                            <div className="email">support@domain.com</div>
+                            <i
+                              className="fa fa-envelope"
+                              aria-hidden="true"
+                            ></i>
+                            <div className="email">{this.state.mail}</div>
                           </div>
                           <div className="data d-flex align-self-stretch phone-support">
                             <div className="title-icon">
                               <i className="fa fa-phone" aria-hidden="true"></i>
                             </div>
-                            <div>+0012-345-67890</div>
+                            <div>{this.state.phone}</div>
                           </div>
                         </div>
                       </div>
@@ -160,7 +178,9 @@ class Footer extends Component {
                     <div className="policy-item">
                       <div className="policy-content iconpolicy2">
                         <img src={homepolicy2} alt="img" />
-                        <div className="policy-name mb-5">FREE INSTALLATION</div>
+                        <div className="policy-name mb-5">
+                          FREE INSTALLATION
+                        </div>
                         <div className="policy-des">
                           Lorem ipsum dolor amet consectetur
                         </div>
@@ -208,16 +228,19 @@ class Footer extends Component {
         </div>
         {/* <!-- Page Loader --> */}
         <div id="page-preloader">
-            <div className="page-loading">
-                <div className="dot"></div>
-                <div className="dot"></div>
-                <div className="dot"></div>
-                <div className="dot"></div>
-                <div className="dot"></div>
-            </div>
+          <div className="page-loading">
+            <div className="dot"></div>
+            <div className="dot"></div>
+            <div className="dot"></div>
+            <div className="dot"></div>
+            <div className="dot"></div>
+          </div>
         </div>
         {/* <!-- search --> */}
-        <div id="tiva-searchBox" className="d-flex align-items-center text-center active">
+        <div
+          id="tiva-searchBox"
+          className="d-flex align-items-center text-center active"
+        >
           <div className="container">
             <span className="tiva-seachBoxClose">
               <i className="zmdi zmdi-close"></i>
@@ -228,14 +251,32 @@ class Footer extends Component {
                 <span>Search</span>
               </div>
               <div className="description">
-                Find your product with fast search. Enter some keyword such as dress, shirts, shoes etc. Or can search by product sku.
+                Find your product with fast search. Enter some keyword such as
+                dress, shirts, shoes etc. Or can search by product sku.
               </div>
               {/* <!-- Block search module TOP --> */}
-              <div id="search" className="search-widget d-flex justify-content-center">
-                <form  >
-                  <span role="status" aria-live="polite" className="ui-helper-hidden-accessible"></span>
-                  <input type="text" value={this.productName} onChange={this.searchProduct} placeholder="Search" className="ui-autocomplete-input" autocomplete="off" />
-                  <button type="button" onClick={(e) => this.redirectProductSearch(e)}>
+              <div
+                id="search"
+                className="search-widget d-flex justify-content-center"
+              >
+                <form>
+                  <span
+                    role="status"
+                    aria-live="polite"
+                    className="ui-helper-hidden-accessible"
+                  ></span>
+                  <input
+                    type="text"
+                    value={this.productName}
+                    onChange={this.searchProduct}
+                    placeholder="Search"
+                    className="ui-autocomplete-input"
+                    autocomplete="off"
+                  />
+                  <button
+                    type="button"
+                    onClick={(e) => this.redirectProductSearch(e)}
+                  >
                     Search
                   </button>
                 </form>
@@ -244,9 +285,8 @@ class Footer extends Component {
           </div>
         </div>
       </footer>
-
-    )
-  };
-};
+    );
+  }
+}
 
 export default Footer;
