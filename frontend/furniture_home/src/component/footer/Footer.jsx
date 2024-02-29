@@ -234,7 +234,7 @@ class Footer extends Component {
               <div id="search" className="search-widget d-flex justify-content-center">
                 <form  >
                   <span role="status" aria-live="polite" className="ui-helper-hidden-accessible"></span>
-                  <input type="text" name="s" value={this.productName} onChange={this.searchProduct} placeholder="Search" className="ui-autocomplete-input" autocomplete="off" />
+                  <input type="text" value={this.productName} onChange={this.searchProduct} placeholder="Search" className="ui-autocomplete-input" autocomplete="off" />
                   <button type="button" onClick={(e) => this.redirectProductSearch(e)}>
                     Search
                   </button>
