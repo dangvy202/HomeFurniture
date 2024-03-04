@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./style.css";
 import SubscribeService from "../../service/SubscribeService";
+import socialService from "../../service/SocialService";
 
 class Subscribe extends Component {
   constructor(props) {
@@ -9,11 +10,22 @@ class Subscribe extends Component {
     this.state = {
       message: "",
       email: "",
+      facebook: "",
+      twiter: "",
+      tiktok: "",
+      instagram: "",
     };
     this.onChangeEmail = this.onChangeEmail.bind(this);
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    socialService.getAllSocial().then((res) => {
+      this.setState({ facebook: res.data.facebook });
+      this.setState({ twiter: res.data.twiter });
+      this.setState({ tiktok: res.data.tiktok });
+      this.setState({ instagram: res.data.instagram });
+    });
+  }
 
   async subscribeForm(e) {
     e.preventDefault();
@@ -132,22 +144,22 @@ class Subscribe extends Component {
                       <div className="social">
                         <ul className="list-inline mb-0 justify-content-end">
                           <li className="list-inline-item mb-0">
-                            <a href="#" target="_blank">
-                              <i className="fa fa-facebook"></i>
+                            <a href={this.state.facebook} target="_blank">
+                              <i className="fa fa-facebook"> </i>
                             </a>
                           </li>
                           <li className="list-inline-item mb-0">
-                            <a href="#" target="_blank">
+                            <a href={this.state.twiter} target="_blank">
                               <i className="fa fa-twitter"></i>
                             </a>
                           </li>
                           <li className="list-inline-item mb-0">
-                            <a href="#" target="_blank">
-                              <i className="fa fa-google"></i>
+                            <a href={this.state.tiktok} target="_blank">
+                              <i className="fa-brands fa-tiktok fa-fw"></i>
                             </a>
                           </li>
                           <li className="list-inline-item mb-0">
-                            <a href="#" target="_blank">
+                            <a href={this.state.instagram} target="_blank">
                               <i className="fa fa-instagram"></i>
                             </a>
                           </li>
