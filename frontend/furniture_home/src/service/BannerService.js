@@ -4,7 +4,7 @@ const BANNER_API_BASE_URL = "http://localhost:8002/banner";
 
 class BannerService {
 
-    getBannerAndProductSpecial(){
+    getBanner(){
         return axios.get(BANNER_API_BASE_URL);
     }
 }
