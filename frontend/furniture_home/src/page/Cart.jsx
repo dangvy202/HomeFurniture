@@ -19,9 +19,10 @@ class Cart extends Component {
   }
 
   trashProduct(idProduct) {
+    debugger;
     var listSessionStorageCart = JSON.parse(sessionStorage.getItem("cart"));
     const delProducts = listSessionStorageCart.filter(
-      (product) => product.id !== idProduct
+      (product) => parseInt(product.id) !== idProduct
     );
     sessionStorage.setItem("cart", JSON.stringify(delProducts));
     window.location.reload();
@@ -31,7 +32,8 @@ class Cart extends Component {
     var listSessionStorageCart = JSON.parse(sessionStorage.getItem("cart"));
 
     const updateProduct = listSessionStorageCart.map((item) => {
-      if (item.id === idProduct) {
+      var idParse = parseInt(item.id);
+      if (idParse === idProduct) {
         item.quantity = item.quantity + 1;
       }
       return item;
@@ -44,7 +46,8 @@ class Cart extends Component {
     var listSessionStorageCart = JSON.parse(sessionStorage.getItem("cart"));
 
     const updateProduct = listSessionStorageCart.map((item) => {
-      if (item.id === idProduct && item.quantity > 1) {
+      var idParse = parseInt(item.id);
+      if (idParse === idProduct && item.quantity > 1) {
         item.quantity = item.quantity - 1;
       }
       return item;

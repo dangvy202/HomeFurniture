@@ -1,6 +1,7 @@
 import React from "react";
 import { Component } from "react";
 import ProductService from "../service/ProductService";
+import wishlistService from "../service/WishlistService";
 
 class ProductDetail extends Component {
   constructor(props) {
@@ -22,9 +23,14 @@ class ProductDetail extends Component {
       categoryName: "",
       roomName: "",
       quantity: 1,
+      notification: "",
+      cart: [],
+      popupType: "",
     };
     this.increaseProduct = this.increaseProduct.bind(this);
     this.reductionProduct = this.reductionProduct.bind(this);
+    this.addWishlistOrder = this.addWishlistOrder.bind(this);
+    this.addToCart = this.addToCart.bind(this);
   }
 
   componentDidMount() {
@@ -65,10 +71,146 @@ class ProductDetail extends Component {
       this.setState({ quantity: sum });
     }
   }
+
+  addWishlistOrder() {
+    if (
+      sessionStorage.getItem("status") != null &&
+      sessionStorage.getItem("message") != null &&
+      sessionStorage.getItem("token") != null &&
+      sessionStorage.getItem("expired") != null &&
+      sessionStorage.getItem("email") != null
+    ) {
+      const request = {
+        email: sessionStorage.getItem("email"),
+        id_product: this.state.id,
+      };
+      wishlistService.addWishlist(request)
+        .then((res) => {
+          this.setState({ notification: res.data.message });
+          this.setState({ popupType: "ADD_TO_WISHLIST" });
+        })
+        .catch((error) => {
+          this.setState({ notification: "FAIL" });
+        });
+    } else {
+      window.location.href = "/login";
+    }
+  }
+
+  addToCart = (product) => {
+    this.setState(
+      (prevState) => {
+        const { cart } = prevState;
+
+        const existingProduct = cart.find((item) => item.id === this.state.id);
+
+        if (existingProduct) {
+          const updatedCart = cart.map((item) =>
+            item.id === this.state.id
+              ? { ...item, quantity: this.state.quantity }
+              : item
+          );
+
+          return { cart: updatedCart };
+        } else {
+          const product = {
+            id: this.state.id,
+            productName: this.state.productName,
+            productDescription: this.state.productDescription,
+            productPrice: this.state.productPrice,
+            productSaleoff:this.state.productSaleoff,
+            productColor:this.state.productColor,
+            productProperty: this.state.productProperty,
+            productStatus:this.state.productStatus
+          };
+          const updatedCart = [...cart, { ...product, quantity: this.state.quantity }];
+
+          return { cart: updatedCart };
+        }
+      },
+      () => {
+        this.setState({ popupType: "ADD_TO_CART" });
+        sessionStorage.setItem("cart", JSON.stringify(this.state.cart));
+      }
+    );
+  };
+
   render() {
     return (
       <div id="product-detail">
         <div className="main-content">
+        <div
+            className="modal fade"
+            id="exampleModal"
+            tabIndex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div className="modal-dialog" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title" id="exampleModalLabel">
+                    Notification
+                  </h5>
+                  <button
+                    type="button"
+                    className="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div className="modal-body">
+                  {(() => {
+                    if (this.state.popupType === "ADD_TO_CART") {
+                      return <>Add to cart success !</>;
+                    } else {
+                      if (this.state.notification === "FAIL") {
+                        return (
+                          <>Add to wishlist fail, check your account please !</>
+                        );
+                      } else {
+                        return <>Add to wishlist success !</>;
+                      }
+                    }
+                  })()}
+                </div>
+                <div className="modal-footer">
+                  {(() => {
+                    if (this.state.popupType === "ADD_TO_CART") {
+                      return (
+                        <>
+                          <a href="/cart" className="btn btn-primary">
+                            Go To Cart
+                          </a>
+                        </>
+                      );
+                    } else {
+                      if (this.state.notification !== "FAIL") {
+                        return (
+                          <>
+                            <a href="/wishlist" className="btn btn-primary">
+                              Go To wishlist
+                            </a>
+                          </>
+                        );
+                      }
+                    }
+                  })()}
+
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
           <div id="wrapper-site">
             <div id="content-wrapper">
               <div id="main">
@@ -366,6 +508,10 @@ class ProductDetail extends Component {
                                               className="btn btn-primary add-to-cart add-item"
                                               data-button-action="add-to-cart"
                                               type="submit"
+                                              data-toggle="modal"
+                                              data-target="#exampleModal"
+                                              onClick={(e) => {
+                                                  e.preventDefault();this.addToCart()}}
                                             >
                                               <i
                                                 className="fa fa-shopping-cart"
@@ -376,6 +522,13 @@ class ProductDetail extends Component {
                                             <a
                                               className="addToWishlist"
                                               href="#"
+                                              data-rel="1"
+                                              data-toggle="modal"
+                                              data-target="#exampleModal"
+                                              onClick={(e) => {
+                                                e.preventDefault();
+                                                this.addWishlistOrder();
+                                              }}
                                             >
                                               <i
                                                 className="fa fa-heart"
@@ -409,12 +562,6 @@ class ProductDetail extends Component {
                                     </div>
                                   </div>
                                   <div className="content">
-                                    <p>
-                                      SKU :
-                                      <span className="content2">
-                                        <a href="#">e-02154</a>
-                                      </span>
-                                    </p>
                                     <p>
                                       Color :
                                       <span className="content2">
