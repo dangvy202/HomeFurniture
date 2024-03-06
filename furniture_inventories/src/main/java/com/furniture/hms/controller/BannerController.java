@@ -25,7 +25,7 @@ public class BannerController {
 
     @GetMapping
     public ResponseEntity<List<BannerResponse>> getAllBannerAndSpecialProduct() {
-	List<BannerResponse> response = service.getAllBannerAndSpecialProduct();
+	List<BannerResponse> response = service.getAllBanner();
 	if (!CollectionUtils.isEmpty(response)) {
 	    return new ResponseEntity<>(response, HttpStatus.OK);
 	} else {
