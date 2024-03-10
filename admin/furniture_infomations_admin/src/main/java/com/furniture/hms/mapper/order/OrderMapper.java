@@ -36,5 +36,6 @@ public interface OrderMapper {
     @Mapping(target = "totalOrder" , source = "order.totalOrder")
     @Mapping(target = "updateDate" , source = "order.updateDate")
     @Mapping(target = "userName" , source = "order.user.userName")
-    OrderResponse toOrderResponse(Boolean status , String error , String message,Order order);
+    @Mapping(target = "phone" , source = "phone")
+    OrderResponse toOrderResponse(Boolean status , String error , String message,Order order, String phone);
 }

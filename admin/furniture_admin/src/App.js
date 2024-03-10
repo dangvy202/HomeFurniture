@@ -1,8 +1,10 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import React, { Component } from "react";
-import Header from './component/header/Header';
 import Dashboard from './page/Dashboard';
 import Order from './page/Order';
+import Header from './component/header/Header';
+import Navbar from './component/navbar/Navbar';
+import Footer from './component/footer/Footer';
 
 class App extends Component {
 
@@ -20,6 +22,7 @@ class App extends Component {
       <div>
         <BrowserRouter>
           <Header />
+          <Navbar />
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/order" element={<Order />} />
@@ -27,6 +30,7 @@ class App extends Component {
             {/* <Route path="*" element={<NotFound />} />
             <Route path="/404" element={<NotFound />} /> */}
           </Routes>
+          <Footer />
         </BrowserRouter>
       </div>
     );

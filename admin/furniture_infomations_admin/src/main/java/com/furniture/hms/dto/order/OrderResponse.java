@@ -29,6 +29,8 @@ public class OrderResponse {
 
     private String userName;
 
+    private String phone;
+
     List<OrderDetail> orderDetails;
 
     @Data

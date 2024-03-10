@@ -1,5 +1,6 @@
 package com.furniture.hms.service.order;
 
+import java.math.BigInteger;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,9 @@ public class OrderService {
 	List<Order> listOrder = orderRepository.findAll();
 	if (!CollectionUtils.isEmpty(listOrder)) {
 	    listOrder.stream().forEach(orderDetail -> {
-		response.add(OrderMapper.INSTANCE.toOrderResponse(true, null, OrderMessage.ORDER_SUCCESS, orderDetail));
+			String phone = orderDetail.getUser().getPhone().toString();
+			response.add(OrderMapper.INSTANCE.toOrderResponse(true, null,
+				OrderMessage.ORDER_SUCCESS, orderDetail,phone));
 	    });
 	    return response;
 	} else {
