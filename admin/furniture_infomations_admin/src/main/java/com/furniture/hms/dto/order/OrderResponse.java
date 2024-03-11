@@ -19,6 +19,8 @@ public class OrderResponse {
 
     private String message;
 
+    private int numberOrder;
+
     private String orderCode;
 
     private String orderStatus;
@@ -30,6 +32,8 @@ public class OrderResponse {
     private String userName;
 
     private String phone;
+
+    private String email;
 
     List<OrderDetail> orderDetails;
 

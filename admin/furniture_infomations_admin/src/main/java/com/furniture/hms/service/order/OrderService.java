@@ -32,17 +32,18 @@ public class OrderService {
 
     private final UserRepository userRepository;
 
+
 //    private final ProductFeign productFeign;
 
     public List<OrderResponse> getAllOrder() {
 	List<OrderResponse> response = new ArrayList<>();
 	List<Order> listOrder = orderRepository.findAll();
 	if (!CollectionUtils.isEmpty(listOrder)) {
-	    listOrder.stream().forEach(orderDetail -> {
-			String phone = orderDetail.getUser().getPhone().toString();
+		for(int i = 0 ; i < listOrder.size() ; i++) {
+			String phone = listOrder.get(i).getUser().getPhone().toString();
 			response.add(OrderMapper.INSTANCE.toOrderResponse(true, null,
-				OrderMessage.ORDER_SUCCESS, orderDetail,phone));
-	    });
+					OrderMessage.ORDER_SUCCESS, listOrder.get(i),phone, i+1));
+		}
 	    return response;
 	} else {
 	    return response;

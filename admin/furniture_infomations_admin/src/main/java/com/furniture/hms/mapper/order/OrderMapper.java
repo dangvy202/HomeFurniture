@@ -6,6 +6,7 @@ import java.time.Instant;
 import com.furniture.hms.dto.order.OrderResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
 import com.furniture.hms.entity.Order;
@@ -28,6 +29,7 @@ public interface OrderMapper {
     Order toOrderEntity(String createBy, Instant createDate, String orderCode, OrderStatusEnum orderStatus,
                         String updateBy, Instant updateDate, User user, BigDecimal totalOrder);
 
+
     @Mapping(target = "status" , source = "status")
     @Mapping(target = "error" , source = "error")
     @Mapping(target = "message" , source = "message")
@@ -37,5 +39,9 @@ public interface OrderMapper {
     @Mapping(target = "updateDate" , source = "order.updateDate")
     @Mapping(target = "userName" , source = "order.user.userName")
     @Mapping(target = "phone" , source = "phone")
-    OrderResponse toOrderResponse(Boolean status , String error , String message,Order order, String phone);
+    @Mapping(target = "email" , source = "order.user.email")
+    @Mapping(target = "numberOrder" , source = "numberOrder")
+    OrderResponse toOrderResponse(Boolean status , String error , String message,Order order, String phone, int numberOrder);
+
+
 }
