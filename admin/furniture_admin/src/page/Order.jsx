@@ -1,5 +1,10 @@
 import React, { Component } from "react";
 import orderService from "../service/OrderService";
+import 'datatables.net';
+import $ from "jquery";
+import 'datatables.net-buttons';
+
+
 
 class Order extends Component {
   constructor(props) {
@@ -15,9 +20,26 @@ class Order extends Component {
     });
   }
 
+  componentDidUpdate() {
+    debugger;
+    $("#example1").DataTable().destroy();
+    $("#example1").DataTable({
+      data: this.state.orderList,
+      columns: [
+        {targets:[0] , title: 'Id', data: 'numberOrder' },
+        {targets:[1] ,  title: 'QR Code', data: 'orderCode' },
+        {targets:[2] ,  title: 'User Name', data: 'userName' },
+        {targets:[3] ,  title: 'Email', data: 'email' },
+        {targets:[4] ,  title: 'Phone', data: 'phone' },
+        {targets:[5] ,  title: 'Status', data: 'orderStatus' },
+        {targets:[6] ,  title: 'Date', data: 'updateDate' }
+    ]
+    });
+  }
+
   render() {
     return (
-      <body class="hold-transition sidebar-mini">
+      <div class="hold-transition sidebar-mini">
         <div class="wrapper">
           <div class="content-wrapper">
             {/* <!-- Content Header (Page header) --> */}
@@ -65,31 +87,6 @@ class Order extends Component {
                               <th>Date</th>
                             </tr>
                           </thead>
-                          <tbody>
-                            {this.state.orderList.map((item) => (
-                              <tr>
-                                <td>{item.numberOrder}</td>
-                                <td>{item.orderCode}</td>
-                                <td>{item.userName}</td>
-                                <td>{item.email}</td>
-                                <td>{item.phone}</td>
-                                <td>{item.orderStatus}</td>
-                                <td>{item.updateDate.split("T")[0]}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-
-                          <tfoot>
-                            <tr>
-                              <th>Id</th>
-                              <th>QR Code</th>
-                              <th>User Name</th>
-                              <th>Email</th>
-                              <th>Phone</th>
-                              <th>Status</th>
-                              <th>Date</th>
-                            </tr>
-                          </tfoot>
                         </table>
                       </div>
                       {/* <!-- /.card-body --> */}
@@ -102,7 +99,7 @@ class Order extends Component {
 
           <aside class="control-sidebar control-sidebar-dark"></aside>
         </div>
-      </body>
+      </div>
     );
   }
 }
