@@ -7,6 +7,10 @@ class OrderService {
     getAllOrder(){
         return axios.get(ORDER_API_BASE_URL);
     }
+
+    deleteOrder(orderCode) {
+        return axios.delete(ORDER_API_BASE_URL + '/delete/' + `${orderCode}`);
+    }
     
 }
 

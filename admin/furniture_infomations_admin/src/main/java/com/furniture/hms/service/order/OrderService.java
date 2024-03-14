@@ -1,14 +1,13 @@
 package com.furniture.hms.service.order;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import com.furniture.hms.constant.OrderMessage;
-import com.furniture.hms.dto.order.OrderRequest;
 import com.furniture.hms.dto.order.OrderResponse;
 import com.furniture.hms.entity.Order;
 import com.furniture.hms.entity.OrderDetail;
@@ -40,7 +39,7 @@ public class OrderService {
 	    for (int i = 0; i < listOrder.size(); i++) {
 		String phone = listOrder.get(i).getUser().getPhone().toString();
 		response.add(OrderMapper.INSTANCE.toOrderResponse(true, null, OrderMessage.ORDER_SUCCESS,
-			listOrder.get(i), phone, listOrder.get(i).getId()));
+			listOrder.get(i), phone, i + 1));
 	    }
 	    return response;
 	} else {
@@ -48,78 +47,14 @@ public class OrderService {
 	}
     }
 
-//    public OrderResponse getOrderDetailByUser(String email, String orderCode) {
-//	List<OrderResponse.OrderDetail> listOrderDetail = new ArrayList<>();
-//	User user = userRepository.findUserByEmail(email).orElse(null);
-//	OrderResponse orderResponse = new OrderResponse();
-//	if (user != null) {
-//	    List<OrderDetail> listOrder = orderDetailRepository.findOrderByUserAndOrderCode(user, orderCode);
-//	    if (listOrder.size() != 0) {
-//		orderResponse = OrderDetailMapper.INSTANCE.toOrderRes(true, null, OrderMessage.ORDER_SUCCESS);
-//		for (OrderDetail order : listOrder) {
-//		    // create variable instant
-//		    OrderResponse.OrderDetail orderDetailResponse = new OrderResponse.OrderDetail();
-//		    OrderResponse.OrderDetail.Product orderProductResponse = new OrderResponse.OrderDetail.Product();
-//		    OrderResponse.OrderDetail.Product.Picture orderPictureResponse = new OrderResponse.OrderDetail.Product.Picture();
-//		    // get feign
-//		    ProductResponse product = productFeign.getDetailByIdProduct(order.getIdProduct());
-//		    // set mapping element
-//		    orderDetailResponse = OrderDetailMapper.INSTANCE.toOrderDetailRes(order);
-//		    orderProductResponse = OrderDetailMapper.INSTANCE.toOrderProductRes(order, product.getProductName(),
-//			    product.getProductPrice(), product.getProductSaleoff());
-//		    orderPictureResponse = OrderDetailMapper.INSTANCE
-//			    .toOrderPictureRes(product.getPicture().getPictureFirst());
-//		    // set one by one element
-//		    orderProductResponse.setPicture(orderPictureResponse);
-//		    orderDetailResponse.setProduct(orderProductResponse);
-//		    // Add Array
-//		    listOrderDetail.add(orderDetailResponse);
-//		}
-//		orderResponse.setOrderDetails(listOrderDetail);
-//		return orderResponse;
-//	    } else {
-//		orderResponse = OrderDetailMapper.INSTANCE.toOrderRes(true, null, OrderMessage.ORDER_EXIST);
-//		return orderResponse;
-//	    }
-//	} else {
-//	    orderResponse = OrderDetailMapper.INSTANCE.toOrderRes(false, OrderMessage.ORDER_FAIL,
-//		    OrderMessage.ORDER_FAIL);
-//	    return orderResponse;
-//	}
-//    }
-
-    public String updateOrder(String idOrder, OrderRequest request) {
-	OrderDetail order = orderDetailRepository.findOrderByOrderCode(idOrder);
-	Instant createDate = Instant.now();
-	Instant updateDate = Instant.now();
-	int id = order.getId();
-	if (order != null) {
-//            order = OrderDetailMapper.INSTANCE.toOrder(
-//                    OrderStatusEnum.UNPAID,
-//                    order.getOrderCode(),
-//                    request.getOrderQuantity(),
-//                    order.getUser(),
-//                    request.getIdProduct(),
-//                    createDate,
-//                    updateDate);
-//            order.setId(id);
-	    try {
-		orderDetailRepository.save(order);
-		return OrderMessage.ORDER_SUCCESS;
-	    } catch (Exception ex) {
-		log.error(ex.getMessage());
-		return OrderMessage.ORDER_FAIL;
-	    }
-	} else {
-	    return OrderMessage.ORDER_FAIL;
-	}
-    }
-
+    @Transactional
     public String deleteOrder(String idOrder) {
-	OrderDetail order = orderDetailRepository.findOrderByOrderCode(idOrder);
-	if (order != null) {
+	List<OrderDetail> orderDetail = orderDetailRepository.findOrderDetailByOrderCode(idOrder);
+	List<Order> order = orderRepository.findOrderByOrderCode(idOrder);
+	if (!CollectionUtils.isEmpty(order) && !CollectionUtils.isEmpty(orderDetail)) {
 	    try {
-		orderDetailRepository.deleteOrderByOrderId(order.getOrderCode());
+		orderRepository.deleteOrderByOrderId(order.stream().findFirst().get().getOrderCode());
+		orderDetailRepository.deleteOrderByOrderId(orderDetail.stream().findFirst().get().getOrderCode());
 		return OrderMessage.ORDER_SUCCESS;
 	    } catch (Exception ex) {
 		log.error(ex.getMessage());

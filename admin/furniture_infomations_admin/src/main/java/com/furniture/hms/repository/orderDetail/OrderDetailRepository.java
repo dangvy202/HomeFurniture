@@ -1,20 +1,21 @@
 package com.furniture.hms.repository.orderDetail;
 
-import com.furniture.hms.entity.OrderDetail;
-import com.furniture.hms.entity.User;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import com.furniture.hms.entity.OrderDetail;
+import com.furniture.hms.entity.User;
 
 @Repository
-public interface OrderDetailRepository extends JpaRepository<OrderDetail,Integer> {
-    List<OrderDetail> findOrderByUserAndOrderCode(User email,String orderCode);
+public interface OrderDetailRepository extends JpaRepository<OrderDetail, Integer> {
+    List<OrderDetail> findOrderByUserAndOrderCode(User email, String orderCode);
 
-    OrderDetail findOrderByOrderCode(String orderCode);
+    List<OrderDetail> findOrderDetailByOrderCode(String orderCode);
 
     @Modifying
     @Transactional

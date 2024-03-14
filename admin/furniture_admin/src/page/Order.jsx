@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import orderService from "../service/OrderService";
-import 'datatables.net';
 import $ from "jquery";
-import 'datatables.net-buttons';
+import MUIDataTable from "mui-datatables";
 
 
 
@@ -11,50 +10,107 @@ class Order extends Component {
     super(props);
     this.state = {
       orderList: [],
+      notification: "",
+      // id : "";
+      // qrCode  : "";.orderCode;
+      // userName  : "";.userName;
+      // email  : "";.email;
+      // phone  : "";.phone;
+      // status  : "";.orderStatus;
+      // date = this.state.orderList[i].updateDate.split("T")[0];
+
     };
+    this.detail = this.detail.bind(this);
+    this.edit = this.edit.bind(this);
+    this.trash = this.trash.bind(this);
   }
 
   componentDidMount() {
     orderService.getAllOrder().then((res) => {
       this.setState({ orderList: res.data });
     });
+
   }
 
-  componentDidUpdate() {
+  detail(order) {
+    alert("order = " + order)
+  }
+
+  edit(order) {
+    alert("edit")
+  }
+
+  trash(order) {
     debugger;
-    $("#example1").DataTable().destroy();
-    $("#example1").DataTable({
-      data: this.state.orderList,
-      columns: [
-        {targets:[0] , title: 'Id', data: 'numberOrder' },
-        {targets:[1] ,  title: 'QR Code', data: 'orderCode' },
-        {targets:[2] ,  title: 'User Name', data: 'userName' },
-        {targets:[3] ,  title: 'Email', data: 'email' },
-        {targets:[4] ,  title: 'Phone', data: 'phone' },
-        {targets:[5] ,  title: 'Status', data: 'orderStatus' },
-        {targets:[6] ,  title: 'Date', data: 'updateDate' }
-    ]
-    });
+    var z = this.state.orderList[order].numberOrder;
+    alert("oke = " + z);
+    // orderService.deleteOrder(order.orderCode).then((res) => {
+    //   this.setState({ notification : res.data })
+    // })
   }
 
   render() {
+    const columns = ['Id', 'QR Code', 'User Name', 'Email', 'Phone', 'Status', 'Date', 'Action'];
+    const orderListSet = new Array();
+    for (var i = 0; i < this.state.orderList.length; i++) {
+      var stt = i;
+      var id = this.state.orderList[i].numberOrder;
+      var qrCode = this.state.orderList[i].orderCode;
+      var userName = this.state.orderList[i].userName;
+      var email = this.state.orderList[i].email;
+      var phone = this.state.orderList[i].phone;
+      var status = this.state.orderList[i].orderStatus;
+      var date = this.state.orderList[i].updateDate.split("T")[0];
+
+
+      const data = {
+        'Id': id,
+        'QR Code': qrCode,
+        'User Name': userName,
+        'Email': email,
+        'Phone': phone,
+        'Status': status,
+        'Date': date,
+        'Action': (
+          <>
+            <button  onClick={(e) => {e.preventDefault() ;this.detail(this.state.orderList[i].orderCode)}} className="btn btn-app bg-success">
+              <i className="fas fa-barcode"></i> Detail
+            </button>
+            <a onClick={() => this.edit(this.state.orderList[i])} className="btn btn-app bg-warning">
+              <i className="fas fa-edit"></i> Edit
+            </a>
+            <button onClick={() => this.trash(stt)} className="btn btn-app bg-danger">
+              <i className="fas fa-trash"></i> Delete
+            </button>
+          </>
+        )
+      }
+      orderListSet.push(data);
+    }
+    const options = {
+      filter: true,
+      selectableRows: 'none',
+      filterType: 'dropdown',
+      responsive: 'vertical',
+    };
+
     return (
-      <div class="hold-transition sidebar-mini">
-        <div class="wrapper">
-          <div class="content-wrapper">
+      <div className="hold-transition sidebar-mini">
+        <div className="wrapper">
+          <div className="content-wrapper">
             {/* <!-- Content Header (Page header) --> */}
-            <section class="content-header">
-              <div class="container-fluid">
-                <div class="row mb-2">
-                  <div class="col-sm-6">
+            <section className="content-header">
+              <div className="container-fluid">
+                <div className="row mb-2">
+                  <div className="col-sm-6">
                     <h1>DataTables</h1>
                   </div>
-                  <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                      <li class="breadcrumb-item">
-                        <a href="#">Home</a>
+                  <div className="col-sm-6">
+                    <ol className="breadcrumb float-sm-right">
+                      <li className="breadcrumb-item">
+                        <a href="/">Home</a>
                       </li>
-                      <li class="breadcrumb-item active">DataTables</li>
+                      <li className="breadcrumb-item active">Order</li>
                     </ol>
                   </div>
                 </div>
@@ -62,32 +118,19 @@ class Order extends Component {
             </section>
 
             {/* <!-- Main content --> */}
-            <section class="content">
-              <div class="container-fluid">
-                <div class="row">
-                  <div class="col-12">
-                    <div class="card">
-                      <div class="card-header">
-                        <h3 class="card-title">Order list</h3>
-                      </div>
+            <section className="content">
+              <div className="container-fluid">
+                <div className="row">
+                  <div className="col-12">
+                    <div className="card">
                       {/* <!-- /.card-header --> */}
-                      <div class="card-body">
-                        <table
-                          id="example1"
-                          class="table table-bordered table-striped"
-                        >
-                          <thead>
-                            <tr>
-                              <th>Id</th>
-                              <th>QR Code</th>
-                              <th>User Name</th>
-                              <th>Email</th>
-                              <th>Phone</th>
-                              <th>Status</th>
-                              <th>Date</th>
-                            </tr>
-                          </thead>
-                        </table>
+                      <div className="card-body">
+                        <MUIDataTable
+                          title={"Order List"}
+                          data={orderListSet}
+                          columns={columns}
+                          option={options}
+                        />
                       </div>
                       {/* <!-- /.card-body --> */}
                     </div>
@@ -97,7 +140,7 @@ class Order extends Component {
             </section>
           </div>
 
-          <aside class="control-sidebar control-sidebar-dark"></aside>
+          <aside className="control-sidebar control-sidebar-dark"></aside>
         </div>
       </div>
     );
