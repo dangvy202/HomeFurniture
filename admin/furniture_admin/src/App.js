@@ -22,7 +22,7 @@ class App extends Component {
       <div>
         <BrowserRouter>
           <Header />
-          <Navbar />
+          {/* <Navbar /> */}
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/order" element={<Order />} />

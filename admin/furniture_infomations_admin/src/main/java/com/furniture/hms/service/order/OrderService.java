@@ -9,9 +9,11 @@ import org.springframework.util.CollectionUtils;
 
 import com.furniture.hms.constant.OrderMessage;
 import com.furniture.hms.dto.order.OrderResponse;
+import com.furniture.hms.entity.InformationOrder;
 import com.furniture.hms.entity.Order;
 import com.furniture.hms.entity.OrderDetail;
 import com.furniture.hms.mapper.order.OrderMapper;
+import com.furniture.hms.repository.informationOrder.InformationOrderRepository;
 import com.furniture.hms.repository.order.OrderRepository;
 import com.furniture.hms.repository.orderDetail.OrderDetailRepository;
 import com.furniture.hms.repository.user.UserRepository;
@@ -27,6 +29,8 @@ public class OrderService {
     private final OrderDetailRepository orderDetailRepository;
 
     private final OrderRepository orderRepository;
+
+    private final InformationOrderRepository informationOrderRepository;
 
     private final UserRepository userRepository;
 
@@ -53,15 +57,20 @@ public class OrderService {
 	List<Order> order = orderRepository.findOrderByOrderCode(idOrder);
 	if (!CollectionUtils.isEmpty(order) && !CollectionUtils.isEmpty(orderDetail)) {
 	    try {
-		orderRepository.deleteOrderByOrderId(order.stream().findFirst().get().getOrderCode());
-		orderDetailRepository.deleteOrderByOrderId(orderDetail.stream().findFirst().get().getOrderCode());
-		return OrderMessage.ORDER_SUCCESS;
+		List<InformationOrder> informationOrders = informationOrderRepository
+			.findInformationOrderByIdOrder(order.stream().findFirst().get().getId());
+		if (!CollectionUtils.isEmpty(informationOrders)) {
+		    informationOrderRepository.deleteInformationOrderByOrder(order.stream().findFirst().get());
+		    orderRepository.deleteOrderByOrderId(order.stream().findFirst().get().getOrderCode());
+		    orderDetailRepository.deleteOrderByOrderId(orderDetail.stream().findFirst().get().getOrderCode());
+		    return OrderMessage.ORDER_SUCCESS;
+		}
 	    } catch (Exception ex) {
 		log.error(ex.getMessage());
 		return OrderMessage.ORDER_FAIL;
 	    }
-	} else {
-	    return OrderMessage.ORDER_FAIL;
 	}
+
+	return OrderMessage.ORDER_FAIL;
     }
 }

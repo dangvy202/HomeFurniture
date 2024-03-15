@@ -8,10 +8,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
-public class InfomationsApplication {
+public class InfomationsAdminApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(InfomationsApplication.class, args);
+		SpringApplication.run(InfomationsAdminApplication.class, args);
 	}
 
 }

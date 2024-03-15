@@ -11,14 +11,6 @@ class Order extends Component {
     this.state = {
       orderList: [],
       notification: "",
-      // id : "";
-      // qrCode  : "";.orderCode;
-      // userName  : "";.userName;
-      // email  : "";.email;
-      // phone  : "";.phone;
-      // status  : "";.orderStatus;
-      // date = this.state.orderList[i].updateDate.split("T")[0];
-
     };
     this.detail = this.detail.bind(this);
     this.edit = this.edit.bind(this);
@@ -29,7 +21,6 @@ class Order extends Component {
     orderService.getAllOrder().then((res) => {
       this.setState({ orderList: res.data });
     });
-
   }
 
   detail(order) {
@@ -40,27 +31,28 @@ class Order extends Component {
     alert("edit")
   }
 
-  trash(order) {
-    debugger;
-    var z = this.state.orderList[order].numberOrder;
-    alert("oke = " + z);
-    // orderService.deleteOrder(order.orderCode).then((res) => {
-    //   this.setState({ notification : res.data })
-    // })
+  async trash(order) {
+    debugger
+    orderService.deleteOrder(order.orderCode).then((res) => {
+      this.setState({ notification: res.data })
+    }).catch((error) => {
+      this.setState({ notification: error.response.data.message })
+    })
+    console.log(this.state.notification)
   }
 
   render() {
     const columns = ['Id', 'QR Code', 'User Name', 'Email', 'Phone', 'Status', 'Date', 'Action'];
     const orderListSet = new Array();
-    for (var i = 0; i < this.state.orderList.length; i++) {
-      var stt = i;
-      var id = this.state.orderList[i].numberOrder;
-      var qrCode = this.state.orderList[i].orderCode;
-      var userName = this.state.orderList[i].userName;
-      var email = this.state.orderList[i].email;
-      var phone = this.state.orderList[i].phone;
-      var status = this.state.orderList[i].orderStatus;
-      var date = this.state.orderList[i].updateDate.split("T")[0];
+    this.state.orderList.map((order) => {
+      ;
+      var id = order.numberOrder;
+      var qrCode = order.orderCode;
+      var userName = order.userName;
+      var email = order.email;
+      var phone = order.phone;
+      var status = order.orderStatus;
+      var date = order.updateDate.split("T")[0];
 
 
       const data = {
@@ -73,20 +65,25 @@ class Order extends Component {
         'Date': date,
         'Action': (
           <>
-            <button  onClick={(e) => {e.preventDefault() ;this.detail(this.state.orderList[i].orderCode)}} className="btn btn-app bg-success">
+            <button onClick={(e) => { e.preventDefault(); this.detail(order.orderCode) }} className="btn btn-app bg-success">
               <i className="fas fa-barcode"></i> Detail
             </button>
-            <a onClick={() => this.edit(this.state.orderList[i])} className="btn btn-app bg-warning">
+            <a onClick={() => this.edit(order)} className="btn btn-app bg-warning">
               <i className="fas fa-edit"></i> Edit
             </a>
-            <button onClick={() => this.trash(stt)} className="btn btn-app bg-danger">
+            <button onClick={() => this.trash(order)} className="btn btn-app bg-danger"
+              data-toggle="modal"
+              data-target="#exampleModal"
+              >
               <i className="fas fa-trash"></i> Delete
             </button>
           </>
         )
       }
       orderListSet.push(data);
-    }
+    })
+
+    // }
     const options = {
       filter: true,
       selectableRows: 'none',
@@ -96,6 +93,38 @@ class Order extends Component {
 
     return (
       <div className="hold-transition sidebar-mini">
+        <div
+          className="modal fade"
+          id="exampleModal"
+          tabIndex="-1"
+          role="dialog"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="exampleModalLabel">
+                  {this.state.notification === "ORDER_SUCCESS" ? "Notification" : "Error!"}
+                </h5>
+              </div>
+              <div className="modal-body">
+                {(() => {
+                  if (this.state.notification === "ORDER_SUCCESS") {
+                    return <>DELETE SUCCESS</>;
+                  } else {
+                    return <>DELETE FAIL , PLEASE CHECK AGAIN</>;
+                  }
+                })()}
+              </div>
+              <div className="modal-footer">
+                <a href="/order" className="btn btn-primary">
+                  Back
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="wrapper">
           <div className="content-wrapper">
             {/* <!-- Content Header (Page header) --> */}
