@@ -15,7 +15,7 @@ class Footer extends Component {
         </footer>
 
         {/* <!-- Control Sidebar --> */}
-        <aside class="control-sidebar control-sidebar-dark">
+        <aside className="control-sidebar control-sidebar-dark">
           {/* <!-- Control sidebar content goes here --> */}
         </aside>
       </div>

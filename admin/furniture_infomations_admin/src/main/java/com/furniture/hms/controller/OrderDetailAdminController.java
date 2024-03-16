@@ -13,17 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.furniture.hms.constant.OrderMessage;
 import com.furniture.hms.dto.order.OrderResponse;
-import com.furniture.hms.service.order.OrderService;
+import com.furniture.hms.service.order.OrderDetailService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/order")
+@RequestMapping("/order-detail")
 @RequiredArgsConstructor
 @CrossOrigin("http://localhost:9000")
-public class OrderAdminController {
+public class OrderDetailAdminController {
 
-    private final OrderService orderService;
+    private final OrderDetailService orderService;
 
     @GetMapping
     public ResponseEntity<List<OrderResponse>> getAllOrder() {
