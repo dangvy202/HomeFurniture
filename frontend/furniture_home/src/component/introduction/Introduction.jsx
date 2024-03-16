@@ -6,19 +6,18 @@ class Introduction extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      introductionList: []
-    }
+      introductionList: [],
+    };
   }
 
-  componentDidMount() {
-    introductionService.getIntroduction().then((res) => {
-      this.setState({ introductionList: res.data })
-    })
-  }
+  // componentDidMount() {
+  //   introductionService.getIntroduction().then((res) => {
+  //     this.setState({ introductionList: res.data })
+  //   })
+  // }
 
   render() {
     return (
-
       <div class="section testimonial-block col-lg-12 col-xs-12">
         <div class="row">
           <div class="col-lg-12 col-md-12 ">
@@ -31,10 +30,13 @@ class Introduction extends Component {
                   <div class="desc-testimonial">
                     <div class="testimonial-content">
                       <div class="text">
-                        <p>" Liquam quis risus viverra, ornare ipsum vitae, congue tellus.
-                          Vestibulum nunc lorem, scelerisque a tristique non, accumsan
-                          ornare eros. Nullam sapien metus, volutpat dictum, accumsan
-                          ornare eros. Nullam sapien metus, volutpat dictum "</p>
+                        <p>
+                          " Liquam quis risus viverra, ornare ipsum vitae,
+                          congue tellus. Vestibulum nunc lorem, scelerisque a
+                          tristique non, accumsan ornare eros. Nullam sapien
+                          metus, volutpat dictum, accumsan ornare eros. Nullam
+                          sapien metus, volutpat dictum "
+                        </p>
                       </div>
                     </div>
                     <div class="testimonial-info">
@@ -50,10 +52,13 @@ class Introduction extends Component {
                   <div class="desc-testimonial">
                     <div class="testimonial-content">
                       <div class="text">
-                        <p>" Liquam quis risus viverra, ornare ipsum vitae, congue tellus.
-                          Vestibulum nunc lorem, scelerisque a tristique non, accumsan
-                          ornare eros. Nullam sapien metus, volutpat dictum, accumsan
-                          ornare eros. Nullam sapien metus, volutpat dictum "</p>
+                        <p>
+                          " Liquam quis risus viverra, ornare ipsum vitae,
+                          congue tellus. Vestibulum nunc lorem, scelerisque a
+                          tristique non, accumsan ornare eros. Nullam sapien
+                          metus, volutpat dictum, accumsan ornare eros. Nullam
+                          sapien metus, volutpat dictum "
+                        </p>
                       </div>
                     </div>
                     <div class="testimonial-info">
@@ -69,10 +74,13 @@ class Introduction extends Component {
                   <div class="desc-testimonial">
                     <div class="testimonial-content">
                       <div class="text">
-                        <p>" Liquam quis risus viverra, ornare ipsum vitae, congue tellus.
-                          Vestibulum nunc lorem, scelerisque a tristique non, accumsan
-                          ornare eros. Nullam sapien metus, volutpat dictum, accumsan
-                          ornare eros. Nullam sapien metus, volutpat dictum "</p>
+                        <p>
+                          " Liquam quis risus viverra, ornare ipsum vitae,
+                          congue tellus. Vestibulum nunc lorem, scelerisque a
+                          tristique non, accumsan ornare eros. Nullam sapien
+                          metus, volutpat dictum, accumsan ornare eros. Nullam
+                          sapien metus, volutpat dictum "
+                        </p>
                       </div>
                     </div>
                     <div class="testimonial-info">
@@ -88,10 +96,13 @@ class Introduction extends Component {
                   <div class="desc-testimonial">
                     <div class="testimonial-content">
                       <div class="text">
-                        <p>" Liquam quis risus viverra, ornare ipsum vitae, congue tellus.
-                          Vestibulum nunc lorem, scelerisque a tristique non, accumsan
-                          ornare eros. Nullam sapien metus, volutpat dictum, accumsan
-                          ornare eros. Nullam sapien metus, volutpat dictum "</p>
+                        <p>
+                          " Liquam quis risus viverra, ornare ipsum vitae,
+                          congue tellus. Vestibulum nunc lorem, scelerisque a
+                          tristique non, accumsan ornare eros. Nullam sapien
+                          metus, volutpat dictum, accumsan ornare eros. Nullam
+                          sapien metus, volutpat dictum "
+                        </p>
                       </div>
                     </div>
                     <div class="testimonial-info">
