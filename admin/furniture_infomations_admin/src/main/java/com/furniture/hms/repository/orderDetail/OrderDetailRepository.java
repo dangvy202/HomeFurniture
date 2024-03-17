@@ -11,7 +11,6 @@ import com.furniture.hms.entity.User;
 
 @Repository
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, Integer> {
-    List<OrderDetail> findOrderByUserAndOrderCode(User email, String orderCode);
 
     List<OrderDetail> findOrderDetailByOrderCode(String orderCode);
 

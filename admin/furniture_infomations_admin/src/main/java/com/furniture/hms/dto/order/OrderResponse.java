@@ -42,6 +42,8 @@ public class OrderResponse {
     public static class OrderDetail {
         private String orderId;
 
+        private BigDecimal totalPrice;
+
         private Product product;
 
         @Data

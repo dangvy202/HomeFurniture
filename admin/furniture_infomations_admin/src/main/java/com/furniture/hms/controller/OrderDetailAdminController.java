@@ -2,6 +2,7 @@ package com.furniture.hms.controller;
 
 import java.util.List;
 
+import com.furniture.hms.entity.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -23,23 +24,17 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin("http://localhost:9000")
 public class OrderDetailAdminController {
 
-    private final OrderDetailService orderService;
+    private final OrderDetailService orderDetailService;
 
-    @GetMapping
-    public ResponseEntity<List<OrderResponse>> getAllOrder() {
-	var orderResponse = orderService.getAllOrder();
-	return new ResponseEntity<>(orderResponse, HttpStatus.OK);
-    }
+    @GetMapping("/{orderCode}")
+    public ResponseEntity<OrderResponse> getAllOrder(@PathVariable("orderCode") String orderCode) {
+	    OrderResponse orderResponse = orderDetailService.getOrderDetailByOrderCode(orderCode);
 
-    @DeleteMapping("/delete/{orderCode}")
-    public ResponseEntity<String> deleteOrder(@PathVariable("orderCode") String orderCode) {
-	var response = orderService.deleteOrder(orderCode);
+        if(orderResponse.getStatus() == true && orderResponse.getMessage() == OrderMessage.ORDER_SUCCESS )  {
+            return new ResponseEntity<>(orderResponse , HttpStatus.OK);
+        }
 
-	if (response == OrderMessage.ORDER_SUCCESS) {
-	    return new ResponseEntity<>(OrderMessage.ORDER_SUCCESS, HttpStatus.OK);
-	} else {
-	    return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-	}
+        return new ResponseEntity<>(orderResponse , HttpStatus.NOT_FOUND);
     }
 
 }
