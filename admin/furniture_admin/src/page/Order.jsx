@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import orderService from "../service/OrderService";
-import $ from "jquery";
 import MUIDataTable from "mui-datatables";
 
 
@@ -13,7 +12,7 @@ class Order extends Component {
       notification: "",
     };
     this.detail = this.detail.bind(this);
-    this.edit = this.edit.bind(this);
+    this.changeStatus = this.changeStatus.bind(this);
     this.trash = this.trash.bind(this);
   }
 
@@ -24,15 +23,19 @@ class Order extends Component {
   }
 
   detail(order) {
-    alert("order = " + order)
+    window.location.href="/order-detail/" + order.orderCode;
   }
 
-  edit(order) {
-    alert("edit")
+  changeStatus(order) {
+    var request = {
+      "order_code": order.orderCode
+    }
+    orderService.updateOrderStatus(request).then((res) => {
+      window.location.href="/order"
+    })
   }
 
   async trash(order) {
-    debugger
     orderService.deleteOrder(order.orderCode).then((res) => {
       this.setState({ notification: res.data })
     }).catch((error) => {
@@ -45,13 +48,12 @@ class Order extends Component {
     const columns = ['Id', 'QR Code', 'User Name', 'Email', 'Phone', 'Status', 'Date', 'Action'];
     const orderListSet = new Array();
     this.state.orderList.map((order) => {
-      ;
       var id = order.numberOrder;
       var qrCode = order.orderCode;
       var userName = order.userName;
       var email = order.email;
       var phone = order.phone;
-      var status = order.orderStatus;
+      var status = order.orderStatus
       var date = order.updateDate.split("T")[0];
 
 
@@ -65,17 +67,17 @@ class Order extends Component {
         'Date': date,
         'Action': (
           <>
-            <button onClick={(e) => { e.preventDefault(); this.detail(order.orderCode) }} className="btn btn-app bg-success">
+            <button onClick={() => this.detail(order) } className="btn btn-app bg-success">
               <i className="fas fa-barcode"></i> Detail
             </button>
-            <a onClick={() => this.edit(order)} className="btn btn-app bg-warning">
-              <i className="fas fa-edit"></i> Edit
-            </a>
             <button onClick={() => this.trash(order)} className="btn btn-app bg-danger"
               data-toggle="modal"
               data-target="#exampleModal"
               >
               <i className="fas fa-trash"></i> Delete
+            </button>
+            <button onClick={() => this.changeStatus(order) } className="btn btn-app bg-warning">
+              <i className="fas fa-barcode"></i> Change Status
             </button>
           </>
         )

@@ -3,8 +3,8 @@ import React, { Component } from "react";
 import Dashboard from './page/Dashboard';
 import Order from './page/Order';
 import Header from './component/header/Header';
-import Navbar from './component/navbar/Navbar';
 import Footer from './component/footer/Footer';
+import OrderDetail from './page/OrderDetail';
 
 class App extends Component {
 
@@ -22,10 +22,10 @@ class App extends Component {
       <div>
         <BrowserRouter>
           <Header />
-          {/* <Navbar /> */}
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/order" element={<Order />} />
+            <Route path="/order-detail/:orderCode" element={<OrderDetail />} />
             {/* NOT FOUND PAGE */}
             {/* <Route path="*" element={<NotFound />} />
             <Route path="/404" element={<NotFound />} /> */}

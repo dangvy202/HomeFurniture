@@ -8,15 +8,16 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import com.furniture.hms.constant.OrderMessage;
+import com.furniture.hms.dto.order.OrderRequest;
 import com.furniture.hms.dto.order.OrderResponse;
 import com.furniture.hms.entity.InformationOrder;
 import com.furniture.hms.entity.Order;
 import com.furniture.hms.entity.OrderDetail;
+import com.furniture.hms.enums.OrderStatusEnum;
 import com.furniture.hms.mapper.order.OrderMapper;
 import com.furniture.hms.repository.informationOrder.InformationOrderRepository;
 import com.furniture.hms.repository.order.OrderRepository;
 import com.furniture.hms.repository.orderDetail.OrderDetailRepository;
-import com.furniture.hms.repository.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,10 +33,6 @@ public class OrderService {
 
     private final InformationOrderRepository informationOrderRepository;
 
-    private final UserRepository userRepository;
-
-//    private final ProductFeign productFeign;
-
     public List<OrderResponse> getAllOrder() {
 	List<OrderResponse> response = new ArrayList<>();
 	List<Order> listOrder = orderRepository.findAll();
@@ -49,6 +46,23 @@ public class OrderService {
 	} else {
 	    return response;
 	}
+    }
+
+    public String updateOrderStatusByOrder(OrderRequest request) {
+	try {
+	    Order order = orderRepository.findOrderByOrderCode(request.getOrderCode()).stream().findFirst()
+		    .orElse(null);
+	    if (order != null) {
+		order.setOrderStatus(OrderStatusEnum.PAID);
+		orderRepository.save(order);
+		return OrderMessage.ORDER_SUCCESS;
+	    }
+	} catch (Exception e) {
+	    log.error(e.getMessage());
+	    return OrderMessage.ORDER_FAIL;
+	}
+
+	return OrderMessage.ORDER_FAIL;
     }
 
     @Transactional
