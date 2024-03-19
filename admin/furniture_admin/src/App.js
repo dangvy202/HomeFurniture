@@ -5,6 +5,7 @@ import Order from './page/Order';
 import Header from './component/header/Header';
 import Footer from './component/footer/Footer';
 import OrderDetail from './page/OrderDetail';
+import InformationOrder from './page/InformationOrder';
 
 class App extends Component {
 
@@ -26,6 +27,7 @@ class App extends Component {
             <Route path="/" element={<Dashboard />} />
             <Route path="/order" element={<Order />} />
             <Route path="/order-detail/:orderCode" element={<OrderDetail />} />
+            <Route path="/information-order" element={<InformationOrder />} />
             {/* NOT FOUND PAGE */}
             {/* <Route path="*" element={<NotFound />} />
             <Route path="/404" element={<NotFound />} /> */}

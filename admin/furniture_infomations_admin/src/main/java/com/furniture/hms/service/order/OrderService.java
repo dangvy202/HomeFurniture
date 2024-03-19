@@ -15,7 +15,7 @@ import com.furniture.hms.entity.Order;
 import com.furniture.hms.entity.OrderDetail;
 import com.furniture.hms.enums.OrderStatusEnum;
 import com.furniture.hms.mapper.order.OrderMapper;
-import com.furniture.hms.repository.informationOrder.InformationOrderRepository;
+import com.furniture.hms.repository.information_order.InformationOrderRepository;
 import com.furniture.hms.repository.order.OrderRepository;
 import com.furniture.hms.repository.orderDetail.OrderDetailRepository;
 

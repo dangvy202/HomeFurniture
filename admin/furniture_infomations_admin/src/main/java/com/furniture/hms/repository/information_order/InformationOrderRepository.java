@@ -1,4 +1,4 @@
-package com.furniture.hms.repository.informationOrder;
+package com.furniture.hms.repository.information_order;
 
 import java.util.List;
 
