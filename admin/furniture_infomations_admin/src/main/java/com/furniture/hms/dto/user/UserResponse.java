@@ -37,4 +37,6 @@ public class UserResponse {
     private BigInteger phone;
 
     private String picture;
+
+    private Date updateDate;
 }

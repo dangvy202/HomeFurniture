@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,4 +36,13 @@ public class UserAdminController {
 	return new ResponseEntity<ResultData<List<UserResponse>>>(response, HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping("/{email}")
+    public ResponseEntity<ResultData<UserResponse>> getUserDetail(@PathVariable("email") String email) {
+	var response = userService.getDetailUserByEmail(email);
+
+	if (response.getStatus() == Boolean.TRUE && response.getMessage() == UserMessage.SUCCESS) {
+	    return new ResponseEntity<ResultData<UserResponse>>(response, HttpStatus.OK);
+	}
+	return new ResponseEntity<ResultData<UserResponse>>(response, HttpStatus.NOT_FOUND);
+    }
 }

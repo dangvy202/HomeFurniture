@@ -6,6 +6,8 @@ import Header from './component/header/Header';
 import Footer from './component/footer/Footer';
 import OrderDetail from './page/OrderDetail';
 import InformationOrder from './page/InformationOrder';
+import User from './page/User';
+import UserDetail from './page/UserDetail';
 
 class App extends Component {
 
@@ -28,6 +30,8 @@ class App extends Component {
             <Route path="/order" element={<Order />} />
             <Route path="/order-detail/:orderCode" element={<OrderDetail />} />
             <Route path="/information-order" element={<InformationOrder />} />
+            <Route path="/user" element={<User />} />
+            <Route path="/user-detail/:email" element={<UserDetail />} />
             {/* NOT FOUND PAGE */}
             {/* <Route path="*" element={<NotFound />} />
             <Route path="/404" element={<NotFound />} /> */}

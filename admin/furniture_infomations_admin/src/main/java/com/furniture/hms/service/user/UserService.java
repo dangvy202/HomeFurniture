@@ -39,4 +39,18 @@ public class UserService {
 	}
 	return new ResultData<List<UserResponse>>(Boolean.FALSE, UserMessage.FAIL, UserMessage.FAIL, response);
     }
+
+    public ResultData<UserResponse> getDetailUserByEmail(String email) {
+	UserResponse response = new UserResponse();
+
+	User user = userRepository.findUserByEmail(email).orElse(null);
+
+	if (user != null) {
+	    response = UserMapper.INSTANCE.toUserRes(user);
+
+	    return new ResultData<UserResponse>(Boolean.TRUE, null, UserMessage.SUCCESS, response);
+	}
+
+	return new ResultData<UserResponse>(Boolean.FALSE, UserMessage.NOT_FOUND, UserMessage.NOT_FOUND, response);
+    }
 }
