@@ -30,7 +30,6 @@ class User extends Component {
 
   componentDidMount() {
     userService.getUserDetailByEmail(this.state.param).then((res) => {
-        debugger;
         this.setState({ firstName : res.data.resultData.firstName});
         this.setState({ lastName : res.data.resultData.lastName});
         this.setState({ userName : res.data.resultData.userName});
