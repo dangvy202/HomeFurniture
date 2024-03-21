@@ -1,6 +1,7 @@
 package com.furniture.hms.dto.user;
 
 import java.math.BigInteger;
+import java.time.Instant;
 import java.util.Date;
 
 import lombok.AllArgsConstructor;
@@ -37,6 +38,8 @@ public class UserResponse {
     private BigInteger phone;
 
     private String picture;
+
+    private Instant createDate;
 
     private Date updateDate;
 }

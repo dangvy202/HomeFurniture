@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -27,26 +28,39 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
     public ResultData<UserResponse> saveEditUserByEmail(UserRequest request) {
-	ResultData<UserResponse> userDetail = this.getDetailUserByEmail(request.getEmail());
-	if (userDetail.getStatus() != Boolean.FALSE && userDetail.getMessage() != UserMessage.NOT_FOUND) {
-//	    Instant createDate = Instant.now();
-//	    Instant updateDate = Instant.now();
-	    Date dateFormat = new SimpleDateFormat("yyyy-MM-dd").parse(request.getUpdateDate().toString());
-	    UserResponse userResponse = userDetail.getResultData();
-	    userResponse.setFirstName(request.getFirstName());
-	    userResponse.setLastName(request.getLastName());
-	    userResponse.setUserName(request.getUserName());
-	    userResponse.setEmail(request.getEmail());
-//	    userResponse.setPassword(request.getPassword());
-	    userResponse.setAddress(request.getAddress());
-	    userResponse.setBirthday(request.getBirthday());
-	    userResponse.setRole(request.getRole());
-	    userResponse.setNation(request.getNation());
-	    userResponse.setPhone(request.getPhone());
-	    userResponse.setUpdateDate(Instant.now());
+	User user = userRepository.findUserByEmail(request.getEmail()).orElse(null);
+
+	if (user != null) {
+	    try {
+		Date birthday = new SimpleDateFormat("yyyy-MM-dd").parse(request.getBirthday());
+		user.setFirstName(request.getFirstName());
+		user.setLastName(request.getLastName());
+		user.setUserName(request.getUserName());
+		user.setEmail(request.getEmail());
+		user.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
+		user.setAddress(request.getAddress());
+		user.setBirthday(birthday);
+		user.setRole(request.getRole());
+		user.setNation(request.getNation());
+		user.setPhone(request.getPhone());
+		user.setUpdateBy("VY");
+		user.setUpdateDate(Instant.now());
+
+		userRepository.save(user);
+
+		return new ResultData<UserResponse>(Boolean.TRUE, null, UserMessage.SUCCESS, null);
+	    } catch (Exception e) {
+
+		log.error(e.getMessage());
+
+		return new ResultData<UserResponse>(Boolean.FALSE, UserMessage.EXCEPTION, e.getMessage(), null);
+	    }
 	}
-	return null;
+
+	return new ResultData<UserResponse>(Boolean.FALSE, UserMessage.NOT_FOUND, UserMessage.NOT_FOUND, null);
     }
 
     public ResultData<List<UserResponse>> getAllUser() {

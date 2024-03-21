@@ -1,6 +1,6 @@
 package com.furniture.hms.mapper.user;
 
-import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.Instant;
 import java.util.Date;
 
@@ -27,13 +27,13 @@ public interface UserMapper {
     @Mapping(target = "nation", source = "nation")
     @Mapping(target = "phone", source = "phone")
     @Mapping(target = "picture", source = "picture")
-    @Mapping(target = "role", constant = "USER")
+    @Mapping(target = "role", source = "role")
     @Mapping(target = "birthday", source = "birthday")
-    @Mapping(target = "createBy", constant = "Vy")
+    @Mapping(target = "createBy", source = "createBy")
     @Mapping(target = "createDate", source = "createDate")
     @Mapping(target = "updateBy", constant = "Vy")
     @Mapping(target = "updateDate", source = "updateDate")
-    User toUserEntity(String picture, BigDecimal phone, String nation, String address, String firstName,
+    User toUserEntity(String picture, BigInteger phone, String nation, String address, String firstName,
 	    String lastName, String username, String email, Instant createDate, Instant updateDate, Date birthday,
-	    String password);
+	    String password, String createBy, String role);
 }

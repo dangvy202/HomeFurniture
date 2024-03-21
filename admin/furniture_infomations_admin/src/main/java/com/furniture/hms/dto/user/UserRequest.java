@@ -28,7 +28,7 @@ public class UserRequest {
 
     private String address;
 
-    private Date birthday;
+    private String birthday;
 
     private String role;
 
