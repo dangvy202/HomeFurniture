@@ -23,6 +23,12 @@ class UserEdit extends Component {
             updateDate: "",
             param: userParameter
         };
+        this.editUser = this.editUser.bind(this);
+        this.onChangePhone = this.onChangePhone.bind(this);
+        this.onChangeNation = this.onChangeNation.bind(this);
+        this.onChangeBirthday = this.onChangeBirthday.bind(this);
+        this.onChangeAddress = this.onChangeAddress.bind(this);
+        this.onChangePassword = this.onChangePassword.bind(this);
     }
 
     componentDidMount() {
@@ -40,6 +46,30 @@ class UserEdit extends Component {
             this.setState({ picture : res.data.resultData.picture});
             this.setState({ updateDate : res.data.resultData.updateDate.split("T")[0]});
         })
+    }
+
+    onChangePhone(e) {
+        this.setState({ phone: e.target.value });
+    }
+
+    onChangeNation(e) {
+        this.setState({ nation: e.target.value})
+    }
+
+    onChangeBirthday(e) {
+        this.setState({ birthday: e.target.value});
+    }
+
+    onChangeAddress(e) {
+        this.setState({ address: e.target.value})
+    }
+
+    onChangePassword(e) {
+        this.setState({ password: e.target.value})
+    }
+
+    editUser() {
+
     }
     render() {
         return (
@@ -69,8 +99,7 @@ class UserEdit extends Component {
                         </section>
                         <div class="card">
                             <div class="card-body register-card-body">
-
-                                <form action="../../index.html" method="post">
+                                <form onSubmit={(e) => this.editUser(e)}>
                                     <div class="input-group mb-3">
                                         <input type="text" value={this.state.firstName} class="form-control" placeholder="First name" />
                                         <div class="input-group-append">
@@ -104,7 +133,7 @@ class UserEdit extends Component {
                                         </div>
                                     </div>
                                     <div class="input-group mb-3">
-                                        <input type="password" value={this.state.password} class="form-control" placeholder="Password" />
+                                        <input type="password" value={this.state.password} onChange={this.onChangePassword} class="form-control" placeholder="Password" />
                                         <div class="input-group-append">
                                             <div class="input-group-text">
                                                 <span class="fas fa-user"></span>
@@ -112,7 +141,7 @@ class UserEdit extends Component {
                                         </div>
                                     </div>
                                     <div class="input-group mb-3">
-                                        <input type="text" value={this.state.address} class="form-control" placeholder="Address" />
+                                        <input type="text" value={this.state.address} onChange={this.onChangeAddress} class="form-control" placeholder="Address" />
                                         <div class="input-group-append">
                                             <div class="input-group-text">
                                                 <span class="fas fa-user"></span>
@@ -120,12 +149,7 @@ class UserEdit extends Component {
                                         </div>
                                     </div>
                                     <div class="input-group mb-3">
-                                        <input type="text" value={this.state.birthday} class="form-control" placeholder="Birthday" />
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">
-                                                <span class="fas fa-user"></span>
-                                            </div>
-                                        </div>
+                                        <input type="date" value={this.state.birthday} onChange={this.onChangeBirthday} class="form-control" placeholder="Birthday" />
                                     </div>
                                     <div class="input-group mb-3">
                                         <input type="text" value={this.state.role} class="form-control" placeholder="Role" />
@@ -136,7 +160,7 @@ class UserEdit extends Component {
                                         </div>
                                     </div>
                                     <div class="input-group mb-3">
-                                        <input type="text" value={this.state.nation} class="form-control" placeholder="Nation" />
+                                        <input type="text" value={this.state.nation} onChange={this.onChangeNation} class="form-control" placeholder="Nation" />
                                         <div class="input-group-append">
                                             <div class="input-group-text">
                                                 <span class="fas fa-user"></span>
@@ -144,7 +168,7 @@ class UserEdit extends Component {
                                         </div>
                                     </div>
                                     <div class="input-group mb-3">
-                                        <input type="text" value={this.state.phone} class="form-control" placeholder="Phone" />
+                                        <input type="number" value={this.state.phone} onChange={this.onChangePhone} class="form-control" placeholder="Phone" />
                                         <div class="input-group-append">
                                             <div class="input-group-text">
                                                 <span class="fas fa-lock"></span>

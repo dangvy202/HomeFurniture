@@ -12,27 +12,22 @@ class User extends Component {
       notification: "",
     };
     this.detail = this.detail.bind(this);
-    this.changeStatus = this.changeStatus.bind(this);
+    this.editUser = this.editUser.bind(this);
     this.trash = this.trash.bind(this);
   }
 
   componentDidMount() {
     userService.getAllUser().then((res) => {
-        this.setState({ userList : res.data.resultData});
+      this.setState({ userList: res.data.resultData });
     })
   }
 
   detail(user) {
-    window.location.href="/user-detail/" + user.email;
+    window.location.href = "/user-detail/" + user.email;
   }
 
-  changeStatus(order) {
-    // var request = {
-    //   "order_code": order.orderCode
-    // }
-    // orderService.updateOrderStatus(request).then((res) => {
-    //   window.location.href="/order"
-    // })
+  editUser(user) {
+    window.location.href = "/user-edit/" + user.email;
   }
 
   async trash(order) {
@@ -45,23 +40,23 @@ class User extends Component {
   }
 
   render() {
-    const columns = ['Id', 'First Name', 'Last Name', 'User Name', 'Email', 'Password', 'Address' , 'Birthday', 'Role', 'Nation', 'Phone', 'Picture', 'Date' , 'Action'];
+    const columns = ['Id', 'First Name', 'Last Name', 'User Name', 'Email', 'Password', 'Address', 'Birthday', 'Role', 'Nation', 'Phone', 'Picture', 'Date', 'Action'];
     const userListSet = new Array();
     var id = 0;
     this.state.userList.map((user) => {
       id = id + 1;
-        var firstName = user.firstName;
-        var lastName = user.lastName;
-        var userName = user.userName;
-        var email = user.email;
-        var password = user.password;
-        var address = user.address;
-        var birthday = user.birthday.split("T")[0];
-        var role = user.role;
-        var nation = user.nation;
-        var picture = user.picture
-        var date = user.updateDate.split("T")[0];
-        var phone = user.phone;
+      var firstName = user.firstName;
+      var lastName = user.lastName;
+      var userName = user.userName;
+      var email = user.email;
+      var password = user.password;
+      var address = user.address;
+      var birthday = user.birthday.split("T")[0];
+      var role = user.role;
+      var nation = user.nation;
+      var picture = user.picture
+      var date = user.updateDate.split("T")[0];
+      var phone = user.phone;
 
       const data = {
         'Id': id,
@@ -79,16 +74,16 @@ class User extends Component {
         'Date': date,
         'Action': (
           <>
-            <button onClick={() => this.detail(user) } className="btn btn-app bg-success">
+            <button onClick={() => this.detail(user)} className="btn btn-app bg-success">
               <i className="fas fa-barcode"></i> Detail
             </button>
             <button onClick={() => this.trash(user)} className="btn btn-app bg-danger"
               data-toggle="modal"
               data-target="#exampleModal"
-              >
+            >
               <i className="fas fa-trash"></i> Delete
             </button>
-            <button onClick={() => this.changeStatus(user) } className="btn btn-app bg-warning">
+            <button onClick={() => this.editUser(user)} className="btn btn-app bg-warning">
               <i className="fas fa-barcode"></i> Edit
             </button>
           </>
