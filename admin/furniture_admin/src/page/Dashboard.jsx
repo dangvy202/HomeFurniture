@@ -1,17 +1,22 @@
 import React, { Component } from "react";
 import orderService from "../service/OrderService";
+import userService from "../service/UserService";
 
 class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      orderList: [],
+      orderLengthTotal: "",
+      userLengthTotal: "",
     };
   }
 
   componentDidMount() {
     orderService.getAllOrder().then((res) => {
-      this.setState({ orderList: res.data });
+      this.setState({ orderLengthTotal: res.data.length });
+    });
+    userService.getAllUser().then((res) => {
+      this.setState({ userLengthTotal: res.data.resultData.length });
     });
   }
 
@@ -52,7 +57,7 @@ class Dashboard extends Component {
                   {/* <!-- small box --> */}
                   <div className="small-box bg-info">
                     <div className="inner">
-                      <h3>{this.state.orderList.length}</h3>
+                      <h3>{this.state.orderLengthTotal}</h3>
 
                       <p>New Orders</p>
                     </div>
@@ -88,7 +93,7 @@ class Dashboard extends Component {
                   {/* <!-- small box --> */}
                   <div className="small-box bg-warning">
                     <div className="inner">
-                      <h3>44</h3>
+                      <h3>{this.state.userLengthTotal}</h3>
 
                       <p>User Registrations</p>
                     </div>
