@@ -29,6 +29,17 @@ public class UserAdminController {
 
     private final UserService userService;
 
+    @PostMapping("/block")
+    public ResponseEntity<ResultData<UserResponse>> blockAccount(@RequestBody UserRequest request) {
+	var response = userService.blockAccount(request);
+
+	if (response.getStatus() == Boolean.TRUE && response.getMessage() == UserMessage.SUCCESS) {
+	    return new ResponseEntity<ResultData<UserResponse>>(response, HttpStatus.OK);
+	}
+
+	return new ResponseEntity<ResultData<UserResponse>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @PostMapping("/save")
     public ResponseEntity<ResultData<UserResponse>> registerUser(@RequestBody UserRequest request) {
 	var response = userService.registerNewUser(request);

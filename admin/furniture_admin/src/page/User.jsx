@@ -13,7 +13,7 @@ class User extends Component {
     };
     this.detail = this.detail.bind(this);
     this.editUser = this.editUser.bind(this);
-    this.trash = this.trash.bind(this);
+    this.blockAccount = this.blockAccount.bind(this);
   }
 
   componentDidMount() {
@@ -30,17 +30,15 @@ class User extends Component {
     window.location.href = "/user-edit/" + user.email;
   }
 
-  async trash(order) {
-    // orderService.deleteOrder(order.orderCode).then((res) => {
-    //   this.setState({ notification: res.data })
-    // }).catch((error) => {
-    //   this.setState({ notification: error.response.data.message })
-    // })
-    // console.log(this.state.notification)
+  blockAccount(user) {
+    debugger;
+    userService.blockAccount(user.email).then((res) => {
+      window.location.href = "/user";
+    })
   }
 
   render() {
-    const columns = ['Id', 'First Name', 'Last Name', 'User Name', 'Email', 'Password', 'Address', 'Birthday', 'Role', 'Nation', 'Phone', 'Picture', 'Date', 'Action'];
+    const columns = ['Id', 'First Name', 'Last Name', 'User Name', 'Email', 'Password', 'Address', 'Birthday', 'Role', 'Nation', 'Phone', 'Picture', 'Date','Status', 'Action'];
     const userListSet = new Array();
     var id = 0;
     this.state.userList.map((user) => {
@@ -57,6 +55,7 @@ class User extends Component {
       var picture = user.picture
       var date = user.updateDate.split("T")[0];
       var phone = user.phone;
+      var status = user.status;
 
       const data = {
         'Id': id,
@@ -72,16 +71,17 @@ class User extends Component {
         'Phone': phone,
         'Picture': picture,
         'Date': date,
+        'Status': status,
         'Action': (
           <>
             <button onClick={() => this.detail(user)} className="btn btn-app bg-success">
               <i className="fas fa-barcode"></i> Detail
             </button>
-            <button onClick={() => this.trash(user)} className="btn btn-app bg-danger"
+            <button onClick={() => this.blockAccount(user)} className="btn btn-app bg-danger"
               data-toggle="modal"
               data-target="#exampleModal"
             >
-              <i className="fas fa-trash"></i> Delete
+              <i className="fas fa-trash"></i> Block
             </button>
             <button onClick={() => this.editUser(user)} className="btn btn-app bg-warning">
               <i className="fas fa-barcode"></i> Edit

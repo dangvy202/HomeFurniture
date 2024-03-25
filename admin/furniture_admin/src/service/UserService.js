@@ -8,6 +8,18 @@ class UserService {
         return axios.get(USER_API_BASE_URL);
     }
 
+    blockAccount(email) {
+        var formData = new FormData();
+        formData.append("email", email);
+
+        return axios.post(USER_API_BASE_URL + '/block' , formData, {
+            headers:{
+                      Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                }
+          });
+    }
+
     getUserDetailByEmail(email) {
         return axios.get(USER_API_BASE_URL + `/${email}`);
     }

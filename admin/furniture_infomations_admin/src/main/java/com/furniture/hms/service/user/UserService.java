@@ -15,6 +15,7 @@ import com.furniture.hms.dto.result_data.ResultData;
 import com.furniture.hms.dto.user.UserRequest;
 import com.furniture.hms.dto.user.UserResponse;
 import com.furniture.hms.entity.User;
+import com.furniture.hms.enums.UserEnum;
 import com.furniture.hms.mapper.user.UserMapper;
 import com.furniture.hms.repository.user.UserRepository;
 
@@ -29,6 +30,19 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public ResultData<UserResponse> blockAccount(UserRequest request) {
+	User user = userRepository.findUserByEmail(request.getEmail()).orElse(null);
+
+	if (user != null) {
+	    user.setStatus(UserEnum.INVALID);
+	    userRepository.save(user);
+
+	    return new ResultData<UserResponse>(Boolean.TRUE, null, UserMessage.SUCCESS, null);
+	}
+
+	return new ResultData<UserResponse>(Boolean.FALSE, UserMessage.FAIL, UserMessage.FAIL, null);
+    }
 
     public ResultData<UserResponse> registerNewUser(UserRequest request) {
 	UserResponse response = new UserResponse();

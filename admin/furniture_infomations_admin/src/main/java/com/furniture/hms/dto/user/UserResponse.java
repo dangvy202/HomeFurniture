@@ -4,6 +4,8 @@ import java.math.BigInteger;
 import java.time.Instant;
 import java.util.Date;
 
+import com.furniture.hms.enums.UserEnum;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -24,6 +26,8 @@ public class UserResponse {
     private String userName;
 
     private String email;
+
+    private UserEnum status;
 
     private String password;
 
