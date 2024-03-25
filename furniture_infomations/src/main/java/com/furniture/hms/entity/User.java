@@ -1,12 +1,24 @@
 package com.furniture.hms.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.math.BigInteger;
-import java.text.DateFormat;
 import java.time.Instant;
 import java.util.Date;
+
+import com.furniture.hms.enums.UserEnum;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Data
 @Entity
@@ -36,6 +48,10 @@ public class User {
 
     @Column(name = "password")
     private String password;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private UserEnum status;
 
     @Column(name = "address")
     private String address;

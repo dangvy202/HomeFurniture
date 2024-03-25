@@ -1,4 +1,4 @@
-package com.furniture.hms.service.informationOrder;
+package com.furniture.hms.service.information_order;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.furniture.hms.constant.InformationOrderMessage;
 import com.furniture.hms.constant.OrderMessage;
-import com.furniture.hms.dto.informationOrder.InformationOrderRequest;
-import com.furniture.hms.dto.informationOrder.InformationOrderResponse;
+import com.furniture.hms.dto.information_order.InformationOrderRequest;
+import com.furniture.hms.dto.information_order.InformationOrderResponse;
 import com.furniture.hms.entity.InformationOrder;
 import com.furniture.hms.entity.Order;
 import com.furniture.hms.mapper.informationOrder.InformationOrderMapper;
@@ -30,34 +30,35 @@ public class InformationOrderService {
 
     private final InformationOrderRepository informationOrderRepository;
 
-	public InformationOrderResponse getInformationOrderByOrderCode(String code) {
-		InformationOrderResponse response = new InformationOrderResponse();
+    public InformationOrderResponse getInformationOrderByOrderCode(String code) {
+	InformationOrderResponse response = new InformationOrderResponse();
 
-		Order order = orderRepository.findOrderByOrderCode(code).orElse(null);
+	Order order = orderRepository.findOrderByOrderCode(code).orElse(null);
 
-		if(order != null) {
-			InformationOrder informationOrder = informationOrderRepository.findInformationOrderByIdOrder(order.getId()).orElse(null);
-			if(informationOrder != null) {
-				response.setError(null);
-				response.setMessage(InformationOrderMessage.INFORMATION_ORDER_SUCCESS);
-				response.setStatus(true);
-				response.setInformationOrderDetail(InformationOrderMapper.INSTANCE.toInformationOrderDetail(
-						informationOrder.getAddress(), informationOrder.getEmail(), informationOrder.getPhone().toString(),
-						informationOrder.getUserName()));
-				return response;
-			} else {
-				response.setError(null);
-				response.setMessage(InformationOrderMessage.INFORMATION_ORDER_NULL);
-				response.setStatus(true);
-				return response;
-			}
-		} else {
-			response.setError(InformationOrderMessage.INFORMATION_ORDER_FAIL);
-			response.setMessage(OrderMessage.ORDER_EXIST);
-			response.setStatus(false);
-			return response;
-		}
+	if (order != null) {
+	    InformationOrder informationOrder = informationOrderRepository.findInformationOrderByIdOrder(order.getId())
+		    .orElse(null);
+	    if (informationOrder != null) {
+		response.setError(null);
+		response.setMessage(InformationOrderMessage.INFORMATION_ORDER_SUCCESS);
+		response.setStatus(true);
+		response.setInformationOrderDetail(InformationOrderMapper.INSTANCE.toInformationOrderDetail(
+			informationOrder.getAddress(), informationOrder.getEmail(),
+			informationOrder.getPhone().toString(), informationOrder.getUserName()));
+		return response;
+	    } else {
+		response.setError(null);
+		response.setMessage(InformationOrderMessage.INFORMATION_ORDER_NULL);
+		response.setStatus(true);
+		return response;
+	    }
+	} else {
+	    response.setError(InformationOrderMessage.INFORMATION_ORDER_FAIL);
+	    response.setMessage(OrderMessage.ORDER_EXIST);
+	    response.setStatus(false);
+	    return response;
 	}
+    }
 
     public InformationOrderResponse addInformationOrder(InformationOrderRequest request) {
 	Order order = orderRepository.findOrderByOrderCode(request.getOrderCode()).orElse(null);

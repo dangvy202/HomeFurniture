@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-import com.furniture.hms.dto.informationOrder.InformationOrderResponse;
+import com.furniture.hms.dto.information_order.InformationOrderResponse;
 import com.furniture.hms.entity.InformationOrder;
 import com.furniture.hms.entity.Order;
 

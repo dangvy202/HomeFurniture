@@ -10,4 +10,5 @@ public class UserMessage {
     public static final String NOT_FOUND = "ACCOUNT NOT EXIST";
     public static final String EMAIL_EXIST = "EMAIL EXIST";
     public static final String BAD_CREDENTIALES = "BAD_CREDENTIALES";
+    public static final String ACCOUNT_BLOCK = "ACCOUNT_BLOCK";
 }

@@ -1,4 +1,4 @@
-package com.furniture.hms.dto.informationOrder;
+package com.furniture.hms.dto.information_order;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
