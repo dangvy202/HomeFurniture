@@ -100,7 +100,7 @@ class Dashboard extends Component {
                     <div className="icon">
                       <i className="ion ion-person-add"></i>
                     </div>
-                    <a href="#" className="small-box-footer">
+                    <a href="/user" className="small-box-footer">
                       More info <i className="fas fa-arrow-circle-right"></i>
                     </a>
                   </div>

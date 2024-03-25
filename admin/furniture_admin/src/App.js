@@ -9,6 +9,7 @@ import InformationOrder from './page/InformationOrder';
 import User from './page/User';
 import UserDetail from './page/UserDetail';
 import UserEdit from './page/UserEdit';
+import UserRegister from './page/UserRegister';
 
 class App extends Component {
 
@@ -34,6 +35,7 @@ class App extends Component {
             <Route path="/user" element={<User />} />
             <Route path="/user-detail/:email" element={<UserDetail />} />
             <Route path="/user-edit/:email" element={<UserEdit />} />
+            <Route path="/user/register" element={<UserRegister />} />
             {/* NOT FOUND PAGE */}
             {/* <Route path="*" element={<NotFound />} />
             <Route path="/404" element={<NotFound />} /> */}

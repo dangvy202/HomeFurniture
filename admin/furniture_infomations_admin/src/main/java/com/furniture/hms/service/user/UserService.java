@@ -30,6 +30,32 @@ public class UserService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    public ResultData<UserResponse> registerNewUser(UserRequest request) {
+	UserResponse response = new UserResponse();
+
+	User user = userRepository.findUserByEmail(request.getEmail()).orElse(null);
+
+	if (user == null) {
+	    try {
+		Date birthDayFormat = new SimpleDateFormat("yyyy-MM-dd").parse(request.getBirthday());
+		User userRegister = UserMapper.INSTANCE.toUserEntity("noImg.jpg", request.getPhone(),
+			request.getNation(), request.getAddress(), request.getFirstName(), request.getLastName(),
+			request.getUserName(), request.getEmail(), Instant.now(), Instant.now(), birthDayFormat,
+			bCryptPasswordEncoder.encode(request.getPassword()), "VY", request.getRole());
+		response = UserMapper.INSTANCE.toUserRes(userRegister);
+
+		userRepository.save(userRegister);
+		return new ResultData<UserResponse>(Boolean.TRUE, null, UserMessage.SUCCESS, response);
+	    } catch (Exception e) {
+		log.error(e.getMessage());
+		return new ResultData<UserResponse>(Boolean.FALSE, UserMessage.EXCEPTION, e.getMessage(), response);
+	    }
+	}
+
+	return new ResultData<UserResponse>(Boolean.FALSE, UserMessage.EMAIL_EXIST, UserMessage.EMAIL_EXIST, response);
+
+    }
+
     public ResultData<UserResponse> saveEditUserByEmail(UserRequest request) {
 	User user = userRepository.findUserByEmail(request.getEmail()).orElse(null);
 

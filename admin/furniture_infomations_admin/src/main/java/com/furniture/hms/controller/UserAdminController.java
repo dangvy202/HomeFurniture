@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,17 @@ import lombok.RequiredArgsConstructor;
 public class UserAdminController {
 
     private final UserService userService;
+
+    @PostMapping("/save")
+    public ResponseEntity<ResultData<UserResponse>> registerUser(@RequestBody UserRequest request) {
+	var response = userService.registerNewUser(request);
+
+	if (response.getStatus() == Boolean.TRUE && response.getMessage() == UserMessage.SUCCESS) {
+	    return new ResponseEntity<ResultData<UserResponse>>(response, HttpStatus.CREATED);
+	}
+
+	return new ResponseEntity<ResultData<UserResponse>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     @PutMapping("/edit/save")
     public ResponseEntity<ResultData<UserResponse>> saveEditUser(@RequestBody UserRequest request) {
