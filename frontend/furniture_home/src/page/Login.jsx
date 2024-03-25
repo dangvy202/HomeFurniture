@@ -10,6 +10,7 @@ class Login extends Component {
       email: "",
       password: "",
       isLogin: true,
+      notification:""
     };
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
@@ -37,15 +38,21 @@ class Login extends Component {
     e.preventDefault();
     LoginService.login(this.state.email, this.state.password)
       .then((res) => {
-        this.setState({ isLogin: "false" });
-        sessionStorage.setItem("status", res.data.status);
-        sessionStorage.setItem("message", "SUCCESS");
-        sessionStorage.setItem("token", res.data.token);
-        sessionStorage.setItem("expired", res.data.expired);
-        sessionStorage.setItem("email", this.state.email);
+        debugger;
+        if(res.data.message !== "ACCOUNT_BLOCK") {
+          this.setState({ isLogin: "false" });
+          this.setState({ notification: res.data.message })
+          sessionStorage.setItem("status", res.data.status);
+          sessionStorage.setItem("message", "SUCCESS");
+          sessionStorage.setItem("token", res.data.token);
+          sessionStorage.setItem("expired", res.data.expired);
+          sessionStorage.setItem("email", this.state.email);
+        }
+        this.setState({ notification: res.data.message })
       })
       .catch((error) => {
         this.setState({ isLogin: false });
+        this.setState({ notification: error.response.data.message})
       });
   }
 
@@ -65,10 +72,10 @@ class Login extends Component {
               <div className="modal-content">
                 <div className="modal-header">
                   <h5 className="modal-title" id="exampleModalLabel">
-                    {this.state.isLogin === false ? "Error!" : "Message!"}
+                    {this.state.notification === "SUCCESS" ? "Message!" : "Error!"}
                   </h5>
                   {(() => {
-                    if (this.state.isLogin === false) {
+                    if (this.state.notification !== "SUCCESS") {
                       return (
                         <>
                           <button
@@ -94,7 +101,7 @@ class Login extends Component {
                 </div>
                 <div className="modal-body">
                   {(() => {
-                    if (this.state.isLogin === false) {
+                    if (this.state.notification !== "SUCCESS") {
                       return <>LOGIN FAIL</>;
                     } else {
                       return <>LOGIN SUCCESS</>;
@@ -103,7 +110,7 @@ class Login extends Component {
                 </div>
                 <div className="modal-footer">
                   {(() => {
-                    if (this.state.isLogin === false) {
+                    if (this.state.notification !== "SUCCESS") {
                       return (
                         <>
                           <button
