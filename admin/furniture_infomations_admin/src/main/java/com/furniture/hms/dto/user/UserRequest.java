@@ -2,6 +2,8 @@ package com.furniture.hms.dto.user;
 
 import java.math.BigInteger;
 
+import com.furniture.hms.enums.UserEnum;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -30,6 +32,8 @@ public class UserRequest {
     private String birthday;
 
     private String role;
+
+    private UserEnum status;
 
     private String nation;
 

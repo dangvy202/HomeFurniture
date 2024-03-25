@@ -84,6 +84,7 @@ public class UserService {
 		user.setAddress(request.getAddress());
 		user.setBirthday(birthday);
 		user.setRole(request.getRole());
+		user.setStatus(request.getStatus());
 		user.setNation(request.getNation());
 		user.setPhone(request.getPhone());
 		user.setUpdateBy("VY");

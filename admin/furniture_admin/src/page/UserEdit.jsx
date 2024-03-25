@@ -21,7 +21,7 @@ class UserEdit extends Component {
             phone: "",
             picture: "",
             updateDate: "",
-            status: false,
+            status: "",
             error: "",
             message: "",
             param: userParameter
@@ -37,6 +37,7 @@ class UserEdit extends Component {
         this.onChangeLastName = this.onChangeLastName.bind(this);
         this.onChangeFirstName = this.onChangeFirstName.bind(this);
         this.onChangeRole = this.onChangeRole.bind(this);
+        this.onChangeStatus = this.onChangeStatus.bind(this);
         this.loadPageWhenEditSuccess = this.loadPageWhenEditSuccess.bind(this);
     }
 
@@ -50,6 +51,7 @@ class UserEdit extends Component {
             this.setState({ address: res.data.resultData.address });
             this.setState({ birthday: res.data.resultData.birthday.split("T")[0] });
             this.setState({ role: res.data.resultData.role });
+            this.setState({ status: res.data.resultData.status });
             this.setState({ nation: res.data.resultData.nation });
             this.setState({ phone: res.data.resultData.phone });
             this.setState({ picture: res.data.resultData.picture });
@@ -59,6 +61,10 @@ class UserEdit extends Component {
 
     loadPageWhenEditSuccess() {
         window.location.href="/user-edit/" + this.state.param
+    }
+
+    onChangeStatus(e) {
+        this.setState({ status: e.target.value })
     }
 
     onChangeRole(e) {
@@ -102,7 +108,6 @@ class UserEdit extends Component {
     }
 
     editUser(e) {
-
         e.preventDefault();
         userService.saveEditUser(
             this.state.firstName,
@@ -114,9 +119,9 @@ class UserEdit extends Component {
             this.state.birthday,
             this.state.role,
             this.state.nation,
-            this.state.phone
+            this.state.phone,
+            this.state.status
         ).then((res) => {
-            this.setState({ status: true });
             this.setState({ message: res.data.message })
         }).catch((error) => {
             this.setState({ message: error.response.data.message })
@@ -268,6 +273,35 @@ class UserEdit extends Component {
                                                         <>
                                                             <option value="USER" selected>USER</option>
                                                             <option value="ADMIN">ADMIN</option>
+                                                            ;
+                                                        </>
+                                                    );
+                                                }
+                                            })()}
+                                        </select>
+                                        {/* <input type="text" value={this.state.role} class="form-control" placeholder="Role" /> */}
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-user"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <select class="form-control" onChange={this.onChangeStatus}>
+                                            {(() => {
+                                                if (this.state.status === "INVALID") {
+                                                    return (
+                                                        <>
+                                                            <option value="VALID">VALID</option>
+                                                            <option value="INVALID" selected>INVALID</option>
+                                                            ;
+                                                        </>
+                                                    );
+                                                } else {
+                                                    return (
+                                                        <>
+                                                            <option value="VALID" selected>VALID</option>
+                                                            <option value="INVALID">INVALID</option>
                                                             ;
                                                         </>
                                                     );

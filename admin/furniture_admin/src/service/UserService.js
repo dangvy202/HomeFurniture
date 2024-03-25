@@ -44,7 +44,7 @@ class UserService {
         });
     }
 
-    saveEditUser(firstName,lastName,userName,email,password,address,birthday,role,nation,phone) {
+    saveEditUser(firstName,lastName,userName,email,password,address,birthday,role,nation,phone,status) {
         var formData = new FormData();
         formData.append("firstName", firstName);
         formData.append("lastName", lastName);
@@ -56,6 +56,7 @@ class UserService {
         formData.append("role", role);
         formData.append("nation", nation);
         formData.append("phone", phone);
+        formData.append("status", status);
         return axios.put(USER_API_BASE_URL + '/edit/save', formData, {
           headers:{
                     Accept: 'application/json',
