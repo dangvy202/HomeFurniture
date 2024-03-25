@@ -33,6 +33,7 @@ public interface UserMapper {
     @Mapping(target = "createDate", source = "createDate")
     @Mapping(target = "updateBy", constant = "Vy")
     @Mapping(target = "updateDate", source = "updateDate")
+    @Mapping(target = "status", constant = "VALID")
     User toUserEntity(String picture, BigInteger phone, String nation, String address, String firstName,
 	    String lastName, String username, String email, Instant createDate, Instant updateDate, Date birthday,
 	    String password, String createBy, String role);

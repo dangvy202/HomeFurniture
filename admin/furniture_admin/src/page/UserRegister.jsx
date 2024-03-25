@@ -236,6 +236,7 @@ class UserRegister extends Component {
                                     </div>
                                     <div class="input-group mb-3">
                                         <select class="form-control" onChange={this.onChangeRole}>
+                                            <option>-select option-</option>
                                             <option value="USER">USER</option>
                                             <option value="ADMIN">ADMIN</option>
                                         </select>
