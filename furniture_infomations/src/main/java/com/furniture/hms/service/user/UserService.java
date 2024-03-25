@@ -202,7 +202,7 @@ public class UserService {
 	    return AuthenticationResponse.builder().status(false).error("403").expired(null).message(UserMessage.FAIL)
 		    .token(null).build();
 	}
-	if (userEntity.getStatus() == UserEnum.INVALID) {
+	if (userEntity.getStatus() != UserEnum.VALID) {
 	    return AuthenticationResponse.builder().status(false).error("401").expired(null)
 		    .message(UserMessage.ACCOUNT_BLOCK).token(null).build();
 	}
