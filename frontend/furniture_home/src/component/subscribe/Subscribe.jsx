@@ -155,7 +155,7 @@ class Subscribe extends Component {
                           </li>
                           <li className="list-inline-item mb-0">
                             <a href={this.state.tiktok} target="_blank">
-                              <i className="fa-brands fa-tiktok fa-fw"></i>
+                              <i className="fa-brands fa-tiktok"></i>
                             </a>
                           </li>
                           <li className="list-inline-item mb-0">

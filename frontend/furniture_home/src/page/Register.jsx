@@ -28,7 +28,6 @@ class Register extends Component {
     this.onChangeNation = this.onChangeNation.bind(this);
     this.onChangePhone = this.onChangePhone.bind(this);
     this.regiterAccount = this.regiterAccount.bind(this);
-    this.openPopup = this.openPopup.bind(this);
   }
 
   onChageFirstName(e) {
