@@ -7,10 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.furniture.hms.constant.OrderMessage;
+import com.furniture.hms.dto.order.OrderCMSRequest;
 import com.furniture.hms.dto.order.OrderCMSResponse;
 import com.furniture.hms.feign.OrderCMSFeign;
 
@@ -38,5 +41,15 @@ public class OrderCMSController {
 	} else {
 	    return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+    }
+
+    @PostMapping("/update/status")
+    public ResponseEntity<String> updateOrderStatus(@RequestBody OrderCMSRequest request) {
+	String response = orderCMSFeign.updateOrderStatus(request);
+
+	if (response.equals(OrderMessage.ORDER_SUCCESS)) {
+	    return new ResponseEntity<String>(response, HttpStatus.OK);
+	}
+	return new ResponseEntity<String>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
