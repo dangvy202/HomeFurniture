@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.furniture.hms.constant.OrderMessage;
 import com.furniture.hms.dto.order.OrderCMSRequest;
 import com.furniture.hms.dto.order.OrderCMSResponse;
-import com.furniture.hms.feign.OrderCMSFeign;
+import com.furniture.hms.service.order.OrderService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,17 +24,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OrderCMSController {
 
-    private final OrderCMSFeign orderCMSFeign;
+    private final OrderService orderService;
 
     @GetMapping
     public ResponseEntity<List<OrderCMSResponse>> getAllOrder() {
-	var response = orderCMSFeign.getAllOrder();
+	var response = orderService.getAllOrder();
 	return new ResponseEntity<List<OrderCMSResponse>>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{orderCode}")
     public ResponseEntity<String> deleteOrder(@PathVariable("orderCode") String orderCode) {
-	var response = orderCMSFeign.deleteOrder(orderCode);
+	var response = orderService.deleteOrder(orderCode);
 
 	if (response.equals(OrderMessage.ORDER_SUCCESS)) {
 	    return new ResponseEntity<>(OrderMessage.ORDER_SUCCESS, HttpStatus.OK);
@@ -45,7 +45,7 @@ public class OrderCMSController {
 
     @PostMapping("/update/status")
     public ResponseEntity<String> updateOrderStatus(@RequestBody OrderCMSRequest request) {
-	String response = orderCMSFeign.updateOrderStatus(request);
+	String response = orderService.updateOrderStatus(request);
 
 	if (response.equals(OrderMessage.ORDER_SUCCESS)) {
 	    return new ResponseEntity<String>(response, HttpStatus.OK);
