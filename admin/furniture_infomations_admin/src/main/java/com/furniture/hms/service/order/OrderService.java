@@ -70,18 +70,14 @@ public class OrderService {
 	List<OrderDetail> orderDetail = orderDetailRepository.findOrderDetailByOrderCode(idOrder);
 	List<Order> order = orderRepository.findOrderByOrderCode(idOrder);
 	if (!CollectionUtils.isEmpty(order) && !CollectionUtils.isEmpty(orderDetail)) {
-	    try {
-		List<InformationOrder> informationOrders = informationOrderRepository
-			.findInformationOrderByIdOrder(order.stream().findFirst().get().getId());
-		if (!CollectionUtils.isEmpty(informationOrders)) {
-		    informationOrderRepository.deleteInformationOrderByOrder(order.stream().findFirst().get());
-		    orderRepository.deleteOrderByOrderId(order.stream().findFirst().get().getOrderCode());
-		    orderDetailRepository.deleteOrderByOrderId(orderDetail.stream().findFirst().get().getOrderCode());
-		    return OrderMessage.ORDER_SUCCESS;
-		}
-	    } catch (Exception ex) {
-		log.error(ex.getMessage());
-		return OrderMessage.ORDER_FAIL;
+
+	    List<InformationOrder> informationOrders = informationOrderRepository
+		    .findInformationOrderByIdOrder(order.stream().findFirst().get().getId());
+	    if (!CollectionUtils.isEmpty(informationOrders)) {
+		informationOrderRepository.deleteInformationOrderByOrder(order.stream().findFirst().get());
+		orderRepository.deleteOrderByOrderId(order.stream().findFirst().get().getOrderCode());
+		orderDetailRepository.deleteOrderByOrderId(orderDetail.stream().findFirst().get().getOrderCode());
+		return OrderMessage.ORDER_SUCCESS;
 	    }
 	}
 
