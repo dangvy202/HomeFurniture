@@ -19,7 +19,7 @@ public interface OrderCMSFeign {
     @GetMapping("/order")
     List<OrderCMSResponse> getAllOrder();
 
-    @DeleteMapping("/delete/{orderCode}")
+    @DeleteMapping("/order/delete/{orderCode}")
     String deleteOrder(@PathVariable("orderCode") String orderCode);
 
     @Component

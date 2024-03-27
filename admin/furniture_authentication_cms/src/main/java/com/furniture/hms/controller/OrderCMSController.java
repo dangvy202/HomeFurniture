@@ -33,7 +33,7 @@ public class OrderCMSController {
     public ResponseEntity<String> deleteOrder(@PathVariable("orderCode") String orderCode) {
 	var response = orderCMSFeign.deleteOrder(orderCode);
 
-	if (response == OrderMessage.ORDER_SUCCESS) {
+	if (response.equals(OrderMessage.ORDER_SUCCESS)) {
 	    return new ResponseEntity<>(OrderMessage.ORDER_SUCCESS, HttpStatus.OK);
 	} else {
 	    return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
