@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.furniture.hms.dto.information_order.InformationOrderCMSResponse;
 import com.furniture.hms.dto.result.ResultData;
 import com.furniture.hms.feign.InformationOrderCMSFeign;
+import com.furniture.hms.service.spi.InformationOrderServiceSpi;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,10 +15,11 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class InformationOrderService {
+public class InformationOrderService implements InformationOrderServiceSpi {
 
     private final InformationOrderCMSFeign informationOrderCMSFeign;
 
+    @Override
     public ResultData<List<InformationOrderCMSResponse>> getAllInformationOrder() {
 	ResultData<List<InformationOrderCMSResponse>> response = informationOrderCMSFeign.getAllInformationOrder();
 	return response;

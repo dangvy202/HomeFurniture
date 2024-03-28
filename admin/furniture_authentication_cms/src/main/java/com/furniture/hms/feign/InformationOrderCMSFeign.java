@@ -20,10 +20,10 @@ public interface InformationOrderCMSFeign {
 
     @Component
     @Slf4j
-    class InformationOrderCMSFeignFallBack implements FallbackFactory<OrderCMSFeign> {
+    class InformationOrderCMSFeignFallBack implements FallbackFactory<InformationOrderCMSFeign> {
 
 	@Override
-	public OrderCMSFeign create(Throwable cause) {
+	public InformationOrderCMSFeign create(Throwable cause) {
 	    return null;
 	}
     }

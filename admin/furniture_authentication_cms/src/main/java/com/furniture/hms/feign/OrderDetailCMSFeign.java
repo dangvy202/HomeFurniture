@@ -18,10 +18,10 @@ public interface OrderDetailCMSFeign {
 
     @Component
     @Slf4j
-    class OrderDetailCMSFeignFallBack implements FallbackFactory<OrderCMSFeign> {
+    class OrderDetailCMSFeignFallBack implements FallbackFactory<OrderDetailCMSFeign> {
 
 	@Override
-	public OrderCMSFeign create(Throwable cause) {
+	public OrderDetailCMSFeign create(Throwable cause) {
 	    return null;
 	}
     }
