@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.furniture.hms.constant.OrderMessage;
 import com.furniture.hms.dto.order.OrderRequest;
 import com.furniture.hms.dto.order.OrderResponse;
 import com.furniture.hms.service.order.OrderService;
@@ -37,22 +36,13 @@ public class OrderAdminController {
     @DeleteMapping("/delete/{orderCode}")
     public ResponseEntity<String> deleteOrder(@PathVariable("orderCode") String orderCode) {
 	var response = orderService.deleteOrder(orderCode);
-
-	if (response == OrderMessage.ORDER_SUCCESS) {
-	    return new ResponseEntity<>(OrderMessage.ORDER_SUCCESS, HttpStatus.OK);
-	} else {
-	    return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-	}
+	return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/update/status")
     public ResponseEntity<String> updateOrderStatus(@RequestBody OrderRequest request) {
 	String response = orderService.updateOrderStatusByOrder(request);
-
-	if (response == OrderMessage.ORDER_SUCCESS) {
-	    return new ResponseEntity<String>(response, HttpStatus.OK);
-	}
-	return new ResponseEntity<String>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+	return new ResponseEntity<String>(response, HttpStatus.OK);
     }
 
 }
