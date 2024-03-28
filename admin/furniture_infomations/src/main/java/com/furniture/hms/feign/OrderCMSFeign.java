@@ -16,7 +16,7 @@ import com.furniture.hms.dto.order.OrderCMSResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
-@FeignClient(name = "furnitureInfomationsAdmin", contextId = "OrderCMSFeign", fallbackFactory = OrderCMSFeign.OrderCMSFeignFallBack.class)
+@FeignClient(name = "furnitureInfomationsAdmin", fallbackFactory = OrderCMSFeign.OrderCMSFeignFallBack.class)
 public interface OrderCMSFeign {
 
     @GetMapping("/order")

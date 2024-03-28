@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import com.furniture.hms.dto.order.OrderCMSRequest;
 import com.furniture.hms.dto.order.OrderCMSResponse;
 import com.furniture.hms.feign.OrderCMSFeign;
-import com.furniture.hms.service.spi.OrderServiceSpi;
+import com.furniture.hms.service.impl.OrderServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class OrderService implements OrderServiceSpi {
+public class OrderService implements OrderServiceImpl {
 
     private final OrderCMSFeign orderFeign;
 
