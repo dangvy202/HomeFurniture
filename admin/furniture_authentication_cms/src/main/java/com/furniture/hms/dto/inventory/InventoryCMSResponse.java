@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InventoryResponse {
+public class InventoryCMSResponse {
 
     private Integer inventoryQuantity;
 
