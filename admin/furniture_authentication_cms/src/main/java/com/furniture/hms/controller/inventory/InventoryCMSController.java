@@ -25,7 +25,7 @@ public class InventoryCMSController {
     private final InventoryService inventoryService;
 
     @GetMapping
-    public ResponseEntity<ResultData<List<InventoryCMSResponse>>> getAllInformationOrder() {
+    public ResponseEntity<ResultData<List<InventoryCMSResponse>>> getAllInventory() {
 	var response = inventoryService.getAllInformationOrder();
 
 	if (response.getMessage().equals(InventoryMessage.INVENTORY_SUCCESS) && response.getStatus() == Boolean.TRUE) {
