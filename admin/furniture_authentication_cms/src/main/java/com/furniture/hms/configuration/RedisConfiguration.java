@@ -17,16 +17,14 @@ public class RedisConfiguration {
         return new JedisConnectionFactory(redisStandaloneConfiguration);
     }
 
-    @Bean
-    public RedisTemplate<String, Object> redisTemplate() {
-        RedisTemplate<String,Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(jedisConnectionFactory());
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashKeySerializer(new JdkSerializationRedisSerializer());
-        redisTemplate.setValueSerializer(new JdkSerializationRedisSerializer());
-        redisTemplate.setEnableTransactionSupport(true);
-        redisTemplate.afterPropertiesSet();
-        return redisTemplate;
-    }
+//    @Bean
+//    public RedisTemplate<String, byte[]> redisTemplate() {
+//        RedisTemplate<String,byte[]> redisTemplate = new RedisTemplate<>();
+//        redisTemplate.setConnectionFactory(jedisConnectionFactory());
+//        redisTemplate.setKeySerializer(new StringRedisSerializer());
+//        redisTemplate.setValueSerializer(new StringRedisSerializer());
+//        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+//        redisTemplate.afterPropertiesSet();
+//        return redisTemplate;
+//    }
 }

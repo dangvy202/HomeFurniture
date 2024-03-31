@@ -28,7 +28,7 @@ public class InformationOrderCMSController {
     public ResponseEntity<ResultData<List<InformationOrderCMSResponse>>> getAllInformationOrder() {
 	var response = informationOrderService.getAllInformationOrder();
 
-	if (response.getMessage() == InformationOrderMessage.INFORMATION_ORDER_SUCCESS
+	if (response.getMessage().equals(InformationOrderMessage.INFORMATION_ORDER_SUCCESS)
 		&& response.getStatus() == Boolean.TRUE) {
 	    return new ResponseEntity<ResultData<List<InformationOrderCMSResponse>>>(response, HttpStatus.OK);
 	}
