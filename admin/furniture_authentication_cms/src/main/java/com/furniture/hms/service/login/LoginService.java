@@ -42,9 +42,9 @@ public class LoginService {
 	public AuthenticationResponse getTokenInRedis(String keyRedis) {
 		String tokenRedis = redisTemplate.opsForValue().get(keyRedis);
 		long expired = redisTemplate.getExpire(keyRedis);
-		long timeNow = System.currentTimeMillis();
-
-		if(timeNow > expired) {
+		long expiredConvertMilisecon = TimeUnit.MILLISECONDS.convert(expired,TimeUnit.SECONDS);
+		long timeNow = TimeUnit.MILLISECONDS.convert(System.currentTimeMillis(),TimeUnit.MILLISECONDS);
+		if(timeNow > expiredConvertMilisecon) {
 			redisTemplate.delete(keyRedis);
 			return AuthenticationResponse.builder().status(false).error("403").expired(null)
 					.message(UserMessage.EXPIRED_USER).token(null).build();
@@ -59,36 +59,37 @@ public class LoginService {
 	}
 
     public AuthenticationResponse login(AuthenticationRequest request) {
-	User userEntity = userRepository.findUserByEmail(request.getEmail()).orElse(null);
+		User userEntity = userRepository.findUserByEmail(request.getEmail()).orElse(null);
 
-	if (userEntity == null) {
-	    return AuthenticationResponse.builder().status(false).error("403").expired(null).message(UserMessage.FAIL)
-		    .token(null).build();
-	}
-	if (userEntity.getStatus() != UserEnum.VALID) {
-	    return AuthenticationResponse.builder().status(false).error("401").expired(null)
-		    .message(UserMessage.ACCOUNT_BLOCK).token(null).build();
-	}
-	if (userEntity.getRole().equals("USER")) {
-	    return AuthenticationResponse.builder().status(false).error("403").expired(null)
-		    .message(UserMessage.DENIED_ROLE).token(null).build();
-	}
-	try {
-	    authenticationManager
-		    .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+		if (userEntity == null) {
+			return AuthenticationResponse.builder().status(false).error("403").expired(null).message(UserMessage.FAIL)
+				.token(null).build();
+		}
+		if (userEntity.getStatus() != UserEnum.VALID) {
+			return AuthenticationResponse.builder().status(false).error("401").expired(null)
+				.message(UserMessage.ACCOUNT_BLOCK).token(null).build();
+		}
+		if (userEntity.getRole().equals("USER")) {
+			return AuthenticationResponse.builder().status(false).error("403").expired(null)
+				.message(UserMessage.DENIED_ROLE).token(null).build();
+		}
+		try {
+			authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
-		long secondExpired = (System.currentTimeMillis() + 1000 * 60 * 24);
-		long dateExpired = new Date(secondExpired).getTime();
-		UserDetail userDetail = new UserDetail(userEntity);
-	    String jwtToken = jwtService.generateToken(userDetail);
-		String keyRedis = UUID.randomUUID().toString();
-		//save token into redis
-		redisTemplate.opsForValue().set(keyRedis,jwtToken,dateExpired,TimeUnit.MILLISECONDS);
-		return getTokenInRedis(keyRedis);
-	} catch (Exception ex) {
-	    log.error(ex.getMessage());
-	    return AuthenticationResponse.builder().status(false).error("403").expired(null)
-		    .message(UserMessage.BAD_CREDENTIALES).token(null).build();
-	}
+			long secondExpired = (System.currentTimeMillis() + 1000 * 60 * 24);
+			long dateExpired = new Date(secondExpired).getTime();
+			UserDetail userDetail = new UserDetail(userEntity);
+			String jwtToken = jwtService.generateToken(userDetail);
+			String keyRedis = UUID.randomUUID().toString();
+			//save token into redis
+			long expiredTimeRedis = TimeUnit.MILLISECONDS.convert(dateExpired,TimeUnit.MILLISECONDS);
+			redisTemplate.opsForValue().set(keyRedis,jwtToken,expiredTimeRedis,TimeUnit.MILLISECONDS);
+			return getTokenInRedis(keyRedis);
+		} catch (Exception ex) {
+			log.error(ex.getMessage());
+			return AuthenticationResponse.builder().status(false).error("403").expired(null)
+				.message(UserMessage.BAD_CREDENTIALES).token(null).build();
+		}
     }
 }
