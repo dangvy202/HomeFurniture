@@ -18,18 +18,18 @@ class Introduction extends Component {
 
   render() {
     return (
-      <div class="section testimonial-block col-lg-12 col-xs-12">
-        <div class="row">
-          <div class="col-lg-12 col-md-12 ">
-            <div class="block">
-              <div class="owl-carousel owl-theme testimonial-type-one">
-                <div class="item type-one d-flex align-items-center flex-column">
-                  <div class="textimonial-image">
-                    <i class="icon-testimonial"></i>
+      <div className="section testimonial-block col-lg-12 col-xs-12">
+        <div className="row">
+          <div className="col-lg-12 col-md-12 ">
+            <div className="block">
+              <div className="owl-carousel owl-theme testimonial-type-one">
+                <div className="item type-one d-flex align-items-center flex-column">
+                  <div className="textimonial-image">
+                    <i className="icon-testimonial"></i>
                   </div>
-                  <div class="desc-testimonial">
-                    <div class="testimonial-content">
-                      <div class="text">
+                  <div className="desc-testimonial">
+                    <div className="testimonial-content">
+                      <div className="text">
                         <p>
                           " Liquam quis risus viverra, ornare ipsum vitae,
                           congue tellus. Vestibulum nunc lorem, scelerisque a
@@ -39,19 +39,19 @@ class Introduction extends Component {
                         </p>
                       </div>
                     </div>
-                    <div class="testimonial-info">
-                      <h5 class="mt-0 box-info">David Jame</h5>
-                      <p class="box-dress">DESIGNER</p>
+                    <div className="testimonial-info">
+                      <h5 className="mt-0 box-info">David Jame</h5>
+                      <p className="box-dress">DESIGNER</p>
                     </div>
                   </div>
                 </div>
-                <div class="item type-one d-flex align-items-center flex-column">
-                  <div class="textimonial-image">
-                    <i class="icon-testimonial"></i>
+                <div className="item type-one d-flex align-items-center flex-column">
+                  <div className="textimonial-image">
+                    <i className="icon-testimonial"></i>
                   </div>
-                  <div class="desc-testimonial">
-                    <div class="testimonial-content">
-                      <div class="text">
+                  <div className="desc-testimonial">
+                    <div className="testimonial-content">
+                      <div className="text">
                         <p>
                           " Liquam quis risus viverra, ornare ipsum vitae,
                           congue tellus. Vestibulum nunc lorem, scelerisque a
@@ -61,19 +61,19 @@ class Introduction extends Component {
                         </p>
                       </div>
                     </div>
-                    <div class="testimonial-info">
-                      <h5 class="mt-0 box-info">Max Control</h5>
-                      <p class="box-dress">DEVELOPER</p>
+                    <div className="testimonial-info">
+                      <h5 className="mt-0 box-info">Max Control</h5>
+                      <p className="box-dress">DEVELOPER</p>
                     </div>
                   </div>
                 </div>
-                <div class="item type-one d-flex align-items-center flex-column">
-                  <div class="textimonial-image">
-                    <i class="icon-testimonial"></i>
+                <div className="item type-one d-flex align-items-center flex-column">
+                  <div className="textimonial-image">
+                    <i className="icon-testimonial"></i>
                   </div>
-                  <div class="desc-testimonial">
-                    <div class="testimonial-content">
-                      <div class="text">
+                  <div className="desc-testimonial">
+                    <div className="testimonial-content">
+                      <div className="text">
                         <p>
                           " Liquam quis risus viverra, ornare ipsum vitae,
                           congue tellus. Vestibulum nunc lorem, scelerisque a
@@ -83,19 +83,19 @@ class Introduction extends Component {
                         </p>
                       </div>
                     </div>
-                    <div class="testimonial-info">
-                      <h5 class="mt-0 box-info">John Do</h5>
-                      <p class="box-dress">CSS - HTML</p>
+                    <div className="testimonial-info">
+                      <h5 className="mt-0 box-info">John Do</h5>
+                      <p className="box-dress">CSS - HTML</p>
                     </div>
                   </div>
                 </div>
-                <div class="item type-one d-flex align-items-center flex-column">
-                  <div class="textimonial-image">
-                    <i class="icon-testimonial"></i>
+                <div className="item type-one d-flex align-items-center flex-column">
+                  <div className="textimonial-image">
+                    <i className="icon-testimonial"></i>
                   </div>
-                  <div class="desc-testimonial">
-                    <div class="testimonial-content">
-                      <div class="text">
+                  <div className="desc-testimonial">
+                    <div className="testimonial-content">
+                      <div className="text">
                         <p>
                           " Liquam quis risus viverra, ornare ipsum vitae,
                           congue tellus. Vestibulum nunc lorem, scelerisque a
@@ -105,9 +105,9 @@ class Introduction extends Component {
                         </p>
                       </div>
                     </div>
-                    <div class="testimonial-info">
-                      <h5 class="mt-0 box-info">Elizabeth Pham</h5>
-                      <p class="box-dress">DEVELOPER</p>
+                    <div className="testimonial-info">
+                      <h5 className="mt-0 box-info">Elizabeth Pham</h5>
+                      <p className="box-dress">DEVELOPER</p>
                     </div>
                   </div>
                 </div>

@@ -560,13 +560,13 @@ class Product extends Component {
                               <div className="product-title">
                                 {item.productName}
                               </div>
-                              <div class="rating">
-                                <div class="star-content">
-                                  <div class="star"></div>
-                                  <div class="star"></div>
-                                  <div class="star"></div>
-                                  <div class="star"></div>
-                                  <div class="star"></div>
+                              <div className="rating">
+                                <div className="star-content">
+                                  <div className="star"></div>
+                                  <div className="star"></div>
+                                  <div className="star"></div>
+                                  <div className="star"></div>
+                                  <div className="star"></div>
                                 </div>
                               </div>
                               <div className="product-group-price">
