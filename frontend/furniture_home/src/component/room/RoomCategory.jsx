@@ -21,7 +21,7 @@ class RoomCategory extends Component {
       <div className="spacing-10 group-image-special">
         <div className="row">
           {this.state.room.map((item) => (
-            <div className="col-lg-4 col-md-4">
+            <div className="col-lg-4 col-md-4" key={item.id}>
               <div className="block">
                 <div className="effect">
                   <a href={"/product/room?=" + item.roomRedirect}>

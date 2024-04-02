@@ -271,7 +271,7 @@ class Footer extends Component {
                     onChange={this.searchProduct}
                     placeholder="Search"
                     className="ui-autocomplete-input"
-                    autocomplete="off"
+                    autoComplete="off"
                   />
                   <button
                     type="button"

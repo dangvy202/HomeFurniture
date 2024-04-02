@@ -168,7 +168,7 @@ class Navbar extends Component {
                     <div className="dropdown-menu">
                       <ul>
                         {this.state.categoryBlog.map((item) => (
-                          <li className="item">
+                          <li className="item" key={item.id}>
                             <a
                               href="#"
                               onClick={() => this.changeBlog(item.id)}
@@ -196,7 +196,7 @@ class Navbar extends Component {
                                 <div className="menu-content">
                                   <ul className="col">
                                     {this.state.categoryProduct.map((item) => (
-                                      <li>
+                                      <li key={item.id}>
                                         <a
                                           href={
                                             "/product/category?=" +
@@ -215,7 +215,7 @@ class Navbar extends Component {
                                 <div className="menu-content">
                                   <ul>
                                     {this.state.room.map((item) => (
-                                      <li>
+                                      <li key={item.id}>
                                         <a
                                           href={
                                             "/product/room?=" +
