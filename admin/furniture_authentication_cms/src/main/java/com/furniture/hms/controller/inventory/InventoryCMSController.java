@@ -6,10 +6,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.furniture.hms.constant.InventoryMessage;
+import com.furniture.hms.dto.inventory.InventoryCMSRequest;
 import com.furniture.hms.dto.inventory.InventoryCMSResponse;
 import com.furniture.hms.dto.result.ResultData;
 import com.furniture.hms.service.inventory.InventoryService;
@@ -33,6 +36,18 @@ public class InventoryCMSController {
 	}
 
 	return new ResponseEntity<ResultData<List<InventoryCMSResponse>>>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @PutMapping("/update/quantity")
+    public ResponseEntity<ResultData<InventoryCMSResponse>> updateQuantityInventory(
+	    @RequestBody InventoryCMSRequest request) {
+	var response = inventoryService.updateQuantityInventory(request);
+
+	if (response.getStatus() == Boolean.TRUE && response.getMessage().equals(InventoryMessage.INVENTORY_SUCCESS)) {
+	    return new ResponseEntity<ResultData<InventoryCMSResponse>>(response, HttpStatus.OK);
+	}
+
+	return new ResponseEntity<ResultData<InventoryCMSResponse>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

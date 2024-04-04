@@ -6,7 +6,10 @@ import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import com.furniture.hms.dto.inventory.InventoryCMSRequest;
 import com.furniture.hms.dto.inventory.InventoryCMSResponse;
 import com.furniture.hms.dto.result.ResultData;
 
@@ -17,6 +20,9 @@ public interface InventoryCMSFeign {
 
     @GetMapping("/inventory")
     ResultData<List<InventoryCMSResponse>> getAllInventories();
+
+    @PutMapping("/inventory/update/quantity")
+    ResultData<InventoryCMSResponse> updateQuantityInventory(@RequestBody InventoryCMSRequest request);
 
     @Component
     @Slf4j

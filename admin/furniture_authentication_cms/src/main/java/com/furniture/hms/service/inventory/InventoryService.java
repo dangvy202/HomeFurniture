@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.furniture.hms.dto.inventory.InventoryCMSRequest;
 import com.furniture.hms.dto.inventory.InventoryCMSResponse;
 import com.furniture.hms.dto.result.ResultData;
 import com.furniture.hms.feign.inventory.InventoryCMSFeign;
@@ -22,6 +23,12 @@ public class InventoryService implements InventoryServiceSpi {
     @Override
     public ResultData<List<InventoryCMSResponse>> getAllInformationOrder() {
 	ResultData<List<InventoryCMSResponse>> response = inventoryCMSFeign.getAllInventories();
+	return response;
+    }
+
+    @Override
+    public ResultData<InventoryCMSResponse> updateQuantityInventory(InventoryCMSRequest request) {
+	ResultData<InventoryCMSResponse> response = inventoryCMSFeign.updateQuantityInventory(request);
 	return response;
     }
 
