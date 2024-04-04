@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import com.furniture.hms.dto.inventory.InventoryRequest;
 import com.furniture.hms.dto.inventory.InventoryResponse;
 import com.furniture.hms.dto.product.ProductResponse;
 import com.furniture.hms.entity.Inventory;
@@ -20,5 +21,7 @@ public interface InventoryMapper {
     @Mapping(target = "updateDate", source = "inventory.updateDate")
     @Mapping(target = "product", source = "product")
     InventoryResponse toInventoryRes(Inventory inventory, ProductResponse product);
+
+    Inventory toInventory(InventoryRequest request);
 
 }
