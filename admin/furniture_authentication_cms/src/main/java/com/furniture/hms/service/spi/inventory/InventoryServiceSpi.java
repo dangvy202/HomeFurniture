@@ -14,4 +14,8 @@ public interface InventoryServiceSpi {
     ResultData<List<InventoryCMSResponse>> getAllInformationOrder();
 
     ResultData<InventoryCMSResponse> updateQuantityInventory(InventoryCMSRequest request);
+
+    ResultData<InventoryCMSResponse> updateStatusInventory(InventoryCMSRequest request);
+
+    ResultData<InventoryCMSResponse> addNewInventoryForProduct(InventoryCMSRequest request);
 }

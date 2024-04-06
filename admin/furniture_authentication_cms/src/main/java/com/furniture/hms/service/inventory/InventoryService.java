@@ -22,14 +22,26 @@ public class InventoryService implements InventoryServiceSpi {
 
     @Override
     public ResultData<List<InventoryCMSResponse>> getAllInformationOrder() {
-	ResultData<List<InventoryCMSResponse>> response = inventoryCMSFeign.getAllInventories();
-	return response;
+        ResultData<List<InventoryCMSResponse>> response = inventoryCMSFeign.getAllInventories();
+        return response;
     }
 
     @Override
     public ResultData<InventoryCMSResponse> updateQuantityInventory(InventoryCMSRequest request) {
-	ResultData<InventoryCMSResponse> response = inventoryCMSFeign.updateQuantityInventory(request);
-	return response;
+        ResultData<InventoryCMSResponse> response = inventoryCMSFeign.updateQuantityInventory(request);
+        return response;
+    }
+
+    @Override
+    public ResultData<InventoryCMSResponse> updateStatusInventory(InventoryCMSRequest request) {
+        ResultData<InventoryCMSResponse> response = inventoryCMSFeign.updateStatusInventory(request);
+        return response;
+    }
+
+    @Override
+    public ResultData<InventoryCMSResponse> addNewInventoryForProduct(InventoryCMSRequest request) {
+        ResultData<InventoryCMSResponse> response = inventoryCMSFeign.addNewInventoryForProduct(request);
+        return response;
     }
 
 }
