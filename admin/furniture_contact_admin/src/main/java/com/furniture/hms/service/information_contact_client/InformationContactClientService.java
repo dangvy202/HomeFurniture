@@ -41,17 +41,15 @@ public class InformationContactClientService {
     public ResultData<InformationContactClientResponse> updateStatusWhenHaveContact(InformationContactClientRequest request) {
         InformationContactClient informationContactClient = repository.findById(request.getId()).orElse(null);
 
-        InformationContactClientResponse response = new InformationContactClientResponse();
         try {
             if(informationContactClient != null) {
                 informationContactClient.setStatus(1);
                 repository.save(informationContactClient);
-                response = InformationContactClientMapper.INSTANCE.toInformationContactClientResponse(informationContactClient);
-                return new ResultData<>(Boolean.TRUE,null,InformationContactClientMessage.INFORMATION_CONTACT_CLIENT_SUCCESS,response);
+                return new ResultData<>(Boolean.TRUE,null,InformationContactClientMessage.INFORMATION_CONTACT_CLIENT_SUCCESS,null);
             }
         } catch (Exception ex) {
-            return new ResultData<>(Boolean.FALSE, InformationContactClientMessage.INFORMATION_CONTACT_CLIENT_FAIL, ex.getMessage(),response);
+            return new ResultData<>(Boolean.FALSE, InformationContactClientMessage.INFORMATION_CONTACT_CLIENT_FAIL, ex.getMessage(),null);
         }
-        return new ResultData<>(Boolean.FALSE, InformationContactClientMessage.INFORMATION_CONTACT_CLIENT_FAIL, InformationContactClientMessage.INFORMATION_CONTACT_CLIENT_NOT_EXIST,response);
+        return new ResultData<>(Boolean.FALSE, InformationContactClientMessage.INFORMATION_CONTACT_CLIENT_FAIL, InformationContactClientMessage.INFORMATION_CONTACT_CLIENT_NOT_EXIST,null);
     }
 }
