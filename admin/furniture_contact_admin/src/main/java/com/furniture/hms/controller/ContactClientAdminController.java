@@ -31,4 +31,10 @@ public class ContactClientAdminController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity<ResultData<ContactHistoryResponse>> deleteByProcess(@RequestBody ContactHistoryRequest request) {
+        var response = service.deleteByProcess(request);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
 }

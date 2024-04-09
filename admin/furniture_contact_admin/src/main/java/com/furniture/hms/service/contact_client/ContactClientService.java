@@ -13,6 +13,7 @@ import com.furniture.hms.mapper.contact_history.ContactHistoryMapper;
 import com.furniture.hms.repository.contact_description.ContactDescriptionRepository;
 import com.furniture.hms.repository.contact_history.ContactHistoryRepository;
 import com.furniture.hms.repository.information_contact_client.InformationContactClientRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -77,6 +78,20 @@ public class ContactClientService {
             return new ResultData<>(Boolean.FALSE,ContactHistoryMessage.CONTACT_HISTORY_FAIL, ex.getMessage(), response);
         }
         return new ResultData<>(Boolean.FALSE,ContactHistoryMessage.CONTACT_HISTORY_FAIL, ContactHistoryMessage.CONTACT_HISTORY_NOT_EXIST, response);
+    }
+
+    @Transactional
+    public ResultData<ContactHistoryResponse> deleteByProcess(ContactHistoryRequest request) {
+        ContactHistory contactHistory = contactHistoryRepository.findById(request.getId()).orElse(null);
+
+        if(contactHistory != null) {
+            //delete
+            contactHistoryRepository.deleteById(contactHistory.getId());
+            contactDescriptionRepository.deleteById(contactHistory.getContactDescription().getId());
+            informationContactClientRepository.deleteById(contactHistory.getInformationContactClient().getId());
+            return new ResultData<>(Boolean.TRUE,null,ContactHistoryMessage.CONTACT_HISTORY_SUCCESS,null);
+        }
+        return new ResultData<>(Boolean.FALSE,ContactHistoryMessage.CONTACT_HISTORY_FAIL,ContactHistoryMessage.CONTACT_HISTORY_NOT_EXIST,null);
     }
 
 }
