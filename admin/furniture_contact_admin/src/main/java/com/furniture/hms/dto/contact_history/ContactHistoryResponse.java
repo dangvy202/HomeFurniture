@@ -15,13 +15,9 @@ import java.util.Objects;
 public class ContactHistoryResponse {
     private int id;
 
-    private String idClient;
-
-    private String idDescription;
-
     private String process;
 
     private String message;
 
-    private Map<String, Objects> other;
+    private Map<String, Object> other;
 }

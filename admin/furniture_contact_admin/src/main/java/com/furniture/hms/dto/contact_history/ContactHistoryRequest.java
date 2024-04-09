@@ -1,6 +1,7 @@
 package com.furniture.hms.dto.contact_history;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.furniture.hms.enums.ProcessEnum;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +21,7 @@ public class ContactHistoryRequest {
     private String idDescription;
 
     @JsonProperty("process")
-    private String process;
+    private ProcessEnum process;
 
     @JsonProperty("message")
     private String message;
