@@ -53,4 +53,18 @@ public class ClientSubscribeService {
         }
         return new ResultData<>(Boolean.FALSE,ClientSubscribeMessage.SUBSCRIBE_FAIL, ClientSubscribeMessage.SUBSCRIBE_NOT_EXIST, null);
     }
+
+    public ResultData<ClientSubscribeResponse> deleteClientSubscribe(ClientSubscribeRequest request) {
+        ClientSubscribeResponse response = new ClientSubscribeResponse();
+        ClientSubscribe clientSubscribe = repository.findById(request.getId()).orElse(null);
+        try{
+            if(clientSubscribe != null) {
+                response = ClientSubscribeMapper.INSTANCE.toClientSubscribeResponse(clientSubscribe);
+                repository.delete(clientSubscribe);
+            }
+        } catch (Exception ex) {
+            return new ResultData<>(Boolean.FALSE,ClientSubscribeMessage.SUBSCRIBE_FAIL, ex.getMessage(), response);
+        }
+        return new ResultData<>(Boolean.FALSE,ClientSubscribeMessage.SUBSCRIBE_FAIL,ClientSubscribeMessage.SUBSCRIBE_NOT_EXIST,response);
+    }
 }

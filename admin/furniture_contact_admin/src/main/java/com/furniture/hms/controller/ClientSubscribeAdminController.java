@@ -29,4 +29,10 @@ public class ClientSubscribeAdminController {
         var response = service.updateStatusClientSubscribe(request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<ResultData<ClientSubscribeResponse>> deleteClientSubscribe(@RequestBody ClientSubscribeRequest request) {
+        var response = service.deleteClientSubscribe(request);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
 }
