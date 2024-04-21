@@ -61,6 +61,7 @@ public class ClientSubscribeService {
             if(clientSubscribe != null) {
                 response = ClientSubscribeMapper.INSTANCE.toClientSubscribeResponse(clientSubscribe);
                 repository.delete(clientSubscribe);
+                return new ResultData<>(Boolean.TRUE,null, ClientSubscribeMessage.SUBSCRIBE_SUCCESS, response);
             }
         } catch (Exception ex) {
             return new ResultData<>(Boolean.FALSE,ClientSubscribeMessage.SUBSCRIBE_FAIL, ex.getMessage(), response);
