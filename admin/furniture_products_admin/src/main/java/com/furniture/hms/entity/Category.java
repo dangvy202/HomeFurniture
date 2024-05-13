@@ -3,6 +3,7 @@ package com.furniture.hms.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.Instant;
 import java.util.Date;
 
 @Data
@@ -35,12 +36,12 @@ public class Category {
     private String createBy;
 
     @Column(name = "create_date")
-    private Date createDate;
+    private Instant createDate;
 
     @Column(name = "update_by")
     private String updateBy;
 
     @Column(name = "update_date")
-    private Date updateDate;
+    private Instant updateDate;
 
 }

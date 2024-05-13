@@ -7,6 +7,7 @@ import com.furniture.hms.service.category.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,8 +26,8 @@ public class CategoryController {
         return new ResponseEntity<ResultData<List<CategoryResponse>>>(response, HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<ResultData<CategoryResponse>> createCategories(@RequestBody CategoryRequest request) {
+    @PostMapping("/create")
+    public ResponseEntity<ResultData<CategoryResponse>> createCategories(@ModelAttribute @Validated CategoryRequest request) {
         var response = categoryService.createCategories(request);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
