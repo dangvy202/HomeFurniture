@@ -27,4 +27,15 @@ public interface CategoryMapper {
     @Mapping(target = "updateBy", source = "updateBy")
     @Mapping(target = "updateDate", source = "updateDate")
     Category toCategoryEntity(String categoryName, String categoryPicture, String categoryRedirect, int status, String createBy, Instant createDate, String updateBy, Instant updateDate);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "categoryName", source = "categoryName")
+    @Mapping(target = "categoryRedirect", source = "categoryRedirect")
+    @Mapping(target = "status", source = "status")
+    @Mapping(target = "createBy", source = "createBy")
+    @Mapping(target = "createDate", source = "createDate")
+    @Mapping(target = "updateBy", source = "updateBy")
+    @Mapping(target = "updateDate", source = "updateDate")
+    Category toCategoryEntityNotImage(String categoryName, String categoryRedirect, int status, String createBy, Instant createDate, String updateBy, Instant updateDate);
+
 }
