@@ -20,6 +20,12 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ResultData<CategoryResponse>> deleteById(@PathVariable("id") int id) {
+        var response = categoryService.deleteById(id);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
     @PutMapping("/update/{id}")
     public ResponseEntity<ResultData<CategoryResponse>> updateById(@PathVariable("id") int id, @ModelAttribute CategoryRequest request) {
         var response = categoryService.updateById(id,request);

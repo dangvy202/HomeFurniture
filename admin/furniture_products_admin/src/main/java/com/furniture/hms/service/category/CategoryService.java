@@ -29,10 +29,37 @@ public class CategoryService {
 
     private static final String PATH = "D:\\HomeFurniture\\template\\HomeFurniture\\frontend\\furniture_home\\src\\component\\asset\\home";
 
+    public ResultData<CategoryResponse> deleteById(int id) {
+        Category category = categoryRepository.findById(id).orElse(null);
+
+        if(category != null) {
+            File tempFile = new File(PATH + "\\" + category.getCategoryPicture());
+            if(tempFile.exists()) {
+                try {
+                    tempFile.delete();
+                    categoryRepository.delete(category);
+                    return new ResultData<>(Boolean.TRUE,null,CategoryMessage.SUCCESS,null);
+                } catch (Exception ex) {
+                    log.error(ex.getMessage());
+                    return new ResultData<>(Boolean.FALSE,CategoryMessage.FAIL,CategoryMessage.DELETE_FAIL,null);
+                }
+            } else {
+                try {
+                    categoryRepository.delete(category);
+                    return new ResultData<>(Boolean.TRUE,null,CategoryMessage.SUCCESS,null);
+                } catch (Exception ex) {
+                    log.error(ex.getMessage());
+                    return new ResultData<>(Boolean.FALSE,CategoryMessage.FAIL,CategoryMessage.DELETE_FAIL,null);
+                }
+            }
+        }
+        return new ResultData<>(Boolean.FALSE,CategoryMessage.FAIL,CategoryMessage.NOT_FOUND,null);
+    }
+
     public ResultData<CategoryResponse> updateById(int id , CategoryRequest request) {
         CategoryResponse response = new CategoryResponse();
         Category category = categoryRepository.findById(id).orElse(null);
-        if(category.toString() == null) {
+        if(category == null) {
             return new ResultData<>(Boolean.FALSE,CategoryMessage.FAIL,CategoryMessage.NOT_FOUND,response);
         }
         try {
