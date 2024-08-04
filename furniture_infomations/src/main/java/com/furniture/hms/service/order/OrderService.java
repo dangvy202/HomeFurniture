@@ -82,17 +82,17 @@ public class OrderService {
     }
 
     public List<OrderResponse> getOrderByEmailUser(String email) {
-	List<OrderResponse> response = new ArrayList<>();
-	User user = userRepository.findUserByEmail(email).orElse(null);
-	if (user != null) {
-	    List<Order> listOrder = orderRepository.findOrderByUser(user);
-	    listOrder.stream().forEach(orderDetail -> {
-		response.add(OrderMapper.INSTANCE.toOrderResponse(true, null, OrderMessage.ORDER_SUCCESS, orderDetail));
-	    });
-	    return response;
-	} else {
-	    return response;
-	}
+		List<OrderResponse> response = new ArrayList<>();
+		User user = userRepository.findUserByEmail(email).orElse(null);
+		if (user != null) {
+			List<Order> listOrder = orderRepository.findOrderByUser(user);
+			listOrder.stream().forEach(orderDetail -> {
+			response.add(OrderMapper.INSTANCE.toOrderResponse(true, null, OrderMessage.ORDER_SUCCESS, orderDetail));
+			});
+			return response;
+		} else {
+			return response;
+		}
     }
 
     public OrderResponse getOrderDetailByUser(String email, String orderCode) {

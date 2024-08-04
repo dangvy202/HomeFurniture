@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import InfomationService from "../service/InfomationService";
 import moment from "moment";
+import OrderService from "../service/OrderService";
 
 class Infomation extends Component {
   constructor(props) {
@@ -13,6 +14,7 @@ class Infomation extends Component {
       nation: "",
       phone: "",
       picture: "",
+      orderHistory:[]
     };
   }
 
@@ -35,6 +37,11 @@ class Infomation extends Component {
           });
         }
       );
+      OrderService.getOrderHistory(sessionStorage.getItem("email"))
+        .then((res) => {
+          this.setState({ orderHistory: res.data });
+        })
+        .catch((error) => {});
     } else {
       window.location.href = "/login";
     }
@@ -111,7 +118,18 @@ class Infomation extends Component {
                       Order
                       <span className="detail">History</span>
                     </h4>
-                    <p>You haven't placed any orders yet.</p>
+
+                    {this.state.orderHistory.length === 0 ? (
+                      <p>You haven't placed any orders yet.</p>
+                    ) : (
+                      <ul>
+                        {this.state.orderHistory.map((order) => (
+                          <li key={order.id}>
+                            Order ID: {order.orderCode} - Date: {moment(order.updateDate).format("DD/MM/YYYY")}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
                 </div>
               </div>

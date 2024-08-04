@@ -36,7 +36,7 @@ class Login extends Component {
   }
   async loginAccount(e) {
     e.preventDefault();
-    LoginService.login(this.state.email, this.state.password)
+    await LoginService.login(this.state.email, this.state.password)
       .then((res) => {
         debugger;
         if(res.data.message !== "ACCOUNT_BLOCK") {
