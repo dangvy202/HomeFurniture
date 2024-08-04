@@ -192,7 +192,7 @@ class BlogDetail extends Component {
                                                                 <span>{this.state.comment.length} Comments</span>
                                                             </p>
                                                             <div className="btn-group">
-                                                                <a href="#">
+                                                                <a  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}>
                                                                     <i className="zmdi zmdi-share"></i>
                                                                     <span>Share</span>
                                                                 </a>
