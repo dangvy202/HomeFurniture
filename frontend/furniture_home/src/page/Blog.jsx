@@ -112,7 +112,7 @@ class Blog extends Component {
                         <div className="col-sm-8 col-lg-9 col-md-9 flex-xs-first main-blogs">
                           <h2>Recent Posts</h2>
                           {currentPosts.map((item) => (
-                            <div className="list-content row">
+                            <div key={item.id} className="list-content row">
                               <div className="hover-after col-md-5 col-xs-12">
                                 <a href={"/blog-detail/"+item.id}>
                                   <img
@@ -193,7 +193,7 @@ class Blog extends Component {
                                           className="next disabled js-search-link"
                                           onClick={() => {
                                             setPage(
-                                              this.state.currentPage ==
+                                              this.state.currentPage ===
                                                 pageNumbers.length
                                                 ? pageNumbers.length
                                                 : this.state.currentPage + 1

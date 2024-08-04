@@ -33,6 +33,8 @@ class Product extends Component {
   changeTab(id) {
     ProductService.getProductByCategory(id).then((resProductByCategory) => {
       this.setState({ products: resProductByCategory.data });
+    }).catch((error) => {
+      window.location.href = "/"
     });
   }
   async setChangeTab(id) {
@@ -215,8 +217,8 @@ class Product extends Component {
             <div className="item text-center row">
               {this.state.products.slice(0, this.state.visible).map((item) => {
                 if (
-                  item.inventory.message.status == true &&
-                  item.inventory.message.error == null
+                  item.inventory.message.status === true &&
+                  item.inventory.message.error === null
                 ) {
                   if (item.inventory.message.message === "AVAILABLE") {
                     return (
@@ -260,7 +262,15 @@ class Product extends Component {
                               <div className="product-title">
                                 {item.productName}
                               </div>
-
+                              <div class="rating">
+                                <div class="star-content">
+                                  <div class="star"></div>
+                                  <div class="star"></div>
+                                  <div class="star"></div>
+                                  <div class="star"></div>
+                                  <div class="star"></div>
+                                </div>
+                              </div>
                               <div className="product-group-price">
                                 <div className="product-price-and-shipping">
                                   {(() => {
@@ -519,8 +529,8 @@ class Product extends Component {
             <div className="item text-center row">
               {this.state.product.slice(0, this.state.visible).map((item) => {
                 if (
-                  item.inventory.message.status == true &&
-                  item.inventory.message.error == null
+                  item.inventory.message.status === true &&
+                  item.inventory.message.error === null
                 ) {
                   if (item.inventory.message.message === "AVAILABLE") {
                     return (

@@ -26,7 +26,7 @@ class CategoryBlog extends Component {
         <div className="title-block">Categories</div>
         <div className="block-content">
           {this.state.categoryBlog.map((item) => (
-            <div className="cateTitle hasSubCategory open level1">
+            <div key={item.id} className="cateTitle hasSubCategory open level1">
               <a
                 href="#"
                 className="cateItem"

@@ -53,8 +53,8 @@ class ProductByCategory extends Component {
             <div className="item text-center row">
               {this.state.product.slice(0, this.state.visible).map((item) => {
                 if (
-                  item.inventory.message.status == true &&
-                  item.inventory.message.error == null
+                  item.inventory.message.status === true &&
+                  item.inventory.message.error === null
                 ) {
                   return (
                     <div className="col-md-3 col-xs-12" key={item.id}>

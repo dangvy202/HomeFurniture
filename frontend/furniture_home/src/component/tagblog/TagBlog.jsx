@@ -28,8 +28,7 @@ class TagBlog extends Component {
                 <div className="block-content">
                     <ul className="listSidebarBlog list-unstyled">
                     {this.state.tagBlog.map((item) => (
-                        
-                        <li>
+                        <li key={item.id}>
                             <a
                                 href="#"
                                 title="Show products matching tag Hot Trend"

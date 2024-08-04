@@ -251,7 +251,7 @@ class Navbar extends Component {
                     </div>
 
                     {(() => {
-                      if (sessionStorage.getItem("token") == null) {
+                      if (sessionStorage.getItem("token") === null) {
                         return (
                           <>
                             <div>

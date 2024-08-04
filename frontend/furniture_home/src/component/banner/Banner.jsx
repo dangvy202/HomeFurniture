@@ -25,48 +25,48 @@ class Banner extends Component {
   render() {
     return (
       // <!-- SHOP THE LOOK -->
-      <div class="main-content" id="home3">
-        <div class="wrap-banner">
-          <div class="slideshow">
-            <div class="tiva-slideshow-wrapper">
-              <div id="tiva-slideshow" class="nivoSlider">
+      <div className="main-content" id="home3">
+        <div className="wrap-banner">
+          <div className="slideshow">
+            <div className="tiva-slideshow-wrapper">
+              <div id="tiva-slideshow" className="nivoSlider">
 
                 <a href="#" title="Slideshow image">
-                  <img class="img-responsive" src={this.state.imgBanner1} title="#caption1" alt="Slideshowimage" />
+                  <img className="img-responsive" src={this.state.imgBanner1} title="#caption1" alt="Slideshowimage" />
                 </a>
                 <a href="#" title="Slideshow image">
-                  <img class="img-responsive" src={this.state.imgBanner2} title="#caption2" alt="Slideshowimage" />
+                  <img className="img-responsive" src={this.state.imgBanner2} title="#caption2" alt="Slideshowimage" />
                 </a>
                 <a href="#" title="Slideshow image">
-                  <img class="img-responsive" src={this.state.imgBanner3} title="#caption3" alt="Slideshowimage" />
+                  <img className="img-responsive" src={this.state.imgBanner3} title="#caption3" alt="Slideshowimage" />
                 </a>
               </div>
-              <div id="caption1" class="nivo-html-caption">
-                <div class="tiva-caption">
-                  <div class="left-right hidden-xs">
-                    <p class="caption-1">
-                      <span class="text-1"><a href="/contact">Contact Us</a></span>
-                      <span class="text-2"><a href="tel:0708517856">Tel: 0708517856</a></span>
+              <div id="caption1" className="nivo-html-caption">
+                <div className="tiva-caption">
+                  <div className="left-right hidden-xs">
+                    <p className="caption-1">
+                      <span className="text-1"><a href="/contact">Contact Us</a></span>
+                      <span className="text-2"><a href="tel:0708517856">Tel: 0708517856</a></span>
                     </p>
                   </div>
                 </div>
               </div>
-              <div id="caption2" class="nivo-html-caption caption">
-                <div class="tiva-caption">
-                  <div class="left-right hidden-xs">
-                    <p class="caption-2">
-                      <span class="text-1"><a href="/contact">Contact Us</a></span>
-                      <span class="text-2"><a href="tel:0708517856">Tel: 0708517856</a></span>
+              <div id="caption2" className="nivo-html-caption caption">
+                <div className="tiva-caption">
+                  <div className="left-right hidden-xs">
+                    <p className="caption-2">
+                      <span className="text-1"><a href="/contact">Contact Us</a></span>
+                      <span className="text-2"><a href="tel:0708517856">Tel: 0708517856</a></span>
                     </p>
                   </div>
                 </div>
               </div>
-              <div id="caption3" class="nivo-html-caption caption">
-                <div class="left-right hidden-xs">
-                  <div class="tiva-caption">
-                    <p class="caption-3">
-                      <span class="text-1"><a href="/contact">Contact Us</a></span>
-                      <span class="text-2"><a href="tel:0708517856">Tel: 0708517856</a></span>
+              <div id="caption3" className="nivo-html-caption caption">
+                <div className="left-right hidden-xs">
+                  <div className="tiva-caption">
+                    <p className="caption-3">
+                      <span className="text-1"><a href="/contact">Contact Us</a></span>
+                      <span className="text-2"><a href="tel:0708517856">Tel: 0708517856</a></span>
                     </p>
                   </div>
                 </div>
